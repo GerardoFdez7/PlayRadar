@@ -7,6 +7,9 @@ const nextConfig = {
     unoptimized: true,
   },
   assetPrefix: '/PlayRadar/',
+  experimental: {
+    appDir: true
+  }
 }
 
 module.exports = nextConfig
