@@ -40,10 +40,15 @@ jobs:
 
       - name: Build with Next.js 🏗️
         run: |
-          echo "Contenido del directorio actual:"
-          ls -la
-          echo "Contenido del directorio app:"
-          ls -la app
+          echo "Directorio actual:"
+          pwd
+          echo "\nEstructura completa del proyecto:"
+          find . -type d
+          echo "\nContenido de package.json:"
+          cat package.json
+          echo "\nContenido de next.config.js:"
+          cat next.config.js
+          echo "\nIniciando build..."
           npx next build
 
       - name: Upload artifact 📡

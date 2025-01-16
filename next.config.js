@@ -5,10 +5,6 @@ const nextConfig = {
   distDir: 'out',
   images: {
     unoptimized: true,
-  },
-  assetPrefix: '/PlayRadar/',
-  experimental: {
-    appDir: true
   }
 }
 
