@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  basePath: "/PlayRadar",
   output: 'export',
   images: {
     unoptimized: true,
   },
-  basePath: '/PlayRadar',
   assetPrefix: '/PlayRadar/',
 }
 
