@@ -39,7 +39,7 @@ import grand_theft_auto_v from "./Grand-Theft-Auto-V1.jpg";
 import cyberpunk_2077 from "./Cyberpunk2077.jpg";
 import elden_ring from "./elden-ring-portada.jpg";
 import hogwarts_legacy from "./hogwarts-legacy.jpg";
-import starfield from "./Starfield.jpg";
+import starfield from "./starfield.jpg";
 import resident_evil_4_remake from "./Resident-Evil-4-Remake.jpg";
 import baldurs_gate_3 from "./baldurs-gate-3.jpg";
 import armored_core_vi from "./Armored-Core-VI-Fires-of-Rubicon.jpg";
