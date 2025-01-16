@@ -24,41 +24,18 @@ jobs:
       - name: Setup Node.js ⚙️ - Cache dependencies ⚡ - Install dependencies 🔧
         uses: ./.github/workflows/setup-node
 
-      - name: Cache Next.js build
-        uses: actions/cache@v4
-        with:
-          path: |
-            .next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
-          restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
-
       - name: Setup Pages ⚙️
         uses: actions/configure-pages@v4
         with:
           static_site_generator: next
 
-      - name: Debug Project Structure 🔍
-        run: |
-          echo "===== DEBUGGING INFO ====="
-          echo "Current directory:"
-          pwd
-          echo "\nDirectory contents:"
-          ls -la
-          echo "\nMoving to playradar directory:"
-          cd playradar
-          echo "\nPlayradar directory contents:"
-          ls -la
-          echo "========================="
-
       - name: Build with Next.js 🏗️
-        working-directory: ./playradar
         run: npx next build
 
       - name: Upload artifact 📡
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./playradar/out
+          path: ./out
 
   deploy:
     environment:
