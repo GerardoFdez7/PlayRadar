@@ -39,7 +39,12 @@ jobs:
           static_site_generator: next
 
       - name: Build with Next.js 🏗️
-        run: npx next build
+        run: |
+          echo "Contenido del directorio actual:"
+          ls -la
+          echo "Contenido del directorio app:"
+          ls -la app
+          npx next build
 
       - name: Upload artifact 📡
         uses: actions/upload-pages-artifact@v3
