@@ -7,6 +7,11 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import radarImage from "./radar.png";
+import {
+  getModoOscuro,
+  setModoOscuro,
+  toggleModoOscuro,
+} from "../services/localStorage";
 
 export default function Login() {
   const router = useRouter();
@@ -15,12 +20,16 @@ export default function Login() {
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [darkMode]);
+    // Initialize dark mode from localStorage when component mounts
+    const savedDarkMode = getModoOscuro();
+    setDarkMode(savedDarkMode);
+    setModoOscuro(savedDarkMode);
+  }, []);
+
+  const handleToggleMode = () => {
+    const newMode = toggleModoOscuro();
+    setDarkMode(newMode);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,7 +48,7 @@ export default function Login() {
       <Button
         size="icon"
         className="absolute top-4 right-4"
-        onClick={() => setDarkMode(!darkMode)}
+        onClick={handleToggleMode}
       >
         {darkMode ? (
           <Sun className="h-[1.2rem] w-[1.2rem]" />
