@@ -38,23 +38,27 @@ jobs:
         with:
           static_site_generator: next
 
-      - name: Build with Next.js 🏗️
+      - name: Debug Project Structure 🔍
         run: |
-          echo "Directorio actual:"
+          echo "===== DEBUGGING INFO ====="
+          echo "Current directory:"
           pwd
-          echo "\nEstructura completa del proyecto:"
-          find . -type d
-          echo "\nContenido de package.json:"
-          cat package.json
-          echo "\nContenido de next.config.js:"
-          cat next.config.js
-          echo "\nIniciando build..."
-          npx next build
+          echo "\nDirectory contents:"
+          ls -la
+          echo "\nMoving to playradar directory:"
+          cd playradar
+          echo "\nPlayradar directory contents:"
+          ls -la
+          echo "========================="
+
+      - name: Build with Next.js 🏗️
+        working-directory: ./playradar
+        run: npx next build
 
       - name: Upload artifact 📡
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./out
+          path: ./playradar/out
 
   deploy:
     environment:
