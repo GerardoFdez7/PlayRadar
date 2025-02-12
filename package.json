@@ -12,5 +12,12 @@
   },
   "scripts": {
     "dev": "next dev"
+  },
+    "proxy": {
+      "/api/*": {
+        "target": "https://api.rawg.io/api",
+        "changeOrigin": true,
+        "pathRewrite": { "^/api": "" }
+      }
   }
 }

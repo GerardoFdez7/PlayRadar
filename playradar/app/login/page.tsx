@@ -119,7 +119,7 @@ export default function Login() {
           <Button
             type="button"
             className="w-full "
-            onClick={() => router.push("/home")}
+            onClick={() => router.push("/")}
           >
             Continue as guest
           </Button>
