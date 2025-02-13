@@ -1,7 +1,7 @@
 export type Game = {
   id: number;
   name: string;
-  image: string;
+  background_image: string;
   released: string;
   slug: string;
   parent_platforms?: {

@@ -68,7 +68,8 @@ export default function Register() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-gradient-to-r from-blue-400 to-purple-500 dark:from-gray-800 dark:to-gray-900 transition-colors duration-500">
+    <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-800 dark:to-gray-900 transition-colors duration-500">
+
       <Button
         size="icon"
         className="absolute top-4 right-4"
@@ -89,7 +90,7 @@ export default function Register() {
           height={80}
           className="w-30 h-30"
         />
-        <h1 className="text-6xl font-bold m-8 text-white dark:text-gray-200 font-playRadar">
+        <h1 className="text-6xl font-bold m-8 w-full dark:text-gray-200 font-playRadar">
           PlayRadar
         </h1>
       </div>
