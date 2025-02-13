@@ -1,6 +1,6 @@
 {
   "name": "playradar",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -8,6 +8,13 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "proxy": {
+        "/api/*": {
+          "target": "https://api.rawg.io/api",
+          "changeOrigin": true,
+          "pathRewrite": { "^/api": "" }
+        }
+    },
   "dependencies": {
     "@radix-ui/react-select": "^2.1.4",
     "@radix-ui/react-slot": "^1.1.1",

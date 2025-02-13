@@ -1,5 +1,4 @@
-// Cambiar a local por seguridad
-const API_KEY = "8f3c7da29df64e42b85467f4f00e1cfd"
+const API_KEY = process.env.NEXT_PUBLIC_RAWG_API_KEY;
 
 export const getGames = async () => {
   try {

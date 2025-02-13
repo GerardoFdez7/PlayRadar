@@ -1,5 +1,11 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    },
     "target": "ES2017",
     "lib": [
       "dom",
@@ -17,24 +23,16 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": ".",
     "plugins": [
       {
         "name": "next"
       }
-    ],
-    "paths": {
-      "@/*": [
-        "./*"
-      ]
-    }
+    ]
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    "../pages/index.tsx",
     ".next/types/**/*.ts",
-    "app/page.tsx",
     "next-env.d.ts",
     "out/types/**/*.ts"
   ],

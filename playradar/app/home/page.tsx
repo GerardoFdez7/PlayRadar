@@ -212,6 +212,8 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
                 <SelectItem value="nintendo">Nintendo</SelectItem>
                 <SelectItem value="linux">Linux</SelectItem>
                 <SelectItem value="mac">Apple</SelectItem>
+                <SelectItem value="ios">iOS</SelectItem>
+                <SelectItem value="android">Android</SelectItem>
               </SelectContent>
             </Select>
           </div>
