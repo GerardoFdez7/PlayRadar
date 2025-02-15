@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Moon,
   Sun,
@@ -68,16 +68,20 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
   const [sortBy, setSortBy] = useState<string>("likes");
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredGames, setFilteredGames] = useState<Game[]>([]);
-  const [trailers, setTrailers] = useState<{ [key: number]: string }>({});
-  
+  const [trailers, setTrailers] = useState<Record<string, string>>({});
+  const [hoveredGameId, setHoveredGameId] = useState<string | number | null>(
+    null
+  );
+  const videoRefs = useRef<{ [key: string]: HTMLVideoElement | null }>({});
 
+  // Initialize dark mode on page load
   useEffect(() => {
-    // Inicializar el modo oscuro al cargar la página
     const darkMode = getModoOscuro();
     setIsDarkMode(darkMode);
     setModoOscuro(darkMode);
   }, []);
 
+  // Call the API and establish filters
   useEffect(() => {
     const initialGames = Array.isArray(games) ? games : [];
     let updatedGames = [...initialGames];
@@ -112,12 +116,27 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
     setIsDarkMode(newMode);
   };
 
-  const handleHoverGame = async (gameId: number) => {
-    if (!trailers[gameId]) {
-      const trailer = await fetchGameTrailer(gameId);
-      setTrailers((prev) => ({ ...prev, [gameId]: trailer }));
+  const handleHoverGame = async (game: Game) => {
+    const identifier = game.id.toString();
+    if (!trailers[identifier]) {
+      const trailerUrl = await fetchGameTrailer(identifier);
+
+      if (trailerUrl) {
+        setTrailers((prev) => ({
+          ...prev,
+          [identifier]: trailerUrl,
+        }));
+      }
     }
   };
+
+  // Effect to handle playback logic
+  useEffect(() => {
+    if (hoveredGameId && videoRefs.current[hoveredGameId]) {
+      const video = videoRefs.current[hoveredGameId]!;
+      video.currentTime = 0;
+    }
+  }, [hoveredGameId, trailers]);
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-500">
@@ -188,12 +207,10 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
           <h1 className="text-4xl font-bold mb-6">Games</h1>
 
           {/* Filters */}
-          <div className="flex gap-4 mb-6">  
-          <Select onValueChange={(value) => setSortBy(value)}>
+          <div className="flex gap-4 mb-6">
+            <Select onValueChange={(value) => setSortBy(value)}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue
-                  placeholder={"Order by"}
-                />
+                <SelectValue placeholder={"Order by"} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="likes">Likes</SelectItem>
@@ -225,22 +242,42 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
               <div
                 key={games.id}
                 className="group relative bg-card rounded-lg overflow-hidden transition-all duration-300 hover:scale-110"
-                onMouseEnter={() => handleHoverGame(games.id)}
+                onMouseEnter={() => {
+                  handleHoverGame(games); // Actualiza los trailers
+                  setHoveredGameId(games.id);
+                }}
+                onMouseLeave={() => {
+                  const video = videoRefs.current[games.id];
+                  if (video) {
+                    video.pause();
+                    video.currentTime = 0;
+                  }
+                  setHoveredGameId(null); // Limpiar el estado para que no se vuelva a reproducir el video
+                }}
               >
                 <div className="aspect-video relative">
                   {/* Video al pasar el cursor */}
-                  {trailers[games.id] && (
+                  {trailers[games.id.toString()] && (
                     <video
-                      src={trailers[games.id]}
+                    ref={(el) => {
+                      videoRefs.current[games.id] = el;
+                    }}
+                      src={trailers[games.id.toString()]}
                       autoPlay
                       //muted
                       loop
-                      className="object-cover w-full h-full absolute inset-0 z-10 transition-all duration-500 group-hover:opacity-100"
+                      className="object-cover w-full h-full absolute inset-0 z-10 transition-opacity duration-500 group-hover:opacity-100 opacity-0"
                       style={{ pointerEvents: "none" }}
+                      onLoadedData={() => {
+                        // Reproducir cuando el video esté listo
+                        if (hoveredGameId === games.id) {
+                          videoRefs.current[games.id]?.play();
+                        }
+                      }}
                     />
                   )}
 
-                  {/* Imagen por defecto */}
+                  {/* Default image */}
                   <Image
                     src={games.background_image || videogameImage}
                     alt={games.name}
@@ -248,10 +285,9 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
                     height={360}
                     className="object-cover w-full h-full transition-all duration-500 group-hover:opacity-0"
                   />
-                  
                 </div>
 
-                {/* Informacion de la tarjeta */}
+                {/* Card information */}
                 <div className="mt-3">
                   {/* Platforms icons*/}
                   <div className="absolute left-5 flex gap-1">
@@ -284,15 +320,16 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
                             viewBox="0 0 24 24"
                             fill="currentColor"
                           >
-                            <path d="m24 12c0-.001 0-.001 0-.002 0-3.618-1.606-6.861-4.144-9.054l-.015-.013c-1.91 1.023-3.548 2.261-4.967 3.713l-.004.004c.044.046.087.085.131.132 3.719 4.012 7.106 9.73 6.546 12.471 1.53-1.985 2.452-4.508 2.452-7.246 0-.002 0-.004 0-.006z"/><path d="m12.591 3.955c1.68-1.104 3.699-1.833 5.872-2.022l.048-.003c-1.837-1.21-4.09-1.929-6.511-1.929-2.171 0-4.207.579-5.962 1.591l.058-.031c.658.567 2.837.781 5.484 2.4.143.089.316.142.502.142.189 0 .365-.055.513-.149l-.004.002z"/><path d="m9.166 6.778c.046-.049.093-.09.138-.138-1.17-1.134-2.446-2.174-3.806-3.1l-.099-.064c-.302-.221-.681-.354-1.091-.354-.146 0-.288.017-.425.049l.013-.002c-2.398 2.198-3.896 5.344-3.896 8.84 0 2.909 1.037 5.576 2.762 7.651l-.016-.02c-1.031-2.547 2.477-8.672 6.419-12.862z"/><path d="m12.084 9.198c-3.962 3.503-9.477 8.73-8.632 11.218 2.174 2.213 5.198 3.584 8.542 3.584 3.493 0 6.637-1.496 8.826-3.883l.008-.009c.486-2.618-4.755-7.337-8.744-10.91z" />
+                            <path d="m24 12c0-.001 0-.001 0-.002 0-3.618-1.606-6.861-4.144-9.054l-.015-.013c-1.91 1.023-3.548 2.261-4.967 3.713l-.004.004c.044.046.087.085.131.132 3.719 4.012 7.106 9.73 6.546 12.471 1.53-1.985 2.452-4.508 2.452-7.246 0-.002 0-.004 0-.006z" />
+                            <path d="m12.591 3.955c1.68-1.104 3.699-1.833 5.872-2.022l.048-.003c-1.837-1.21-4.09-1.929-6.511-1.929-2.171 0-4.207.579-5.962 1.591l.058-.031c.658.567 2.837.781 5.484 2.4.143.089.316.142.502.142.189 0 .365-.055.513-.149l-.004.002z" />
+                            <path d="m9.166 6.778c.046-.049.093-.09.138-.138-1.17-1.134-2.446-2.174-3.806-3.1l-.099-.064c-.302-.221-.681-.354-1.091-.354-.146 0-.288.017-.425.049l.013-.002c-2.398 2.198-3.896 5.344-3.896 8.84 0 2.909 1.037 5.576 2.762 7.651l-.016-.02c-1.031-2.547 2.477-8.672 6.419-12.862z" />
+                            <path d="m12.084 9.198c-3.962 3.503-9.477 8.73-8.632 11.218 2.174 2.213 5.198 3.584 8.542 3.584 3.493 0 6.637-1.496 8.826-3.883l.008-.009c.486-2.618-4.755-7.337-8.744-10.91z" />
                           </svg>
                         )}
                         {parent_platforms.platform.slug === "nintendo" && (
-                          <svg
-                          className="w-4 h-3.5"
-                          fill="currentColor"
-                        >
-                          <path d="m 8.088,13 1.837,0 C 11.613,13 13,11.613 13,9.925 l 0,-5.85 C 13,2.3875 11.613,1 9.925,1 L 8.05,1 C 8.013,1 7.975,1.037 7.975,1.075 l 0,11.85 C 7.9745,12.963 8.0125,13 8.088,13 Z m 2.287,-6.5995 c 0.6755,0 1.1995,0.5625 1.1995,1.199 0,0.676 -0.5625,1.2 -1.1995,1.2 -0.675,0 -1.2,-0.5245 -1.2,-1.2 C 9.1375,6.925 9.7,6.4005 10.375,6.4005 Z M 6.7,1 4.075,1 C 2.3875,1 1,2.3875 1,4.075 l 0,5.85 C 1,11.613 2.3875,13 4.075,13 L 6.7,13 c 0.037,0 0.075,-0.037 0.075,-0.0745 l 0,-11.8505 C 6.7755,1.037 6.7375,1 6.7,1 Z m -0.862,11.0255 -1.763,0 c -1.163,0 -2.1005,-0.9375 -2.1005,-2.1005 l 0,-5.85 c 0,-1.163 0.9375,-2.1005 2.1005,-2.1005 l 1.725,0 0.038,10.051 z M 2.875,4.5995 c 0,0.6375 0.4875,1.125 1.125,1.125 0.6375,0 1.125,-0.4875 1.125,-1.125 0,-0.6365 -0.4875,-1.125 -1.125,-1.125 -0.6375,0 -1.125,0.4885 -1.125,1.125 z"/></svg>
+                          <svg className="w-4 h-3.5" fill="currentColor">
+                            <path d="m 8.088,13 1.837,0 C 11.613,13 13,11.613 13,9.925 l 0,-5.85 C 13,2.3875 11.613,1 9.925,1 L 8.05,1 C 8.013,1 7.975,1.037 7.975,1.075 l 0,11.85 C 7.9745,12.963 8.0125,13 8.088,13 Z m 2.287,-6.5995 c 0.6755,0 1.1995,0.5625 1.1995,1.199 0,0.676 -0.5625,1.2 -1.1995,1.2 -0.675,0 -1.2,-0.5245 -1.2,-1.2 C 9.1375,6.925 9.7,6.4005 10.375,6.4005 Z M 6.7,1 4.075,1 C 2.3875,1 1,2.3875 1,4.075 l 0,5.85 C 1,11.613 2.3875,13 4.075,13 L 6.7,13 c 0.037,0 0.075,-0.037 0.075,-0.0745 l 0,-11.8505 C 6.7755,1.037 6.7375,1 6.7,1 Z m -0.862,11.0255 -1.763,0 c -1.163,0 -2.1005,-0.9375 -2.1005,-2.1005 l 0,-5.85 c 0,-1.163 0.9375,-2.1005 2.1005,-2.1005 l 1.725,0 0.038,10.051 z M 2.875,4.5995 c 0,0.6375 0.4875,1.125 1.125,1.125 0.6375,0 1.125,-0.4875 1.125,-1.125 0,-0.6365 -0.4875,-1.125 -1.125,-1.125 -0.6375,0 -1.125,0.4885 -1.125,1.125 z" />
+                          </svg>
                         )}
                         {parent_platforms.platform.slug === "mac" && (
                           <svg
@@ -329,7 +366,7 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
                           >
                             <path d="M14.97535,3.01886l.95982-1.73159a.19342.19342,0,0,0-.33833-.18756l-.97045,1.75078a6.54141,6.54141,0,0,0-5.25275,0L8.40316,1.09971a.19342.19342,0,0,0-.33833.18756l.95985,1.7316A5.54614,5.54614,0,0,0,5.93152,7.89522h12.137A5.54615,5.54615,0,0,0,14.97535,3.01886ZM9.19911,5.67446a.5068.5068,0,1,1,.5068-.5068A.50737.50737,0,0,1,9.19911,5.67446Zm5.60178,0a.5068.5068,0,1,1,.5068-.5068A.50737.50737,0,0,1,14.80089,5.67446Zm-8.86946,11.497a1.46713,1.46713,0,0,0,1.46713,1.46713h.9736v3.00095a1.36046,1.36046,0,1,0,2.72091,0V18.63859h1.81386v3.00095a1.36046,1.36046,0,1,0,2.72091,0V18.63859h.97364a1.46713,1.46713,0,0,0,1.46713-1.46713V8.37532H5.93143ZM4.06415,8.14191A1.362,1.362,0,0,0,2.7037,9.50237v5.66846a1.36046,1.36046,0,1,0,2.72091,0V9.50237A1.362,1.362,0,0,0,4.06415,8.14191Zm15.8717,0a1.362,1.362,0,0,0-1.36046,1.36046v5.66846a1.36046,1.36046,0,1,0,2.72091,0V9.50237A1.362,1.362,0,0,0,19.93585,8.14191Z"></path>
                           </svg>
-                        )}                        
+                        )}
                       </span>
                     ))}
                   </div>

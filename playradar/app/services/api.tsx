@@ -3,7 +3,7 @@ const API_KEY = process.env.NEXT_PUBLIC_RAWG_API_KEY;
 export const getGames = async () => {
   try {
     const res = await fetch(
-      `https://api.rawg.io/api/games?key=${API_KEY}&ordering=-metacritic&platforms=1,2,3,4,18,7,6,5&page_size=50`
+      `https://api.rawg.io/api/games?key=${API_KEY}&ordering=-metacritic&platforms=1,2,3,4,18,7,6,5&page_size=50&dates=2015-01-01,2026-12-31`
     );
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
@@ -13,7 +13,7 @@ export const getGames = async () => {
     const data = await res.json();
     return Array.isArray(data.results) ? data.results : [];
   } catch (error) {
-    console.error('Error en getGames:', error);
+    console.error("Error en getGames:", error);
     return [];
   }
 };
@@ -59,15 +59,21 @@ export const getGameScreenshots = async (slug: string) => {
   }
 };
 
+export const fetchGameTrailer = async (gameId: string) => {
+  try {
+    const res = await fetch(
+      `https://api.rawg.io/api/games/${gameId}/movies?key=${API_KEY}`
+    );
+    if (!res.ok) throw new Error("Error en la petición");
+    console.log(`Trailer request: ${res.url}`);
+    console.log(`Trailer status code: ${res.status}`);
 
-export const fetchGameTrailer = async (gameId: number) => {
-    try {
-    const res = await fetch( 
-      `https://api.rawg.io/api/games/${gameId}/movies?key=${API_KEY}`); 
-        const data = await res.json();
-        return data.results;
-      } catch (error) {
-        console.error(error);
-        return null;
-      }
-  };
+    const data = await res.json();
+    console.log('API Response:', data);
+
+    return data.results[0]?.data?.max || null;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};

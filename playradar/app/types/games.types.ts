@@ -15,6 +15,15 @@ export type Game = {
   genres: string[];
 };
 
+export type Trailer = {
+  id: number;
+  name: string;
+  preview: string;
+  data: {
+    max: string;
+  };
+};
+
 export type SetGamesFunc = (value: Game[]) => void;
 export type SetOrderFunc = (value: string) => void;
 
