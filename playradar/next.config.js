@@ -3,6 +3,9 @@ const nextConfig = {
   env: {
     API_KEY: process.env.API_KEY,
   },
+  experimental: {
+    reactCompiler: true,
+  },
   images: {
     remotePatterns: [
       {

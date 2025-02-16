@@ -135,10 +135,15 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
     if (hoveredGameId && videoRefs.current[hoveredGameId]) {
       const video = videoRefs.current[hoveredGameId]!;
       video.currentTime = 0;
+      video.load()
+      video.play().catch(() => {
+        // Manejo silencioso de errores
+      });
     }
   }, [hoveredGameId, trailers]);
 
   return (
+    
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-500">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
