@@ -21,6 +21,7 @@ import {
   Globe2,
   LogOut,
 } from "lucide-react";
+import { MdVolumeOff, MdVolumeUp } from "react-icons/md"; 
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -73,6 +74,7 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
     null
   );
   const videoRefs = useRef<{ [key: string]: HTMLVideoElement | null }>({});
+  const [muted, setMuted] = useState(true);
 
   // Initialize dark mode on page load
   useEffect(() => {
@@ -135,7 +137,7 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
     if (hoveredGameId && videoRefs.current[hoveredGameId]) {
       const video = videoRefs.current[hoveredGameId]!;
       video.currentTime = 0;
-      video.load()
+      video.load();
       video.play().catch(() => {
         // Manejo silencioso de errores
       });
@@ -143,7 +145,6 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
   }, [hoveredGameId, trailers]);
 
   return (
-    
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-500">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -263,23 +264,36 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
                 <div className="aspect-video relative">
                   {/* Video al pasar el cursor */}
                   {trailers[games.id.toString()] && (
-                    <video
-                    ref={(el) => {
-                      videoRefs.current[games.id] = el;
-                    }}
-                      src={trailers[games.id.toString()]}
-                      autoPlay
-                      //muted
-                      loop
-                      className="object-cover w-full h-full absolute inset-0 z-10 transition-opacity duration-500 group-hover:opacity-100 opacity-0"
-                      style={{ pointerEvents: "none" }}
-                      onLoadedData={() => {
-                        // Reproducir cuando el video esté listo
-                        if (hoveredGameId === games.id) {
-                          videoRefs.current[games.id]?.play();
-                        }
-                      }}
-                    />
+                    <>
+                      <video
+                        ref={(el) => {
+                          videoRefs.current[games.id] = el;
+                        }}
+                        src={trailers[games.id.toString()]}
+                        autoPlay
+                        muted={muted}
+                        loop
+                        className="object-cover w-full h-full absolute inset-0 z-10 transition-opacity duration-500 group-hover:opacity-100 opacity-0"
+                        style={{ pointerEvents: "none" }}
+                        onLoadedData={() => {
+                          // Reproducir cuando el video esté listo
+                          if (hoveredGameId === games.id) {
+                            videoRefs.current[games.id]?.play();
+                          }
+                        }}
+                      />
+                      {/* Botón para alternar sonido */}
+                      <button
+                        onClick={() => setMuted((prev) => !prev)}
+                        className="absolute bottom-2 right-2 z-20 bg-gray-700 bg-opacity-50 p-2 rounded-full"
+                      >
+                        {muted ? (
+                    <MdVolumeOff className="w-6 h-6 opacity-50" />
+                  ) : (
+                    <MdVolumeUp className="w-6 h-6 opacity-50" />
+                 )}
+                      </button>
+                    </>
                   )}
 
                   {/* Default image */}
