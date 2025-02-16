@@ -7,7 +7,6 @@ import {
   Search,
   ThumbsUp,
   ThumbsDown,
-  Heart,
   Swords,
   Compass,
   Gamepad2,
@@ -19,9 +18,10 @@ import {
   Sword,
   Brush,
   Globe2,
-  LogOut,
+  ChevronDown,
+  //LogOut,
 } from "lucide-react";
-import { MdVolumeOff, MdVolumeUp } from "react-icons/md"; 
+import { MdVolumeOff, MdVolumeUp } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+//import { useRouter } from "next/navigation";
 import radarImage from "./radar.png";
 import videogameImage from "./placeholder.png";
 import {
@@ -62,7 +62,7 @@ interface ClientHomePageProps {
 }
 
 export default function ClientHomePage({ games }: ClientHomePageProps) {
-  const router = useRouter();
+  //const router = useRouter();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
   const [selectedPlatform, setSelectedPlatform] = useState<string>("all");
@@ -145,40 +145,53 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
   }, [hoveredGameId, trailers]);
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-500">
+    <div className="min-h-screen bg-gray-300 dark:bg-gray-900 transition-colors duration-500">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="flex h-16 items-center px-4">
-          <div className="w-[50px] h-[50px] ml-2 mr-20">
-            <Image src={radarImage} alt="Radar" width={50} height={50} />
+      <header className="sticky top-0 z-50 w-full backdrop-blur supports-[backdrop-filter]">
+        <div className="flex h-16 items-center justify-between py-12  px-4 max-w-none">
+          {/* Logo */}
+          <div className="flex items-center gap-4 flex-shrink-0">
+            <div className="w-[85px] h-[85px]">
+              <Image
+                src={radarImage}
+                alt="Radar"
+                className="w-full h-full object-contain mt-2"
+              />
+            </div>
           </div>
-          <div className="flex-1 flex items-center ml-5">
-            <div className="relative flex-1 max-w-2xl ml-20">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+          {/* Search bar */}
+          <div className="flex-1 bg-gray-100 dark:bg-gray-800 flex rounded-full justify-center max-w-3xl h-14 mx-8">
+            <div className="relative w-full h-full flex items-center">
+              <div className="absolute left-2 flex items-center">
+                <Search className="h-4 w-4 text-muted-foreground" />
+              </div>
               <Input
-                placeholder="Search games..."
-                className="pl-8 w-full"
+                placeholder="Search games"
+                className="pl-8 w-full border-0 bg-transparent shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 ring-0 outline-none"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
           </div>
-          <Button size="icon" className="ml-4" onClick={handleToggleMode}>
+          <Button
+            size="icon"
+            className="ml-4 border-0 bg-transparent shadow-none hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 hover:scale-110"
+            onClick={handleToggleMode}
+          >
             {isDarkMode ? (
-              <Sun className="h-[1.2rem] w-[1.2rem]" />
+              <Sun className="h-5 w-5 fill-white dark:stroke-white dark:fill-white transition-transform" />
             ) : (
-              <Moon className="h-[1.2rem] w-[1.2rem]" />
+              <Moon className="h-5 w-5 stroke-[1.5] stroke-black fill-black dark:stroke-white dark:fill-black transition-transform" />
             )}
-            <span className="sr-only">Toggle theme</span>
           </Button>
         </div>
       </header>
 
       <div className="flex">
         {/* Sidebar */}
-        <aside className="w-64 h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto border-r bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-          <div className="p-4">
-            <h2 className="text-lg font-semibold mb-4">Genres</h2>
+        <aside className="w-41 h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto ">
+          <div className="p-4 ">
+            <h2 className="text-3xl font-bold mb-4 mt-3">Genres</h2>
             <nav className="space-y-2">
               {genres.map((genre) => (
                 <button
@@ -195,6 +208,7 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
                 </button>
               ))}
             </nav>
+            {/* Log out 
             <div className="absolute bottom-4 left-4 right-4">
               <Button
                 variant="ghost"
@@ -203,20 +217,22 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
               >
                 <LogOut className="mr-2 h-4 w-4" />
                 Log out
-              </Button>
-            </div>
+              </Button>              
+            </div>     
+            */}
           </div>
         </aside>
 
         {/* Main Content */}
         <main className="flex-1 p-6">
-          <h1 className="text-4xl font-bold mb-6">Games</h1>
-
+          <h1 className="text-5xl font-bold font-playRadar mb-3 ">PlayRadar</h1>
+          <p className="text-lg mb-6">Scroll, click, play… repeat!</p>
           {/* Filters */}
           <div className="flex gap-4 mb-6">
             <Select onValueChange={(value) => setSortBy(value)}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-[180px] border border-gray-400">
                 <SelectValue placeholder={"Order by"} />
+                <ChevronDown className="h-5 w-5 opacity-80" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="likes">Likes</SelectItem>
@@ -225,8 +241,9 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
               </SelectContent>
             </Select>
             <Select onValueChange={(value) => setSelectedPlatform(value)}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-[180px] border border-gray-400">
                 <SelectValue placeholder="Platforms" />
+                <ChevronDown className="h-5 w-5 opacity-80" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All</SelectItem>
@@ -288,10 +305,10 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
                         className="absolute bottom-2 right-2 z-20 bg-gray-700 bg-opacity-50 p-2 rounded-full"
                       >
                         {muted ? (
-                    <MdVolumeOff className="w-6 h-6 opacity-50" />
-                  ) : (
-                    <MdVolumeUp className="w-6 h-6 opacity-50" />
-                 )}
+                          <MdVolumeOff className="w-6 h-6 opacity-50" />
+                        ) : (
+                          <MdVolumeUp className="w-6 h-6 opacity-50" />
+                        )}
                       </button>
                     </>
                   )}
@@ -317,7 +334,7 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
                       >
                         {parent_platforms.platform.slug === "pc" && (
                           <svg
-                            className="w-3 h-3"
+                            className="w-4 h-4"
                             viewBox="0 0 24 24"
                             fill="currentColor"
                           >
@@ -326,11 +343,11 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
                         )}
                         {parent_platforms.platform.slug === "playstation" && (
                           <svg
-                            className="w-4 h-4"
-                            viewBox="0 0 24 24"
+                            className="w-5 h-5"
+                            viewBox="0 0 35 25"
                             fill="currentColor"
                           >
-                            <path d="M8.984 2.596v17.547l3.915 1.261V6.688c0-.69.304-1.151.794-.991.636.18.76.814.76 1.505v5.875c2.441 1.193 4.362-.002 4.362-3.152 0-3.237-1.126-4.675-4.438-5.827-1.307-.448-3.728-1.186-5.393-1.502zm4.656 16.241l6.296-2.275c.715-.258.826-.625.246-.818-.586-.192-1.637-.139-2.357.123l-4.205 1.499v-2.385l.24-.085s1.201-.42 2.913-.615c1.696-.18 3.785.029 5.437.661 1.848.601 2.041 1.472 1.576 2.072s-1.622 1.036-1.622 1.036l-8.544 3.107v-2.297l.02-.023zM1.999 18.674c-2.31-.586-2.657-1.784-1.765-2.234.797-.41 2.154-.573 3.622-.506l2.942.187V18.5c-1.033-.018-2.164-.069-3.201-.165-1.244-.109-1.228.493-.108.724.988.2 2.395.314 3.635.346l-.01 2.36c-.277.013-.574.023-.874.023-1.758 0-3.279-.225-4.241-.5v-2.614z" />
+                            <path d="m18.646 5.077c.044.289.069.622.069.96 0 .109-.003.218-.008.326l.001-.015c0 2.344-.007 4.688.006 7.032.655.34 1.427.549 2.245.57h.007c.022.001.048.001.074.001.521 0 1.011-.131 1.439-.362l-.016.008c.478-.268.867-.644 1.143-1.096l.008-.014c.295-.491.512-1.064.616-1.677l.004-.029c.08-.464.125-.998.125-1.542 0-.191-.006-.382-.017-.57l.001.026c-.013-1.131-.259-2.202-.692-3.171l.02.051c-.269-.559-.613-1.036-1.027-1.443l-.001-.001c-.389-.383-.824-.72-1.298-1l-.031-.017c-.979-.56-2.112-1.048-3.302-1.404l-.116-.03c-.75-.24-1.505-.47-2.262-.69-1.323-.375-2.652-.735-4.005-.987q0 11.2 0 22.393l5.065 1.607q.006-9.414 0-18.827c-.001-.018-.001-.039-.001-.06 0-.36.112-.693.304-.967l-.004.005c.115-.146.292-.24.49-.24.038 0 .074.003.11.01l-.004-.001c.234.043.44.143.609.286l-.002-.002c.235.224.397.523.446.858l.001.008zm-13.226 13.272c1.738-.621 3.475-1.249 5.216-1.866.007-.076.01-.165.01-.254 0-.034-.001-.069-.002-.103v.005c0-.865 0-1.73 0-2.594-2.202.777-4.4 1.563-6.602 2.342-.537.196-1.082.37-1.608.594-.675.272-1.254.581-1.795.943l.035-.022c-.243.156-.438.368-.569.619l-.004.009c-.065.135-.103.294-.103.461 0 .139.026.271.073.393l-.003-.007c.139.322.354.589.624.785l.005.004c.47.338 1.02.601 1.613.756l.035.008c1.548.53 3.332.835 5.187.835.117 0 .234-.001.351-.004h-.017c.995-.024 1.948-.129 2.876-.308l-.108.017c.014-.146.006-.293.008-.439 0-.732 0-1.463 0-2.194-.744.266-1.487.537-2.23.806-.244.101-.536.193-.837.26l-.037.007c-.406.087-.873.138-1.351.139h-.001c-.009 0-.021 0-.032 0-.42 0-.823-.072-1.198-.204l.025.008c-.15-.049-.271-.15-.344-.282l-.002-.003c-.007-.025-.011-.054-.011-.084 0-.102.047-.193.12-.254h.001c.188-.165.413-.294.66-.372l.013-.004zm25.184-1.68c-.436-.361-.949-.648-1.509-.831l-.033-.009c-.309-.098-.609-.22-.918-.314-1.432-.449-3.079-.708-4.786-.708-.036 0-.073 0-.109 0h.006c-.502.018-1.004.032-1.503.09-1.52.165-2.908.484-4.228.946l.132-.04q0 1.52 0 3.04c1.829-.64 3.654-1.287 5.482-1.928.551-.183 1.185-.288 1.844-.288h.052-.003c.018 0 .039-.001.06-.001.412 0 .808.071 1.176.201l-.025-.008c.148.048.269.147.343.276l.002.003c.005.024.008.051.008.079 0 .139-.075.261-.186.327l-.002.001c-.291.195-.629.352-.99.453l-.025.006q-3.85 1.374-7.699 2.745c-.054.01-.033.076-.038.114v2.834q5.06-1.819 10.121-3.635c.665-.218 1.21-.437 1.738-.685l-.092.039c.528-.245.979-.567 1.359-.959l.001-.001c.198-.209.32-.492.32-.804 0-.004 0-.008 0-.012v.001c-.034-.378-.22-.707-.497-.929l-.003-.002z" />
                           </svg>
                         )}
                         {parent_platforms.platform.slug === "xbox" && (
@@ -346,14 +363,18 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
                           </svg>
                         )}
                         {parent_platforms.platform.slug === "nintendo" && (
-                          <svg className="w-4 h-3.5" fill="currentColor">
+                          <svg 
+                          className="w-8 h-8"
+                          viewBox="0 0 19 14"
+                          fill="currentColor"
+                          >
                             <path d="m 8.088,13 1.837,0 C 11.613,13 13,11.613 13,9.925 l 0,-5.85 C 13,2.3875 11.613,1 9.925,1 L 8.05,1 C 8.013,1 7.975,1.037 7.975,1.075 l 0,11.85 C 7.9745,12.963 8.0125,13 8.088,13 Z m 2.287,-6.5995 c 0.6755,0 1.1995,0.5625 1.1995,1.199 0,0.676 -0.5625,1.2 -1.1995,1.2 -0.675,0 -1.2,-0.5245 -1.2,-1.2 C 9.1375,6.925 9.7,6.4005 10.375,6.4005 Z M 6.7,1 4.075,1 C 2.3875,1 1,2.3875 1,4.075 l 0,5.85 C 1,11.613 2.3875,13 4.075,13 L 6.7,13 c 0.037,0 0.075,-0.037 0.075,-0.0745 l 0,-11.8505 C 6.7755,1.037 6.7375,1 6.7,1 Z m -0.862,11.0255 -1.763,0 c -1.163,0 -2.1005,-0.9375 -2.1005,-2.1005 l 0,-5.85 c 0,-1.163 0.9375,-2.1005 2.1005,-2.1005 l 1.725,0 0.038,10.051 z M 2.875,4.5995 c 0,0.6375 0.4875,1.125 1.125,1.125 0.6375,0 1.125,-0.4875 1.125,-1.125 0,-0.6365 -0.4875,-1.125 -1.125,-1.125 -0.6375,0 -1.125,0.4885 -1.125,1.125 z" />
                           </svg>
                         )}
                         {parent_platforms.platform.slug === "mac" && (
                           <svg
-                            className="w-4 h-4"
-                            viewBox="0 0 24 24"
+                            className="w-5 h-5"
+                            viewBox="0 0 24 26"
                             fill="currentColor"
                           >
                             <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701" />
@@ -370,8 +391,8 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
                         )}
                         {parent_platforms.platform.slug === "ios" && (
                           <svg
-                            className="w-4 h-4"
-                            viewBox="0 0 30 30"
+                            className="w-6 h-6"
+                            viewBox="0 0 30 32"
                             fill="currentColor"
                           >
                             <path d="M1.119 12.633v10.576h2.49v-10.576h-2.49zM11.882 10.768c2.553 0 4.193 2.040 4.193 5.232 0 3.217-1.64 5.257-4.193 5.257-2.578 0-4.206-2.040-4.206-5.257 0-3.192 1.627-5.232 4.206-5.232zM25.45 8.578c-3.129 0-5.357 1.727-5.357 4.293 0 2.040 1.264 3.317 3.918 3.93l1.865 0.451c1.815 0.413 2.553 1.014 2.553 2.053 0 1.202-1.214 2.053-2.941 2.053-1.765 0-3.092-0.864-3.229-2.19h-2.503c0.1 2.654 2.278 4.281 5.582 4.281 3.492 0 5.683-1.715 5.683-4.443 0-2.14-1.252-3.354-4.155-4.018l-1.665-0.376c-1.765-0.426-2.491-0.989-2.491-1.94 0-1.202 1.101-2.003 2.729-2.003 1.64 0 2.766 0.814 2.891 2.153h2.453c-0.063-2.528-2.153-4.243-5.332-4.243zM11.882 8.578c-4.205-0-6.834 2.866-6.834 7.422 0 4.594 2.628 7.447 6.834 7.447 4.181 0 6.821-2.854 6.821-7.447 0-4.556-2.641-7.422-6.822-7.422zM2.357 8.553c-0.007-0-0.016-0-0.024-0-0.747 0-1.352 0.605-1.352 1.352s0.605 1.352 1.352 1.352c0.009 0 0.017-0 0.026-0l-0.001 0c0.011 0 0.024 0.001 0.037 0.001 0.747 0 1.352-0.605 1.352-1.352s-0.605-1.352-1.352-1.352c-0.013 0-0.026 0-0.039 0.001l0.002-0z"></path>
@@ -395,18 +416,26 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
                       <h3 className="font-semibold truncate">{games.name}</h3>
                     </div>
                     <div className="flex items-center justify-between">
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        className="hover:text-red-500 "
-                      >
-                        {/* Cambiar por anadir a mi lista "Jugar mas tarde" */}
-                        <Heart className="h-5 w-5 mr-4" />
+                      <Button size="icon" variant="ghost" className="mr-4">
+                        {/* "Jugar mas tarde" */}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="h-6 w-6"
+                        >
+                          <path d="M5 12h14" />
+                          <path d="M12 5v14" />
+                        </svg>
                       </Button>
                       <div className="flex items-center gap-1">
-                        <ThumbsDown className="h-4 w-4" />
-                        <ThumbsUp className="h-4 w-4" />
-                        <span className="text-sm text-muted-foreground">
+                        <ThumbsDown className="h-5 w-5" />
+                        <ThumbsUp className="h-5 w-5" />
+                        <span className="text-s text-muted-foreground">
                           {games.ratings_count}
                         </span>
                       </div>

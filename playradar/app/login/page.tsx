@@ -44,17 +44,16 @@ export default function Login() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-800 dark:to-gray-900 transition-colors duration-500">
-
+    <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-gray-300 dark:bg-gray-900 transition-colors duration-500">
       <Button
         size="icon"
-        className="absolute top-4 right-4"
+        className="ml-4 border-0 bg-transparent shadow-none hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 hover:scale-110 absolute top-4 right-4"
         onClick={handleToggleMode}
       >
         {darkMode ? (
-          <Sun className="h-[1.2rem] w-[1.2rem]" />
+          <Sun className="h-5 w-5 fill-white dark:stroke-white dark:fill-white transition-transform" />
         ) : (
-          <Moon className="h-[1.2rem] w-[1.2rem]" />
+          <Moon className="h-5 w-5 stroke-[1.5] stroke-black fill-black dark:stroke-white dark:fill-black transition-transform" />
         )}
         <span className="sr-only">Toggle theme</span>
       </Button>
@@ -72,7 +71,7 @@ export default function Login() {
       </div>
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-md mx-auto p-8 bg-white dark:bg-gray-800 shadow-xl rounded-xl transition-all duration-500 ease-in-out hover:transform hover:scale-105 border-2"
+        className="w-full max-w-md mx-auto p-8 bg-gray-100 dark:bg-gray-800 shadow-xl rounded-xl transition-all duration-500 ease-in-out hover:transform hover:scale-105 "
       >
         <div className="mb-6">
           <label
@@ -84,7 +83,7 @@ export default function Login() {
           <input
             type="email"
             id="email"
-            className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -99,7 +98,7 @@ export default function Login() {
           <input
             type="password"
             id="password"
-            className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
