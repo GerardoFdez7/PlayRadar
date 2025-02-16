@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
-//import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import radarImage from "./radar.png";
 import videogameImage from "./placeholder.png";
 import {
@@ -62,7 +62,7 @@ interface ClientHomePageProps {
 }
 
 export default function ClientHomePage({ games }: ClientHomePageProps) {
-  //const router = useRouter();
+  const router = useRouter();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
   const [selectedPlatform, setSelectedPlatform] = useState<string>("all");
@@ -147,20 +147,21 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
   return (
     <div className="min-h-screen bg-gray-300 dark:bg-gray-900 transition-colors duration-500">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full backdrop-blur supports-[backdrop-filter]">
-        <div className="flex h-16 items-center justify-between py-12  px-4 max-w-none">
+      <header className="sticky top-0 z-50 w-full backdrop-blur supports-[backdrop-filter] ">
+        <div className="flex h-16 items-center justify-between py-12 px-4 max-w-none">
           {/* Logo */}
           <div className="flex items-center gap-4 flex-shrink-0">
-            <div className="w-[85px] h-[85px]">
+            <div className="w-[85px] h-[85px] cursor-pointer ml-3">
               <Image
                 src={radarImage}
                 alt="Radar"
                 className="w-full h-full object-contain mt-2"
+                onClick={() => router.push("/")}
               />
             </div>
           </div>
           {/* Search bar */}
-          <div className="flex-1 bg-gray-100 dark:bg-gray-800 flex rounded-full justify-center max-w-3xl h-14 mx-8">
+          <div className="flex-1 bg-gray-100 dark:bg-gray-800 flex rounded-full justify-center max-w-3xl h-14 mx-8 mt-2">
             <div className="relative w-full h-full flex items-center">
               <div className="absolute left-2 flex items-center">
                 <Search className="h-4 w-4 text-muted-foreground" />
@@ -175,7 +176,7 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
           </div>
           <Button
             size="icon"
-            className="ml-4 border-0 bg-transparent shadow-none hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 hover:scale-110"
+            className="ml-4 mr-3 border-0 bg-transparent shadow-none hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 hover:scale-110"
             onClick={handleToggleMode}
           >
             {isDarkMode ? (
@@ -189,7 +190,7 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
 
       <div className="flex">
         {/* Sidebar */}
-        <aside className="w-41 h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto ">
+        <aside className="w-41 h-[calc(100vh-4rem)] ml-3 sticky top-16 overflow-y-auto ">
           <div className="p-4 ">
             <h2 className="text-3xl font-bold mb-4 mt-3">Genres</h2>
             <nav className="space-y-2">
@@ -224,7 +225,7 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-6">
+        <main className="flex-1 p-6 mr-3">
           <h1 className="text-5xl font-bold font-playRadar mb-3 ">PlayRadar</h1>
           <p className="text-lg mb-6">Scroll, click, play… repeat!</p>
           {/* Filters */}
