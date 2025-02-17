@@ -1,3 +1,11 @@
+export type Genre = {
+  id: number;
+  name: string;
+  slug: string;
+  games_count?: number;
+  image_background?: string;
+};
+
 export type Game = {
   id: number;
   name: string;
@@ -12,7 +20,7 @@ export type Game = {
     }
   }[];
   ratings_count?: number;
-  genres: string[];
+  genres: Genre[];
 };
 
 export type Trailer = {

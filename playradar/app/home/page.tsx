@@ -44,17 +44,17 @@ import { fetchGameTrailer } from "../services/api";
 import { Game } from "../types/games.types";
 
 const genres = [
-  { name: "Action", icon: <Swords className="w-4 h-4" /> },
-  { name: "Adventure", icon: <Compass className="w-4 h-4" /> },
-  { name: "Arcade", icon: <Gamepad2 className="w-4 h-4" /> },
-  { name: "Board Games", icon: <DiceIcon className="w-4 h-4" /> },
-  { name: "Card", icon: <Cards className="w-4 h-4" /> },
-  { name: "Casual", icon: <Target className="w-4 h-4" /> },
-  { name: "Educational", icon: <GraduationCap className="w-4 h-4" /> },
-  { name: "Family", icon: <Users className="w-4 h-4" /> },
-  { name: "Fighting", icon: <Sword className="w-4 h-4" /> },
-  { name: "Indie", icon: <Brush className="w-4 h-4" /> },
-  { name: "Massively Multiplayer", icon: <Globe2 className="w-4 h-4" /> },
+  { name: "Action", slug: "action", icon: <Swords className="w-4 h-4" /> },
+  { name: "Adventure", slug: "adventure", icon: <Compass className="w-4 h-4" /> },
+  { name: "Arcade",slug: "arcade", icon: <Gamepad2 className="w-4 h-4" /> },
+  { name: "Board Games", slug: "board Games", icon: <DiceIcon className="w-4 h-4" /> },
+  { name: "Card", slug: "card", icon: <Cards className="w-4 h-4" /> },
+  { name: "Casual", slug: "aasual", icon: <Target className="w-4 h-4" /> },
+  { name: "Educational", slug: "educational", icon: <GraduationCap className="w-4 h-4" /> },
+  { name: "Family", slug: "family", icon: <Users className="w-4 h-4" /> },
+  { name: "Fighting", slug: "fighting", icon: <Sword className="w-4 h-4" /> },
+  { name: "Indie", slug: "indie", icon: <Brush className="w-4 h-4" /> },
+  { name: "Massively Multiplayer", slug: "massively multiplayer", icon: <Globe2 className="w-4 h-4" /> },
 ];
 
 interface ClientHomePageProps {
@@ -64,7 +64,7 @@ interface ClientHomePageProps {
 export default function ClientHomePage({ games }: ClientHomePageProps) {
   const router = useRouter();
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
+  const [selectedGenreSlug, setSelectedGenreSlug] = useState<string | null>(null);
   const [selectedPlatform, setSelectedPlatform] = useState<string>("all");
   const [sortBy, setSortBy] = useState<string>("likes");
   const [searchTerm, setSearchTerm] = useState("");
@@ -94,6 +94,12 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
       );
     }
 
+    if (selectedGenreSlug) {
+      updatedGames = updatedGames.filter((game) =>
+        game.genres?.some((g) => g.slug === selectedGenreSlug)
+      );
+    }
+
     if (selectedPlatform !== "all") {
       updatedGames = updatedGames.filter((games) =>
         games.parent_platforms?.some(
@@ -111,7 +117,7 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
     }
 
     setFilteredGames(updatedGames);
-  }, [selectedPlatform, sortBy, searchTerm, games]);
+  }, [selectedPlatform, sortBy, searchTerm, selectedGenreSlug, games]);
 
   const handleToggleMode = () => {
     const newMode = toggleModoOscuro();
@@ -194,15 +200,15 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
           <div className="p-4 ">
             <h2 className="text-3xl font-bold mb-4 mt-3">Genres</h2>
             <nav className="space-y-2">
-              {genres.map((genre) => (
-                <button
-                  key={genre.name}
-                  onClick={() => setSelectedGenre(genre.name)}
-                  className={`w-full flex items-center px-3 py-2 rounded-lg text-sm transition-colors ${
-                    selectedGenre === genre.name
-                      ? "bg-primary text-primary-foreground"
-                      : "hover:bg-muted"
-                  }`}
+            {genres.map((genre) => (
+            <button
+              key={genre.slug}
+              onClick={() => setSelectedGenreSlug((prev) => (prev === genre.slug ? null : genre.slug))}
+              className={`w-full flex items-center px-3 py-2 rounded-lg text-sm transition-colors ${
+                selectedGenreSlug === genre.slug
+                  ? "bg-primary text-primary-foreground"
+                  : "hover:bg-accent/50"
+              }`}
                 >
                   <span className="mr-2">{genre.icon}</span>
                   {genre.name}
