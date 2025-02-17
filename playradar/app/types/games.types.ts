@@ -32,13 +32,13 @@ export type Trailer = {
   };
 };
 
-export type SetGamesFunc = (value: Game[]) => void;
-export type SetOrderFunc = (value: string) => void;
-
 export type UseSearchResultsParams = {
   games: Game[];
   searchText: string;
 };
+
+export type SetGamesFunc = (value: Game[]) => void;
+export type SetOrderFunc = (value: string) => void;
 
 export type HandleSortingParams = {
   sortingFunction: (

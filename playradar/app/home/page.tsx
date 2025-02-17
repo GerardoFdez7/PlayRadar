@@ -40,7 +40,7 @@ import {
   toggleModoOscuro,
   setModoOscuro,
 } from "../services/localStorage";
-import { fetchGameTrailer } from "../services/api";
+import { fetchGameTrailer, getSearchedGames } from "../services/api";
 import { Game } from "../types/games.types";
 
 const genres = [
@@ -68,6 +68,7 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
   const [selectedPlatform, setSelectedPlatform] = useState<string>("all");
   const [sortBy, setSortBy] = useState<string>("likes");
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchedGames, setSearchedGames] = useState<Game[]>(games);
   const [filteredGames, setFilteredGames] = useState<Game[]>([]);
   const [trailers, setTrailers] = useState<Record<string, string>>({});
   const [hoveredGameId, setHoveredGameId] = useState<string | number | null>(
@@ -83,16 +84,27 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
     setModoOscuro(darkMode);
   }, []);
 
+  useEffect(() => {
+    const handler = setTimeout(async () => {
+      if (searchTerm.trim()) {
+        try {
+          const apiResults = await getSearchedGames(searchTerm);
+          setSearchedGames(apiResults || []);
+        } catch (error) {
+          console.error("Error fetching games:", error);
+          setSearchedGames([]);
+        }
+      } else {
+        setSearchedGames(games); // Resetear a juegos iniciales
+      }
+    }, 500); // Debounce de 500ms
+
+    return () => clearTimeout(handler);
+  }, [searchTerm, games]);
+
   // Call the API and establish filters
   useEffect(() => {
-    const initialGames = Array.isArray(games) ? games : [];
-    let updatedGames = [...initialGames];
-
-    if (searchTerm) {
-      updatedGames = updatedGames.filter((game) =>
-        game.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
+    let updatedGames = [...searchedGames]; 
 
     if (selectedGenreSlug) {
       updatedGames = updatedGames.filter((game) =>
@@ -117,7 +129,7 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
     }
 
     setFilteredGames(updatedGames);
-  }, [selectedPlatform, sortBy, searchTerm, selectedGenreSlug, games]);
+  }, [selectedPlatform, sortBy, searchedGames, selectedGenreSlug, games]);
 
   const handleToggleMode = () => {
     const newMode = toggleModoOscuro();
