@@ -10,14 +10,12 @@ import {
   Swords,
   Compass,
   Gamepad2,
-  Dice1Icon as DiceIcon,
   WalletCardsIcon as Cards,
   Target,
   GraduationCap,
   Users,
   Sword,
   Brush,
-  Globe2,
   ChevronDown,
   //LogOut,
 } from "lucide-react";
@@ -52,13 +50,8 @@ const genres = [
     icon: <Compass className="w-4 h-4" />,
   },
   { name: "Arcade", slug: "arcade", icon: <Gamepad2 className="w-4 h-4" /> },
-  {
-    name: "Board Games",
-    slug: "board Games",
-    icon: <DiceIcon className="w-4 h-4" />,
-  },
   { name: "Card", slug: "card", icon: <Cards className="w-4 h-4" /> },
-  { name: "Casual", slug: "aasual", icon: <Target className="w-4 h-4" /> },
+  { name: "Casual", slug: "casual", icon: <Target className="w-4 h-4" /> },
   {
     name: "Educational",
     slug: "educational",
@@ -67,11 +60,6 @@ const genres = [
   { name: "Family", slug: "family", icon: <Users className="w-4 h-4" /> },
   { name: "Fighting", slug: "fighting", icon: <Sword className="w-4 h-4" /> },
   { name: "Indie", slug: "indie", icon: <Brush className="w-4 h-4" /> },
-  {
-    name: "Massively Multiplayer",
-    slug: "massively multiplayer",
-    icon: <Globe2 className="w-4 h-4" />,
-  },
 ];
 
 interface ClientHomePageProps {
@@ -86,7 +74,9 @@ export default function ClientHomePage({
   const router = useRouter();
 
   // States for normal load
-  const [games, setGames] = useState<Game[]>(initialGames);
+  const [games, setGames] = useState<Game[]>(
+    Array.isArray(initialGames) ? initialGames : []
+  );
   const [nextUrl, setNextUrl] = useState<string | null>(initialNextUrl);
 
   // Search statuses
@@ -110,7 +100,7 @@ export default function ClientHomePage({
   const videoRefs = useRef<{ [key: string]: HTMLVideoElement | null }>({});
   const [muted, setMuted] = useState(true);
 
-  // Sentinel for the infinite scroll (single)
+  // Sentinel for the infinite scroll
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   // Initialize dark mode on page load
@@ -240,6 +230,7 @@ export default function ClientHomePage({
     };
   }, [loadMoreGames, loadMoreSearchResults, searchTerm]);
 
+  // Get the trailer when mouse is over the game
   const handleHoverGame = async (game: Game) => {
     const identifier = game.id.toString();
     if (!trailers[identifier]) {
@@ -375,7 +366,7 @@ export default function ClientHomePage({
 
           {/* Games Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredGames.map((games) => (
+            {filteredGames?.map((games) => (
               <div
                 key={games.id}
                 className="group relative bg-card rounded-lg overflow-hidden transition-all duration-300 hover:scale-110"
@@ -560,20 +551,19 @@ export default function ClientHomePage({
             ))}
             {/* Detect end of the list */}
             <div ref={sentinelRef} className="h-1"></div>
-
-            {/* Loading animation */}
-            {isLoading && (
-              <div className="col-span-2 flex justify-center">
-                <div className="w-50 h-50">
-                  <DotLottieReact
-                    src="https://lottie.host/7b4dd0bd-fedc-41a6-b542-8d7c1950999a/3fmNE4stxF.lottie"
-                    loop
-                    autoplay
-                  />
-                </div>
-              </div>
-            )}
           </div>
+          {/* Loading animation */}
+          {isLoading && (
+            <div className="flex justify-center">
+              <div className="w-50 h-50">
+                <DotLottieReact
+                  src="https://lottie.host/7b4dd0bd-fedc-41a6-b542-8d7c1950999a/3fmNE4stxF.lottie"
+                  loop
+                  autoplay
+                />
+              </div>
+            </div>
+          )}
         </main>
       </div>
     </div>

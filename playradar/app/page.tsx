@@ -1,22 +1,16 @@
 import ClientHomePage from "../app/home/page";
 import { getGames } from "../app/services/api";
 
-
 export default async function HomePage() {
   const initialData = await getGames();
-
-  if (!initialData) {
-    return <div>Error al cargar juegos</div>;
-  }
-
-  const initialGames = Array.isArray(initialData.results)
-    ? initialData.results
-    : [];
-  const initialNextUrl = initialData.next;
+  
+  // Fuerza estructura segura incluso si la API falla
+  const initialGames = initialData?.results || [];
+  const initialNextUrl = initialData?.next || null;
 
   return (
     <ClientHomePage
-    initialGames={initialGames}
+      initialGames={initialGames}
       initialNextUrl={initialNextUrl}
     />
   );
