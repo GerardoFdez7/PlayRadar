@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   Moon,
   Sun,
@@ -22,6 +22,7 @@ import {
   //LogOut,
 } from "lucide-react";
 import { MdVolumeOff, MdVolumeUp } from "react-icons/md";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -40,36 +41,68 @@ import {
   toggleModoOscuro,
   setModoOscuro,
 } from "../services/localStorage";
-import { fetchGameTrailer, getSearchedGames } from "../services/api";
+import { fetchGameTrailer, getSearchedGames, getGames } from "../services/api";
 import { Game } from "../types/games.types";
 
 const genres = [
   { name: "Action", slug: "action", icon: <Swords className="w-4 h-4" /> },
-  { name: "Adventure", slug: "adventure", icon: <Compass className="w-4 h-4" /> },
-  { name: "Arcade",slug: "arcade", icon: <Gamepad2 className="w-4 h-4" /> },
-  { name: "Board Games", slug: "board Games", icon: <DiceIcon className="w-4 h-4" /> },
+  {
+    name: "Adventure",
+    slug: "adventure",
+    icon: <Compass className="w-4 h-4" />,
+  },
+  { name: "Arcade", slug: "arcade", icon: <Gamepad2 className="w-4 h-4" /> },
+  {
+    name: "Board Games",
+    slug: "board Games",
+    icon: <DiceIcon className="w-4 h-4" />,
+  },
   { name: "Card", slug: "card", icon: <Cards className="w-4 h-4" /> },
   { name: "Casual", slug: "aasual", icon: <Target className="w-4 h-4" /> },
-  { name: "Educational", slug: "educational", icon: <GraduationCap className="w-4 h-4" /> },
+  {
+    name: "Educational",
+    slug: "educational",
+    icon: <GraduationCap className="w-4 h-4" />,
+  },
   { name: "Family", slug: "family", icon: <Users className="w-4 h-4" /> },
   { name: "Fighting", slug: "fighting", icon: <Sword className="w-4 h-4" /> },
   { name: "Indie", slug: "indie", icon: <Brush className="w-4 h-4" /> },
-  { name: "Massively Multiplayer", slug: "massively multiplayer", icon: <Globe2 className="w-4 h-4" /> },
+  {
+    name: "Massively Multiplayer",
+    slug: "massively multiplayer",
+    icon: <Globe2 className="w-4 h-4" />,
+  },
 ];
 
 interface ClientHomePageProps {
-  games: Game[];
+  initialGames: Game[];
+  initialNextUrl: string | null;
 }
 
-export default function ClientHomePage({ games }: ClientHomePageProps) {
+export default function ClientHomePage({
+  initialGames,
+  initialNextUrl,
+}: ClientHomePageProps) {
   const router = useRouter();
+
+  // States for normal load
+  const [games, setGames] = useState<Game[]>(initialGames);
+  const [nextUrl, setNextUrl] = useState<string | null>(initialNextUrl);
+
+  // Search statuses
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState<Game[]>([]);
+  const [nextSearchUrl, setNextSearchUrl] = useState<string | null>(null);
+
+  // Other statuses and refs (dark mode, filters, trailers, etc.)
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [selectedGenreSlug, setSelectedGenreSlug] = useState<string | null>(null);
+  const [selectedGenreSlug, setSelectedGenreSlug] = useState<string | null>(
+    null
+  );
   const [selectedPlatform, setSelectedPlatform] = useState<string>("all");
   const [sortBy, setSortBy] = useState<string>("likes");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchedGames, setSearchedGames] = useState<Game[]>(games);
-  const [filteredGames, setFilteredGames] = useState<Game[]>([]);
+  const [filteredGames, setFilteredGames] = useState<Game[]>(games);
   const [trailers, setTrailers] = useState<Record<string, string>>({});
   const [hoveredGameId, setHoveredGameId] = useState<string | number | null>(
     null
@@ -77,34 +110,24 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
   const videoRefs = useRef<{ [key: string]: HTMLVideoElement | null }>({});
   const [muted, setMuted] = useState(true);
 
+  // Sentinel for the infinite scroll (single)
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+
   // Initialize dark mode on page load
   useEffect(() => {
     const darkMode = getModoOscuro();
     setIsDarkMode(darkMode);
     setModoOscuro(darkMode);
   }, []);
-
-  useEffect(() => {
-    const handler = setTimeout(async () => {
-      if (searchTerm.trim()) {
-        try {
-          const apiResults = await getSearchedGames(searchTerm);
-          setSearchedGames(apiResults || []);
-        } catch (error) {
-          console.error("Error fetching games:", error);
-          setSearchedGames([]);
-        }
-      } else {
-        setSearchedGames(games); // Resetear a juegos iniciales
-      }
-    }, 500); // Debounce de 500ms
-
-    return () => clearTimeout(handler);
-  }, [searchTerm, games]);
+  const handleToggleMode = () => {
+    const newMode = toggleModoOscuro();
+    setIsDarkMode(newMode);
+  };
 
   // Call the API and establish filters
   useEffect(() => {
-    let updatedGames = [...searchedGames]; 
+    const displayGames = searchTerm.trim() ? searchResults : games;
+    let updatedGames = [...displayGames];
 
     if (selectedGenreSlug) {
       updatedGames = updatedGames.filter((game) =>
@@ -113,10 +136,8 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
     }
 
     if (selectedPlatform !== "all") {
-      updatedGames = updatedGames.filter((games) =>
-        games.parent_platforms?.some(
-          (p) => p.platform.slug === selectedPlatform
-        )
+      updatedGames = updatedGames.filter((game) =>
+        game.parent_platforms?.some((p) => p.platform.slug === selectedPlatform)
       );
     }
 
@@ -129,18 +150,100 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
     }
 
     setFilteredGames(updatedGames);
-  }, [selectedPlatform, sortBy, searchedGames, selectedGenreSlug, games]);
+  }, [
+    selectedPlatform,
+    sortBy,
+    searchResults,
+    games,
+    selectedGenreSlug,
+    searchTerm,
+  ]);
 
-  const handleToggleMode = () => {
-    const newMode = toggleModoOscuro();
-    setIsDarkMode(newMode);
-  };
+  // More games
+  const loadMoreGames = useCallback(async () => {
+    if (!nextUrl || isLoading) return;
+    setIsLoading(true);
+    const data = await getGames(nextUrl);
+    if (data && Array.isArray(data.results)) {
+      setGames((prev) => [...prev, ...data.results]);
+      setNextUrl(data.next);
+    }
+    setIsLoading(false);
+  }, [nextUrl, isLoading]);
+
+  // When the search term changes the initial call is made
+  useEffect(() => {
+    const fetchInitialSearch = async () => {
+      if (searchTerm.trim()) {
+        setIsLoading(true);
+        const data = await getSearchedGames(searchTerm);
+        if (data && Array.isArray(data.results)) {
+          setSearchResults(data.results);
+          setNextSearchUrl(data.next);
+        }
+        setIsLoading(false);
+      } else {
+        // If the term is deleted, we reset to the initial games
+        setSearchResults([]);
+        setNextSearchUrl(null);
+      }
+    };
+
+    // 500ms debounce
+    const handler = setTimeout(() => {
+      fetchInitialSearch();
+    }, 500);
+
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
+
+  // More games when searching
+  const loadMoreSearchResults = useCallback(async () => {
+    if (!nextSearchUrl || isLoading) return;
+    setIsLoading(true);
+    const data = await getSearchedGames(searchTerm, nextSearchUrl);
+    if (data && Array.isArray(data.results)) {
+      setSearchResults((prev) => [...prev, ...data.results]);
+      setNextSearchUrl(data.next);
+    }
+    setIsLoading(false);
+  }, [nextSearchUrl, searchTerm, isLoading]);
+
+  // Detect if the user is in the end of the page
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          if (searchTerm.trim()) {
+            // If searched, load more search results
+            loadMoreSearchResults();
+          } else {
+            // If not, load more games (normal view)
+            loadMoreGames();
+          }
+        }
+      },
+      {
+        rootMargin: "0px",
+        threshold: 1.0,
+      }
+    );
+
+    const currentSentinel = sentinelRef.current;
+    if (currentSentinel) {
+      observer.observe(currentSentinel);
+    }
+    return () => {
+      if (currentSentinel) {
+        observer.unobserve(currentSentinel);
+      }
+    };
+  }, [loadMoreGames, loadMoreSearchResults, searchTerm]);
 
   const handleHoverGame = async (game: Game) => {
     const identifier = game.id.toString();
     if (!trailers[identifier]) {
       const trailerUrl = await fetchGameTrailer(identifier);
-
       if (trailerUrl) {
         setTrailers((prev) => ({
           ...prev,
@@ -157,7 +260,7 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
       video.currentTime = 0;
       video.load();
       video.play().catch(() => {
-        // Manejo silencioso de errores
+        // Errors
       });
     }
   }, [hoveredGameId, trailers]);
@@ -212,33 +315,25 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
           <div className="p-4 ">
             <h2 className="text-3xl font-bold mb-4 mt-3">Genres</h2>
             <nav className="space-y-2">
-            {genres.map((genre) => (
-            <button
-              key={genre.slug}
-              onClick={() => setSelectedGenreSlug((prev) => (prev === genre.slug ? null : genre.slug))}
-              className={`w-full flex items-center px-3 py-2 rounded-lg text-sm transition-colors ${
-                selectedGenreSlug === genre.slug
-                  ? "bg-primary text-primary-foreground"
-                  : "hover:bg-accent/50"
-              }`}
+              {genres.map((genre) => (
+                <button
+                  key={genre.slug}
+                  onClick={() =>
+                    setSelectedGenreSlug((prev) =>
+                      prev === genre.slug ? null : genre.slug
+                    )
+                  }
+                  className={`w-full flex items-center px-3 py-2 rounded-lg text-sm transition-colors ${
+                    selectedGenreSlug === genre.slug
+                      ? "bg-primary text-primary-foreground"
+                      : "hover:bg-accent/50"
+                  }`}
                 >
                   <span className="mr-2">{genre.icon}</span>
                   {genre.name}
                 </button>
               ))}
             </nav>
-            {/* Log out 
-            <div className="absolute bottom-4 left-4 right-4">
-              <Button
-                variant="ghost"
-                className="w-full justify-start"
-                onClick={() => router.push("/login")}
-              >
-                <LogOut className="mr-2 h-4 w-4" />
-                Log out
-              </Button>              
-            </div>     
-            */}
           </div>
         </aside>
 
@@ -285,7 +380,7 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
                 key={games.id}
                 className="group relative bg-card rounded-lg overflow-hidden transition-all duration-300 hover:scale-110"
                 onMouseEnter={() => {
-                  handleHoverGame(games); // Actualiza los trailers
+                  handleHoverGame(games); // Update trailers
                   setHoveredGameId(games.id);
                 }}
                 onMouseLeave={() => {
@@ -294,7 +389,7 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
                     video.pause();
                     video.currentTime = 0;
                   }
-                  setHoveredGameId(null); // Limpiar el estado para que no se vuelva a reproducir el video
+                  setHoveredGameId(null); // Clean the state
                 }}
               >
                 <div className="aspect-video relative">
@@ -312,13 +407,13 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
                         className="object-cover w-full h-full absolute inset-0 z-10 transition-opacity duration-500 group-hover:opacity-100 opacity-0"
                         style={{ pointerEvents: "none" }}
                         onLoadedData={() => {
-                          // Reproducir cuando el video esté listo
+                          // Play video when ready
                           if (hoveredGameId === games.id) {
                             videoRefs.current[games.id]?.play();
                           }
                         }}
                       />
-                      {/* Botón para alternar sonido */}
+                      {/* Mute button */}
                       <button
                         onClick={() => setMuted((prev) => !prev)}
                         className="absolute bottom-2 right-2 z-20 bg-gray-700 bg-opacity-50 p-2 rounded-full"
@@ -382,10 +477,10 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
                           </svg>
                         )}
                         {parent_platforms.platform.slug === "nintendo" && (
-                          <svg 
-                          className="w-8 h-8"
-                          viewBox="0 0 19 14"
-                          fill="currentColor"
+                          <svg
+                            className="w-8 h-8"
+                            viewBox="0 0 19 14"
+                            fill="currentColor"
                           >
                             <path d="m 8.088,13 1.837,0 C 11.613,13 13,11.613 13,9.925 l 0,-5.85 C 13,2.3875 11.613,1 9.925,1 L 8.05,1 C 8.013,1 7.975,1.037 7.975,1.075 l 0,11.85 C 7.9745,12.963 8.0125,13 8.088,13 Z m 2.287,-6.5995 c 0.6755,0 1.1995,0.5625 1.1995,1.199 0,0.676 -0.5625,1.2 -1.1995,1.2 -0.675,0 -1.2,-0.5245 -1.2,-1.2 C 9.1375,6.925 9.7,6.4005 10.375,6.4005 Z M 6.7,1 4.075,1 C 2.3875,1 1,2.3875 1,4.075 l 0,5.85 C 1,11.613 2.3875,13 4.075,13 L 6.7,13 c 0.037,0 0.075,-0.037 0.075,-0.0745 l 0,-11.8505 C 6.7755,1.037 6.7375,1 6.7,1 Z m -0.862,11.0255 -1.763,0 c -1.163,0 -2.1005,-0.9375 -2.1005,-2.1005 l 0,-5.85 c 0,-1.163 0.9375,-2.1005 2.1005,-2.1005 l 1.725,0 0.038,10.051 z M 2.875,4.5995 c 0,0.6375 0.4875,1.125 1.125,1.125 0.6375,0 1.125,-0.4875 1.125,-1.125 0,-0.6365 -0.4875,-1.125 -1.125,-1.125 -0.6375,0 -1.125,0.4885 -1.125,1.125 z" />
                           </svg>
@@ -436,7 +531,7 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
                     </div>
                     <div className="flex items-center justify-between">
                       <Button size="icon" variant="ghost" className="mr-4">
-                        {/* "Jugar mas tarde" */}
+                        {/* "Play later" */}
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 24 24"
@@ -463,6 +558,21 @@ export default function ClientHomePage({ games }: ClientHomePageProps) {
                 </div>
               </div>
             ))}
+            {/* Detect end of the list */}
+            <div ref={sentinelRef} className="h-1"></div>
+
+            {/* Loading animation */}
+            {isLoading && (
+              <div className="col-span-2 flex justify-center">
+                <div className="w-50 h-50">
+                  <DotLottieReact
+                    src="https://lottie.host/7b4dd0bd-fedc-41a6-b542-8d7c1950999a/3fmNE4stxF.lottie"
+                    loop
+                    autoplay
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </main>
       </div>

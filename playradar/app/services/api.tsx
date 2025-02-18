@@ -1,32 +1,35 @@
 const API_KEY = process.env.NEXT_PUBLIC_RAWG_API_KEY;
 
-export const getGames = async () => {
+export const getGames = async (url?: string) => {
   try {
-    const res = await fetch(
-      `https://api.rawg.io/api/games?key=${API_KEY}&ordering=-metacritic&platforms=1,2,3,4,18,7,6,5&page_size=50&dates=2015-01-01,2026-12-31`
-    );
+    const apiUrl =
+      url ??
+      `https://api.rawg.io/api/games?key=${API_KEY}&ordering=-metacritic&platforms=1,2,3,4,18,7,6,5&page_size=40&dates=2015-01-01,2026-12-31`;
+    const res = await fetch(apiUrl);
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
     console.log(`Request to API: ${res.url}`);
     console.log(`Response status code: ${res.status}`);
 
     const data = await res.json();
-    return Array.isArray(data.results) ? data.results : [];
+    return data; // { count, next, previous, results }
   } catch (error) {
-    console.error("Error en getGames:", error);
-    return [];
+    console.error("Error en getGamesWithNext:", error);
+    return null;
   }
 };
 
-export const getSearchedGames = async (query: string) => {
+export const getSearchedGames = async (query: string, url?: string) => {
   try {
-    const res = await fetch(
-      `https://api.rawg.io/api/games?key=${API_KEY}&search=${query}&page_size=50`
-    );
+    const apiUrl =
+      url ??
+      `https://api.rawg.io/api/games?key=${API_KEY}&search=${query}&page_size=50`;
+    const res = await fetch(apiUrl);
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
     const data = await res.json();
-    return data.results;
+    return data; // { count, next, previous, results }
   } catch (error) {
-    console.error(error);
+    console.error("Error en getSearchedGamesWithNext:", error);
     return null;
   }
 };
@@ -69,7 +72,7 @@ export const fetchGameTrailer = async (gameId: string) => {
     console.log(`Trailer status code: ${res.status}`);
 
     const data = await res.json();
-    console.log('API Response:', data);
+    console.log("API Response:", data);
 
     return data.results[0]?.data?.max || null;
   } catch (error) {
