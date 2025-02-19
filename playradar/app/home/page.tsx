@@ -268,14 +268,18 @@ export default function ClientHomePage({
                 src={radarImage}
                 alt="Radar"
                 className="w-full h-full object-contain mt-2"
-                onClick={() => router.push("/")}
+                onClick={() => window.location.reload()}
               />
             </div>
           </div>
           {/* Search bar */}
-          <div className="flex-1 bg-gray-100 dark:bg-gray-800 flex rounded-full justify-center max-w-3xl h-14 mx-8 mt-2">
+          
+          <div className="flex-1 bg-gray-100 dark:bg-gray-800 flex rounded-full justify-center max-w-3xl h-14 mx-8 mt-2 mr-24">
+          
             <div className="relative w-full h-full flex items-center">
+            
               <div className="absolute left-2 flex items-center">
+              
                 <Search className="h-4 w-4 text-muted-foreground" />
               </div>
               <Input
@@ -284,8 +288,27 @@ export default function ClientHomePage({
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
+              {/* X button to clear search */}
+              {searchTerm && (
+                <button
+                  className="absolute right-7 font-semibold"
+                  onClick={() => {
+                    setSearchTerm("");
+                  }}
+                >
+                  X
+                </button>
+              )}
             </div>
           </div>
+          {/* LOG IN button*/}
+          <button
+            onClick={() => router.push("/login")}
+            className="absolute right-1 mr-20 font-bold bg-transparent hover:underline text-lg"
+          >
+            LOG IN
+          </button>
+          {/* Theme button*/}
           <Button
             size="icon"
             className="ml-4 mr-3 border-0 bg-transparent shadow-none hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 hover:scale-110"
