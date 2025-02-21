@@ -273,13 +273,9 @@ export default function ClientHomePage({
             </div>
           </div>
           {/* Search bar */}
-          
           <div className="flex-1 bg-gray-100 dark:bg-gray-800 flex rounded-full justify-center max-w-3xl h-14 mx-8 mt-2 mr-24">
-          
             <div className="relative w-full h-full flex items-center">
-            
               <div className="absolute left-2 flex items-center">
-              
                 <Search className="h-4 w-4 text-muted-foreground" />
               </div>
               <Input
@@ -302,12 +298,14 @@ export default function ClientHomePage({
             </div>
           </div>
           {/* LOG IN button*/}
+          <div className="absolute right-1 mr-20">
           <button
             onClick={() => router.push("/login")}
-            className="absolute right-1 mr-20 font-bold bg-transparent hover:underline text-lg"
-          >
+            className="font-bold bg-transparent text-lg relative after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-[-4px] after:h-[4px] 
+            after:bg-current after:transform after:origin-left after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100 after:rounded-full">
             LOG IN
           </button>
+          </div>
           {/* Theme button*/}
           <Button
             size="icon"
