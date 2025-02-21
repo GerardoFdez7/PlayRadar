@@ -100,6 +100,11 @@ export default function ClientHomePage({
   const videoRefs = useRef<{ [key: string]: HTMLVideoElement | null }>({});
   const [muted, setMuted] = useState(true);
 
+  // Short images state
+  const [currentScreenshotIndex, setCurrentScreenshotIndex] = useState<
+    Record<number, number>
+  >({});
+
   // Sentinel for the infinite scroll
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
@@ -229,6 +234,29 @@ export default function ClientHomePage({
       }
     };
   }, [loadMoreGames, loadMoreSearchResults, searchTerm]);
+
+  // Nueva función para manejar el hover en las screenshots
+  const handleScreenshotHover = (
+    e: React.MouseEvent<HTMLDivElement>,
+    game: Game
+  ) => {
+    const container = e.currentTarget.getBoundingClientRect();
+    const mouseX = e.clientX - container.left;
+    const percentage = mouseX / container.width;
+    const totalScreenshots = game.short_screenshots?.length || 0;
+
+    if (totalScreenshots > 0) {
+      const newIndex = Math.min(
+        Math.floor(percentage * totalScreenshots),
+        totalScreenshots - 1
+      );
+
+      setCurrentScreenshotIndex((prev) => ({
+        ...prev,
+        [game.id]: newIndex,
+      }));
+    }
+  };
 
   // Get the trailer when mouse is over the game
   const handleHoverGame = async (game: Game) => {
@@ -402,10 +430,15 @@ export default function ClientHomePage({
                     video.currentTime = 0;
                   }
                   setHoveredGameId(null); // Clean the state
+                  // Reset index on exit
+                  setCurrentScreenshotIndex((prev) => ({
+                    ...prev,
+                    [games.id]: 0,
+                  }));
                 }}
               >
                 <div className="aspect-video relative">
-                  {/* Video al pasar el cursor */}
+                  {/* Video trailer */}
                   {trailers[games.id.toString()] && (
                     <>
                       <video
@@ -428,7 +461,7 @@ export default function ClientHomePage({
                       {/* Mute button */}
                       <button
                         onClick={() => setMuted((prev) => !prev)}
-                        className="absolute bottom-2 right-2 z-20 bg-gray-700 bg-opacity-50 p-2 rounded-full"
+                        className="absolute bottom-2 right-2 z-30 bg-gray-700/50 p-2 rounded-full"
                       >
                         {muted ? (
                           <MdVolumeOff className="w-6 h-6 opacity-50" />
@@ -439,13 +472,61 @@ export default function ClientHomePage({
                     </>
                   )}
 
-                  {/* Default image */}
+                  {/* Sección modificada para screenshots */}
+                  {!trailers[games.id.toString()] &&
+                    games.short_screenshots &&
+                    games.short_screenshots.length > 0 && (
+                      <div
+                        className="absolute inset-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 isolate"
+                        onMouseMove={(e) => handleScreenshotHover(e, games)}
+                      >
+                        <Image
+                          src={
+                            games.short_screenshots[
+                              currentScreenshotIndex[games.id] || 0
+                            ]?.image || videogameImage
+                          }
+                          alt={games.name}
+                          fill
+                          className="object-cover w-full h-full"
+                        />
+
+                        {/* Indicador de posición */}
+                        <div className="absolute bottom-0 left-0 right-0 p-2 z-10">
+                          <div className="flex flex-col gap-1">
+                            {/* Contador de posición */}
+                            <div className="flex justify-between items-center"></div>
+
+                            {/* Barra de progreso interactiva */}
+                            <div className="flex gap-3">
+                              {games.short_screenshots.map((_, index) => (
+                                <div
+                                  key={index}
+                                  className={`h-1 flex-1 rounded-full transition-all duration-300 ${
+                                    index === currentScreenshotIndex[games.id]
+                                      ? "bg-white"
+                                      : "bg-gray-500"
+                                  }`}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                  {/* Imagen por defecto */}
                   <Image
                     src={games.background_image || videogameImage}
                     alt={games.name}
                     width={640}
                     height={360}
-                    className="object-cover w-full h-full transition-all duration-500 group-hover:opacity-0"
+                    className={`object-cover w-full h-full transition-all duration-500 ${
+                      trailers[games.id.toString()] ||
+                      (games.short_screenshots?.length ?? 0) > 0
+                        ? "group-hover:opacity-0"
+                        : ""
+                    }`}
                   />
                 </div>
 

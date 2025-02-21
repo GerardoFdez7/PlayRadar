@@ -21,6 +21,10 @@ export type Game = {
   }[];
   ratings_count?: number;
   genres: Genre[];
+  short_screenshots?: {
+    id: number;
+    image: string;
+  }[];
 };
 
 export type Trailer = {
