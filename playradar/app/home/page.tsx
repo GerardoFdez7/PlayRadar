@@ -32,6 +32,7 @@ import {
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import radarImage from "./radar.png";
 import videogameImage from "./placeholder.png";
 import {
@@ -235,7 +236,7 @@ export default function ClientHomePage({
     };
   }, [loadMoreGames, loadMoreSearchResults, searchTerm]);
 
-  // Nueva función para manejar el hover en las screenshots
+  // Handle scrolling in screenshots
   const handleScreenshotHover = (
     e: React.MouseEvent<HTMLDivElement>,
     game: Game
@@ -327,12 +328,13 @@ export default function ClientHomePage({
           </div>
           {/* LOG IN button*/}
           <div className="absolute right-1 mr-20">
-          <button
-            onClick={() => router.push("/login")}
-            className="font-bold bg-transparent text-lg relative after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-[-4px] after:h-[4px] 
-            after:bg-current after:transform after:origin-left after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100 after:rounded-full">
-            LOG IN
-          </button>
+            <button
+              onClick={() => router.push("/login")}
+              className="font-bold bg-transparent text-lg relative after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-[-4px] after:h-[4px] 
+            after:bg-current after:transform after:origin-left after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100 after:rounded-full"
+            >
+              LOG IN
+            </button>
           </div>
           {/* Theme button*/}
           <Button
@@ -348,10 +350,9 @@ export default function ClientHomePage({
           </Button>
         </div>
       </header>
-
       <div className="flex">
         {/* Sidebar */}
-        <aside className="w-41 h-[calc(100vh-4rem)] ml-3 sticky top-16 overflow-y-auto ">
+        <aside className="w-41 h-[calc(100vh-4rem)] ml-3 sticky top-16 overflow-y-auto flex flex-col">
           <div className="p-4 ">
             <h2 className="text-3xl font-bold mb-4 mt-3">Genres</h2>
             <nav className="space-y-2">
@@ -375,6 +376,22 @@ export default function ClientHomePage({
               ))}
             </nav>
           </div>
+          {/* Footer */}
+          <footer className="w-[10vw] py-6 px-4 text-center mt-auto">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              © {new Date().getFullYear()} PlayRadar. All rights reserved.
+            </p>
+            <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+              Developed by Gerardo Fernández.
+            </p>
+            <Link
+              href="https://gerardofernandez7.github.io/Portfolio/"
+              target="_blank"
+              className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300 transition-colors"
+            >
+              Contact
+            </Link>
+          </footer>
         </aside>
 
         {/* Main Content */}
@@ -461,18 +478,18 @@ export default function ClientHomePage({
                       {/* Mute button */}
                       <button
                         onClick={() => setMuted((prev) => !prev)}
-                        className="absolute bottom-2 right-2 z-30 bg-gray-700/50 p-2 rounded-full"
+                        className="absolute bottom-2 right-2 z-30 bg-gray-700/50 p-2 rounded-full hover:bg-gray-700/75 transition-all"
                       >
                         {muted ? (
-                          <MdVolumeOff className="w-6 h-6 opacity-50" />
+                          <MdVolumeOff className="w-6 h-6 opacity-50 hover:opacity-100" />
                         ) : (
-                          <MdVolumeUp className="w-6 h-6 opacity-50" />
+                          <MdVolumeUp className="w-6 h-6 opacity-50 hover:opacity-100" />
                         )}
                       </button>
                     </>
                   )}
 
-                  {/* Sección modificada para screenshots */}
+                  {/* Screenshots */}
                   {!trailers[games.id.toString()] &&
                     games.short_screenshots &&
                     games.short_screenshots.length > 0 && (
@@ -491,13 +508,13 @@ export default function ClientHomePage({
                           className="object-cover w-full h-full"
                         />
 
-                        {/* Indicador de posición */}
+                        {/* Position indicator */}
                         <div className="absolute bottom-0 left-0 right-0 p-2 z-10">
                           <div className="flex flex-col gap-1">
-                            {/* Contador de posición */}
+                            {/* Position counter */}
                             <div className="flex justify-between items-center"></div>
 
-                            {/* Barra de progreso interactiva */}
+                            {/* Interactive progress bar */}
                             <div className="flex gap-3">
                               {games.short_screenshots.map((_, index) => (
                                 <div
@@ -515,7 +532,7 @@ export default function ClientHomePage({
                       </div>
                     )}
 
-                  {/* Imagen por defecto */}
+                  {/* Default image */}
                   <Image
                     src={games.background_image || videogameImage}
                     alt={games.name}
