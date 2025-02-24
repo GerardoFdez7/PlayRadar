@@ -45,7 +45,7 @@ export default function Login() {
   };
 
   return (
-    <main className="flex flex-col min-h-screen items-center justify-center p-24 bg-gray-300 dark:bg-gray-900 transition-colors duration-500">
+    <main className="flex flex-col min-h-screen items-center p-24 justify-center bg-gray-300 dark:bg-gray-900 transition-colors duration-500">
       <Button
         size="icon"
         className="ml-4 border-0 bg-transparent shadow-none hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 hover:scale-110 absolute top-4 right-4"
@@ -72,7 +72,7 @@ export default function Login() {
       </div>
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-md mx-auto p-8 bg-gray-100 dark:bg-gray-800 shadow-xl rounded-xl transition-all duration-500 ease-in-out hover:transform hover:scale-105 "
+        className="mb-8 w-full max-w-md mx-auto p-8 bg-gray-100 dark:bg-gray-800 shadow-xl rounded-xl transition-all duration-500 ease-in-out hover:transform hover:scale-105"
       >
         <div className="mb-6">
           <label
@@ -128,20 +128,22 @@ export default function Login() {
       </form>
 
       {/* Footer */}
-      <footer className="mt-auto w-full py-6 px-4 text-center">
-        <p className="text-sm text-gray-600 dark:text-gray-400">
+      <footer className="mt-auto w-full pt-6 px-4 text-center border-gray-400 dark:border-gray-500">
+        {/* Línea decorativa con bordes redondeados */}
+        <div className="absolute left-1/2 -translate-x-1/2 w-[90vw] h-[2px] bg-gray-400 dark:bg-gray-500 rounded-full before:content-[''] before:absolute before:left-1/2 before:-translate-x-1/2 before:w-[10vw] before:h-full before:bg-inherit before:rounded-full" />
+        <p className="text-sm text-gray-900 dark:text-gray-400 pt-4">
           © {new Date().getFullYear()} PlayRadar. All rights reserved.
         </p>
-        <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
           Developed by Gerardo Fernández.
         </p>
         <Link
           href="https://gerardofernandez7.github.io/Portfolio/"
           target="_blank"
-          className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300 transition-colors"
+          className="text-sm text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300 transition-colors"
         >
           Contact
-        </Link>
+        </Link>       
       </footer>
     </main>
   );

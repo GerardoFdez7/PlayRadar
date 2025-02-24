@@ -353,7 +353,7 @@ export default function ClientHomePage({
       <div className="flex">
         {/* Sidebar */}
         <aside className="w-41 h-[calc(100vh-4rem)] ml-3 sticky top-16 overflow-y-auto flex flex-col">
-          <div className="p-4 ">
+          <div className="p-4 mb-40">
             <h2 className="text-3xl font-bold mb-4 mt-3">Genres</h2>
             <nav className="space-y-2">
               {genres.map((genre) => (
@@ -377,17 +377,18 @@ export default function ClientHomePage({
             </nav>
           </div>
           {/* Footer */}
-          <footer className="w-[10vw] py-6 px-4 text-center mt-auto">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+          <footer className="w-[10vw] mt-auto py-6 px-4 text-center border-gray-400 dark:border-gray-500">
+            <div className="absolute left-1/2 -translate-x-1/2 w-[90vw] h-[2px] bg-gray-400 dark:bg-gray-500 rounded-full before:content-[''] before:absolute before:left-1/2 before:-translate-x-1/2 before:w-[10vw] before:h-full before:bg-inherit before:rounded-full" />
+            <p className="text-sm text-gray-900 dark:text-gray-400 pt-4">
               © {new Date().getFullYear()} PlayRadar. All rights reserved.
             </p>
-            <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
               Developed by Gerardo Fernández.
             </p>
             <Link
               href="https://gerardofernandez7.github.io/Portfolio/"
               target="_blank"
-              className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300 transition-colors"
+              className="text-sm text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300 transition-colors"
             >
               Contact
             </Link>
