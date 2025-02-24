@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -15,11 +15,6 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [username, setUsername] = useState("");
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -54,8 +49,6 @@ export default function Register() {
       alert("An error occurred while registering the user. Please try again.");
     }
   };
-
-  if (!mounted) return null;
 
   return (
     <main className="flex flex-col min-h-screen items-center justify-center p-24 bg-gray-300 dark:bg-gray-900 transition-colors duration-500">

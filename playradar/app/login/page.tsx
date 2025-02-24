@@ -1,7 +1,7 @@
 "use client";
 
 import { checkUser } from "../services/dataBaseConfig";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -13,11 +13,6 @@ export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,8 +25,6 @@ export default function Login() {
       alert("Invalid email or password");
     }
   };
-
-  if (!mounted) return null;
 
   return (
     <main className="flex flex-col min-h-screen items-center p-24 justify-center bg-gray-300 dark:bg-gray-900 transition-colors duration-500">

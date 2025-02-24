@@ -81,7 +81,6 @@ export default function ClientHomePage({
 
   // Other statuses and refs (dark mode, filters, trailers, etc.)
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [mounted, setMounted] = useState(false);
   const [selectedGenreSlug, setSelectedGenreSlug] = useState<string | null>(
     null
   );
@@ -103,10 +102,6 @@ export default function ClientHomePage({
   // Sentinel for the infinite scroll
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
-  // Initialize dark mode on page load
-  useEffect(() => {
-    setMounted(true);
-  }, []);
   // Call the API and establish filters
   useEffect(() => {
     const displayGames = searchTerm.trim() ? searchResults : games;
@@ -277,8 +272,6 @@ export default function ClientHomePage({
       });
     }
   }, [hoveredGameId, trailers]);
-
-  if (!mounted) return null;
 
   return (
     <div className="min-h-screen bg-gray-300 dark:bg-gray-900 transition-colors duration-500">

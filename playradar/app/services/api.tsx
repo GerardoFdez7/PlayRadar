@@ -4,7 +4,7 @@ export const getGames = async (url?: string) => {
   try {
     const apiUrl =
       url ??
-      `https://api.rawg.io/api/games?key=${API_KEY}&ordering=-metacritic&page_size=40&dates=2015-01-01,2026-12-31`;
+      `https://api.rawg.io/api/games?key=${API_KEY}&ordering=-metacritic&page_size=40&dates=2015-01-01,2027-12-31`;
     const res = await fetch(apiUrl);
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
