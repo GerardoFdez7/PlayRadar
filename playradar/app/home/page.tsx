@@ -138,9 +138,12 @@ export default function ClientHomePage({
     }
 
     if (sortBy === "likes") {
-      updatedGames.sort(
-        (a, b) => (b.ratings_count ?? 0) - (a.ratings_count ?? 0)
-      );
+      updatedGames.sort((a, b) => (b.ratings_count ?? 0) - (a.ratings_count ?? 0));
+    } else if (sortBy === "release") {
+      updatedGames.sort((a, b) => {
+        const dateA = new Date(a.released).getTime();
+        const dateB = new Date(b.released).getTime();
+        return dateB - dateA;});
     } else if (sortBy === "name") {
       updatedGames.sort((a, b) => a.name.localeCompare(b.name));
     }
@@ -655,14 +658,20 @@ export default function ClientHomePage({
                         >
                           <path d="M5 12h14" />
                           <path d="M12 5v14" />
-                        </svg>                        
+                        </svg>
                       </Button>
                       {/* Like and Dislike */}
                       <div className="flex items-center gap-1">
-                        <Button variant="ghost" className="p-0 m-1 hover:bg-transparent hover:[&_svg]:fill-foreground/30">
+                        <Button
+                          variant="ghost"
+                          className="p-0 m-1 hover:bg-transparent hover:[&_svg]:fill-foreground/30"
+                        >
                           <ThumbsDown className="h-5 w-5" />
                         </Button>
-                        <Button variant="ghost" className="p-0 m-1 hover:bg-transparent hover:[&_svg]:fill-foreground/30">
+                        <Button
+                          variant="ghost"
+                          className="p-0 m-1 hover:bg-transparent hover:[&_svg]:fill-foreground/30"
+                        >
                           <ThumbsUp className="h-5 w-5" />
                         </Button>
                         <span className="text-stext-muted-foreground">
@@ -685,9 +694,7 @@ export default function ClientHomePage({
                         <div className="h-px bg-gradient-to-r from-transparent via-gray-800 dark:via-gray-200 to-transparent my-2" />
                         {/* Release */}
                         <div className="flex justify-between items-center mt-2 mb-4">
-                          <span className="text-sm">
-                            Released
-                          </span>
+                          <span className="text-sm">Released</span>
                           <span className="text-sm">
                             {new Date(games.released).toLocaleDateString()}
                           </span>
