@@ -14,19 +14,34 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "PlayRadar",
-  description: "Made by a gamer for gamers",
+  description: "Made by a gamer, for gamers",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            (function() {
+              try {
+                var modoOscuro = localStorage.getItem('modoOscuro');
+                if (modoOscuro === 'true') {
+                  document.documentElement.classList.add('dark');
+                }
+              } catch (e) {}
+            })();
+            `,
+          }}
+        />
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {/* Si necesitas lógica adicional del lado del cliente para manejar toggles, puedes envolver los children en un componente cliente */}
         {children}
       </body>
     </html>

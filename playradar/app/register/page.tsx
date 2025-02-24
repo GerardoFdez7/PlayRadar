@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -8,11 +8,7 @@ import Link from "next/link";
 import Image from "next/image";
 import radarImage from "./radar.png";
 import { addUser, isEmailOrUsernameTaken } from "../services/dataBaseConfig";
-import {
-  getModoOscuro,
-  setModoOscuro,
-  toggleModoOscuro,
-} from "../services/localStorage";
+import { toggleModoOscuro } from "../services/localStorage";
 
 export default function Register() {
   const router = useRouter();
@@ -21,13 +17,6 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [username, setUsername] = useState("");
   const [darkMode, setDarkMode] = useState(false);
-
-  useEffect(() => {
-    // Initialize dark mode from localStorage when component mounts
-    const savedDarkMode = getModoOscuro();
-    setDarkMode(savedDarkMode);
-    setModoOscuro(savedDarkMode);
-  }, []);
 
   const handleToggleMode = () => {
     const newMode = toggleModoOscuro();
@@ -69,7 +58,7 @@ export default function Register() {
   };
 
   return (
-    <main className="flex flex-col min-h-screen items-center justify-center p-24 bg-gray-300 dark:bg-gray-900 transition-colors duration-500">      
+    <main className="flex flex-col min-h-screen items-center justify-center p-24 bg-gray-300 dark:bg-gray-900 transition-colors duration-500">
       <Button
         size="icon"
         className="ml-4 border-0 bg-transparent shadow-none hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 hover:scale-110 absolute top-4 right-4"
@@ -180,8 +169,8 @@ export default function Register() {
 
       {/* Footer */}
       <footer className="mt-auto w-full py-6 px-4 text-center border-gray-400 dark:border-gray-500">
-      <div className="absolute left-1/2 -translate-x-1/2 w-[90vw] h-[2px] bg-gray-400 dark:bg-gray-500 rounded-full before:content-[''] before:absolute before:left-1/2 before:-translate-x-1/2 before:w-[10vw] before:h-full before:bg-inherit before:rounded-full" />
-      <p className="text-sm text-gray-900 dark:text-gray-400 pt-4">
+        <div className="absolute left-1/2 -translate-x-1/2 w-[90vw] h-[2px] bg-gray-400 dark:bg-gray-500 rounded-full before:content-[''] before:absolute before:left-1/2 before:-translate-x-1/2 before:w-[10vw] before:h-full before:bg-inherit before:rounded-full" />
+        <p className="text-sm text-gray-900 dark:text-gray-400 pt-4">
           © {new Date().getFullYear()} PlayRadar. All rights reserved.
         </p>
         <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">

@@ -1,31 +1,20 @@
 "use client";
 
 import { checkUser } from "../services/dataBaseConfig";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import radarImage from "./radar.png";
-import {
-  getModoOscuro,
-  setModoOscuro,
-  toggleModoOscuro,
-} from "../services/localStorage";
+import { toggleModoOscuro } from "../services/localStorage";
 
 export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [darkMode, setDarkMode] = useState(false);
-
-  useEffect(() => {
-    // Initialize dark mode from localStorage when component mounts
-    const savedDarkMode = getModoOscuro();
-    setDarkMode(savedDarkMode);
-    setModoOscuro(savedDarkMode);
-  }, []);
 
   const handleToggleMode = () => {
     const newMode = toggleModoOscuro();
@@ -143,7 +132,7 @@ export default function Login() {
           className="text-sm text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300 transition-colors"
         >
           Contact
-        </Link>       
+        </Link>
       </footer>
     </main>
   );

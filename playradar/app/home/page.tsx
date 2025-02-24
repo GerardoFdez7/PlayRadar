@@ -36,9 +36,7 @@ import Link from "next/link";
 import radarImage from "./radar.png";
 import videogameImage from "./placeholder.png";
 import {
-  getModoOscuro,
-  toggleModoOscuro,
-  setModoOscuro,
+  toggleModoOscuro
 } from "../services/localStorage";
 import { fetchGameTrailer, getSearchedGames, getGames } from "../services/api";
 import { Game } from "../types/games.types";
@@ -87,7 +85,7 @@ export default function ClientHomePage({
 
   // Other statuses and refs (dark mode, filters, trailers, etc.)
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
   const [selectedGenreSlug, setSelectedGenreSlug] = useState<string | null>(
     null
   );
@@ -110,14 +108,9 @@ export default function ClientHomePage({
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   // Initialize dark mode on page load
-  useEffect(() => {
-    const darkMode = getModoOscuro();
-    setIsDarkMode(darkMode);
-    setModoOscuro(darkMode);
-  }, []);
   const handleToggleMode = () => {
     const newMode = toggleModoOscuro();
-    setIsDarkMode(newMode);
+    setDarkMode(newMode);
   };
 
   // Call the API and establish filters
@@ -345,7 +338,7 @@ export default function ClientHomePage({
             className="ml-4 mr-3 border-0 bg-transparent shadow-none hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 hover:scale-110"
             onClick={handleToggleMode}
           >
-            {isDarkMode ? (
+            {darkMode ? (
               <Sun className="h-5 w-5 fill-white dark:stroke-white dark:fill-white transition-transform" />
             ) : (
               <Moon className="h-5 w-5 stroke-[1.5] stroke-black fill-black dark:stroke-white dark:fill-black transition-transform" />

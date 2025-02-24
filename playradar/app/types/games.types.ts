@@ -35,35 +35,3 @@ export type Trailer = {
     max: string;
   };
 };
-
-export type UseSearchResultsParams = {
-  games: Game[];
-  searchText: string;
-};
-
-export type SetGamesFunc = (value: Game[]) => void;
-export type SetOrderFunc = (value: string) => void;
-
-export type HandleSortingParams = {
-  sortingFunction: (
-    games: Game[],
-    order: string,
-    setFilteredGames: SetGamesFunc,
-    setOrder: SetOrderFunc,
-    col: string
-  ) => void;
-  col: string;
-};
-
-export type SortingGame = {
-  [key: string]: string;
-};
-
-export type SortingNum = {
-  [key: string]: number;
-};
-
-export type SearchResultsProps = {
-  games: Game[];
-  searchText: string;
-};
