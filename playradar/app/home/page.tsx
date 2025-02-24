@@ -2,8 +2,6 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
-  Moon,
-  Sun,
   Search,
   ThumbsUp,
   ThumbsDown,
@@ -35,9 +33,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import radarImage from "./radar.png";
 import videogameImage from "./placeholder.png";
-import {
-  toggleModoOscuro
-} from "../services/localStorage";
+import ModeToggle from "@/components/themeSelector";
 import { fetchGameTrailer, getSearchedGames, getGames } from "../services/api";
 import { Game } from "../types/games.types";
 
@@ -85,7 +81,7 @@ export default function ClientHomePage({
 
   // Other statuses and refs (dark mode, filters, trailers, etc.)
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [darkMode, setDarkMode] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [selectedGenreSlug, setSelectedGenreSlug] = useState<string | null>(
     null
   );
@@ -108,11 +104,9 @@ export default function ClientHomePage({
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   // Initialize dark mode on page load
-  const handleToggleMode = () => {
-    const newMode = toggleModoOscuro();
-    setDarkMode(newMode);
-  };
-
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   // Call the API and establish filters
   useEffect(() => {
     const displayGames = searchTerm.trim() ? searchResults : games;
@@ -131,12 +125,15 @@ export default function ClientHomePage({
     }
 
     if (sortBy === "likes") {
-      updatedGames.sort((a, b) => (b.ratings_count ?? 0) - (a.ratings_count ?? 0));
+      updatedGames.sort(
+        (a, b) => (b.ratings_count ?? 0) - (a.ratings_count ?? 0)
+      );
     } else if (sortBy === "release") {
       updatedGames.sort((a, b) => {
         const dateA = new Date(a.released).getTime();
         const dateB = new Date(b.released).getTime();
-        return dateB - dateA;});
+        return dateB - dateA;
+      });
     } else if (sortBy === "name") {
       updatedGames.sort((a, b) => a.name.localeCompare(b.name));
     }
@@ -281,6 +278,8 @@ export default function ClientHomePage({
     }
   }, [hoveredGameId, trailers]);
 
+  if (!mounted) return null;
+
   return (
     <div className="min-h-screen bg-gray-300 dark:bg-gray-900 transition-colors duration-500">
       {/* Header */}
@@ -332,18 +331,10 @@ export default function ClientHomePage({
               LOG IN
             </button>
           </div>
-          {/* Theme button*/}
-          <Button
-            size="icon"
-            className="ml-4 mr-3 border-0 bg-transparent shadow-none hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 hover:scale-110"
-            onClick={handleToggleMode}
-          >
-            {darkMode ? (
-              <Sun className="h-5 w-5 fill-white dark:stroke-white dark:fill-white transition-transform" />
-            ) : (
-              <Moon className="h-5 w-5 stroke-[1.5] stroke-black fill-black dark:stroke-white dark:fill-black transition-transform" />
-            )}
-          </Button>
+          {/* Theme button */}
+          <div className="ml-4 mr-3">
+            <ModeToggle />
+          </div>
         </div>
       </header>
       <div className="flex">

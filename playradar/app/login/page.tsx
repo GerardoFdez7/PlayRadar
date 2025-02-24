@@ -1,25 +1,23 @@
 "use client";
 
 import { checkUser } from "../services/dataBaseConfig";
-import React, { useState } from "react";
-import { Moon, Sun } from "lucide-react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import radarImage from "./radar.png";
-import { toggleModoOscuro } from "../services/localStorage";
+import ModeToggle from "@/components/themeSelector";
 
 export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [darkMode, setDarkMode] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  const handleToggleMode = () => {
-    const newMode = toggleModoOscuro();
-    setDarkMode(newMode);
-  };
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,20 +31,15 @@ export default function Login() {
     }
   };
 
+  if (!mounted) return null;
+
   return (
     <main className="flex flex-col min-h-screen items-center p-24 justify-center bg-gray-300 dark:bg-gray-900 transition-colors duration-500">
-      <Button
-        size="icon"
-        className="ml-4 border-0 bg-transparent shadow-none hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 hover:scale-110 absolute top-4 right-4"
-        onClick={handleToggleMode}
-      >
-        {darkMode ? (
-          <Sun className="h-5 w-5 fill-white dark:stroke-white dark:fill-white transition-transform" />
-        ) : (
-          <Moon className="h-5 w-5 stroke-[1.5] stroke-black fill-black dark:stroke-white dark:fill-black transition-transform" />
-        )}
-        <span className="sr-only">Toggle theme</span>
-      </Button>
+      {/* Theme button */}
+      <div className="absolute top-4 right-4">
+        <ModeToggle />
+      </div>
+      
       <div className="flex items-center">
         <Image
           src={radarImage}
@@ -118,7 +111,6 @@ export default function Login() {
 
       {/* Footer */}
       <footer className="mt-auto w-full pt-6 px-4 text-center border-gray-400 dark:border-gray-500">
-        {/* Línea decorativa con bordes redondeados */}
         <div className="absolute left-1/2 -translate-x-1/2 w-[90vw] h-[2px] bg-gray-400 dark:bg-gray-500 rounded-full before:content-[''] before:absolute before:left-1/2 before:-translate-x-1/2 before:w-[10vw] before:h-full before:bg-inherit before:rounded-full" />
         <p className="text-sm text-gray-900 dark:text-gray-400 pt-4">
           © {new Date().getFullYear()} PlayRadar. All rights reserved.

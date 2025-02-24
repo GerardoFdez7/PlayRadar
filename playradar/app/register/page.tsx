@@ -1,14 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
-import { Moon, Sun } from "lucide-react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import radarImage from "./radar.png";
 import { addUser, isEmailOrUsernameTaken } from "../services/dataBaseConfig";
-import { toggleModoOscuro } from "../services/localStorage";
+import ModeToggle from "@/components/themeSelector";
 
 export default function Register() {
   const router = useRouter();
@@ -16,21 +15,20 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [username, setUsername] = useState("");
-  const [darkMode, setDarkMode] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  const handleToggleMode = () => {
-    const newMode = toggleModoOscuro();
-    setDarkMode(newMode);
-  };
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       alert("Passwords do not match");
       return;
     }
 
-    // Validación de contraseñas
+    // Password validation
     if (password !== confirmPassword) {
       alert("Passwords do not match");
       return;
@@ -41,14 +39,14 @@ export default function Register() {
       return;
     }
 
-    // Validación de usuario y correo existentes
+    // Validation of existing user and email
     const isTaken = await isEmailOrUsernameTaken(email, username);
     if (isTaken) {
       alert("Email or username is already registered. Please try another.");
       return;
     }
 
-    // Lógica para registrar al usuario
+    // Logic to register the user
     const success = await addUser(username, email, password);
     if (success) {
       router.push("/login");
@@ -57,20 +55,15 @@ export default function Register() {
     }
   };
 
+  if (!mounted) return null;
+
   return (
     <main className="flex flex-col min-h-screen items-center justify-center p-24 bg-gray-300 dark:bg-gray-900 transition-colors duration-500">
-      <Button
-        size="icon"
-        className="ml-4 border-0 bg-transparent shadow-none hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 hover:scale-110 absolute top-4 right-4"
-        onClick={handleToggleMode}
-      >
-        {darkMode ? (
-          <Sun className="h-5 w-5 fill-white dark:stroke-white dark:fill-white transition-transform" />
-        ) : (
-          <Moon className="h-5 w-5 stroke-[1.5] stroke-black fill-black dark:stroke-white dark:fill-black transition-transform" />
-        )}
-        <span className="sr-only">Toggle theme</span>
-      </Button>
+      {/* Theme button */}
+      <div className="absolute top-4 right-4">
+        <ModeToggle />
+      </div>
+
       <div className="flex items-center">
         <Image
           src={radarImage || "/placeholder.svg"}
