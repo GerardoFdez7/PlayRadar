@@ -378,7 +378,7 @@ export default function ClientHomePage({
           </div>
           {/* Footer */}
           <footer className="w-[10vw] mt-auto py-6 px-4 text-center border-gray-400 dark:border-gray-500">
-            <div className="absolute left-1/2 -translate-x-1/2 w-[90vw] h-[2px] bg-gray-400 dark:bg-gray-500 rounded-full before:content-[''] before:absolute before:left-1/2 before:-translate-x-1/2 before:w-[10vw] before:h-full before:bg-inherit before:rounded-full" />
+            <div className="absolute left-1/2 -translate-x-1/2 h-[2px] bg-gray-400 dark:bg-gray-500 rounded-full before:content-[''] before:absolute before:left-1/2 before:-translate-x-1/2 before:w-[10vw] before:h-full before:bg-inherit before:rounded-full" />
             <p className="text-sm text-gray-900 dark:text-gray-400 pt-4">
               © {new Date().getFullYear()} PlayRadar. All rights reserved.
             </p>
@@ -436,7 +436,7 @@ export default function ClientHomePage({
             {filteredGames?.map((games) => (
               <div
                 key={games.id}
-                className="group relative bg-card rounded-lg overflow-hidden transition-all duration-300 hover:scale-110"
+                className="group relative bg-card rounded-xl transition-all duration-300 hover:scale-110 overflow-visible hover:z-[40]"
                 onMouseEnter={() => {
                   handleHoverGame(games); // Update trailers
                   setHoveredGameId(games.id);
@@ -549,7 +549,7 @@ export default function ClientHomePage({
                 </div>
 
                 {/* Card information */}
-                <div className="mt-3">
+                <div className="mt-2">
                   {/* Platforms icons*/}
                   <div className="absolute left-5 flex gap-1">
                     {games.parent_platforms?.map((parent_platforms) => (
@@ -638,7 +638,7 @@ export default function ClientHomePage({
 
                   <div className="p-6">
                     <div className="flex items-center justify-between">
-                      <h3 className="font-semibold truncate">{games.name}</h3>
+                      <h3 className="font-semibold truncate ">{games.name}</h3>
                     </div>
                     <div className="flex items-center justify-between">
                       <Button size="icon" variant="ghost" className="mr-4">
@@ -655,14 +655,43 @@ export default function ClientHomePage({
                         >
                           <path d="M5 12h14" />
                           <path d="M12 5v14" />
-                        </svg>
+                        </svg>                        
                       </Button>
+                      {/* Like and Dislike */}
                       <div className="flex items-center gap-1">
-                        <ThumbsDown className="h-5 w-5" />
-                        <ThumbsUp className="h-5 w-5" />
-                        <span className="text-s text-muted-foreground">
+                        <Button variant="ghost" className="p-0 m-1 hover:bg-transparent hover:[&_svg]:fill-foreground/30">
+                          <ThumbsDown className="h-5 w-5" />
+                        </Button>
+                        <Button variant="ghost" className="p-0 m-1 hover:bg-transparent hover:[&_svg]:fill-foreground/30">
+                          <ThumbsUp className="h-5 w-5" />
+                        </Button>
+                        <span className="text-stext-muted-foreground">
                           {games.ratings_count}
                         </span>
+                      </div>
+                    </div>
+
+                    {/* Expanded content on hover */}
+                    <div className="absolute left-0 right-0 bg-card mt-2 pr-6 pl-6 rounded-xl">
+                      <div className="transition-all duration-300 transform origin-top scale-y-0 h-0 group-hover:scale-y-100 group-hover:h-auto">
+                        {/* Genre */}
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="text-sm">Genre</span>
+                          <span className="text-sm text-right">
+                            {games.genres.map((genre) => genre.name).join(", ")}
+                          </span>
+                        </div>
+                        {/* Line */}
+                        <div className="h-px bg-gradient-to-r from-transparent via-gray-800 dark:via-gray-200 to-transparent my-2" />
+                        {/* Release */}
+                        <div className="flex justify-between items-center mt-2 mb-4">
+                          <span className="text-sm">
+                            Released
+                          </span>
+                          <span className="text-sm">
+                            {new Date(games.released).toLocaleDateString()}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
