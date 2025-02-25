@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "../components/ui/button";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -15,29 +15,35 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      alert("Passwords do not match");
-      return;
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError(null);
+      }, 5000);
+      return () => clearTimeout(timer);
     }
+  }, [error]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
     // Password validation
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      setError("Passwords do not match");
       return;
     }
 
     if (password.length < 8) {
-      alert("Password must be at least 8 characters long");
+      setError("Password must be at least 8 characters long");
       return;
     }
 
-    // Validation of existing user and email
+    // Validation of existing user or email
     const isTaken = await isEmailOrUsernameTaken(email, username);
     if (isTaken) {
-      alert("Email or username is already registered. Please try another.");
+      setError("Email or username is already registered. Please try another.");
       return;
     }
 
@@ -46,7 +52,7 @@ export default function Register() {
     if (success) {
       router.push("/login");
     } else {
-      alert("An error occurred while registering the user. Please try again.");
+      setError("An error occurred while registering. Please try again.");
     }
   };
 
@@ -57,6 +63,7 @@ export default function Register() {
         <ModeToggle />
       </div>
 
+      {/* Header */}
       <div className="flex items-center">
         <Image
           src={radarImage || "/placeholder.svg"}
@@ -69,10 +76,37 @@ export default function Register() {
           PlayRadar
         </h1>
       </div>
+
+      {/* Send form */}
       <form
         onSubmit={handleSubmit}
         className="mb-8 w-full max-w-md mx-auto p-8 bg-gray-100 dark:bg-gray-800 shadow-xl rounded-xl transition-all duration-500 ease-in-out hover:transform hover:scale-105"
       >
+        {/* Handle errors */}
+        {error && (
+          <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg flex items-start gap-3 dark:bg-red-800 dark:border-red-600 dark:text-red-100">
+            <svg
+              className="w-5 h-5 flex-shrink-0 mt-0.5"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <span className="flex-1">{error}</span>
+            <button
+              onClick={() => setError(null)}
+              className="text-red-700 dark:text-red-200 hover:text-red-900 dark:hover:text-red-400 font-bold"
+            >
+              ×
+            </button>
+          </div>
+        )}
+
+        {/* Form body */}    
         <div className="mb-6">
           <label
             htmlFor="username"
