@@ -12,13 +12,16 @@ import {
   Target,
   GraduationCap,
   Users,
-  Sword,
   Brush,
   ChevronDown,
   //LogOut,
 } from "lucide-react";
-import { MdVolumeOff, MdVolumeUp } from "react-icons/md";
+import { MdVolumeOff, MdVolumeUp, MdOutlineSportsBasketball } from "react-icons/md";
+import { IoExtensionPuzzleOutline } from "react-icons/io5";
+import { FaGun } from "react-icons/fa6";
+import { GiFloatingPlatforms } from "react-icons/gi";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { PiBoxingGloveBold, PiStrategy, PiCubeTransparentLight } from "react-icons/pi";
 import { Button } from "../components/ui/button";
 import {
   Select,
@@ -39,6 +42,12 @@ import { Game } from "../types/games.types";
 
 const genres = [
   { name: "Action", slug: "action", icon: <Swords className="w-4 h-4" /> },
+  { name: "Fighting", slug: "fighting", icon: <PiBoxingGloveBold className="w-4 h-4" /> },  
+  { name: "Shooter", slug: "shooter", icon: <FaGun className="w-4 h-4" /> },
+  { name: "Platformer", slug: "platformer", icon: <GiFloatingPlatforms className="w-4 h-4" /> },
+  { name: "Sports", slug: "sports", icon: <MdOutlineSportsBasketball className="w-4 h-4" /> },
+  { name: "Strategy", slug: "strategy", icon: <PiStrategy className="w-4 h-4" /> },  
+  { name: "Simulation", slug: "simulation", icon: <PiCubeTransparentLight className="w-4 h-4" /> }, 
   {
     name: "Adventure",
     slug: "adventure",
@@ -52,9 +61,9 @@ const genres = [
     slug: "educational",
     icon: <GraduationCap className="w-4 h-4" />,
   },
-  { name: "Family", slug: "family", icon: <Users className="w-4 h-4" /> },
-  { name: "Fighting", slug: "fighting", icon: <Sword className="w-4 h-4" /> },
-  { name: "Indie", slug: "indie", icon: <Brush className="w-4 h-4" /> },
+  { name: "Puzzle", slug: "puzzle", icon: <IoExtensionPuzzleOutline className="w-4 h-4" /> }, 
+  { name: "Family", slug: "family", icon: <Users className="w-4 h-4" /> },  
+  { name: "Indie", slug: "indie", icon: <Brush className="w-4 h-4" /> },   
 ];
 
 interface ClientHomePageProps {
@@ -333,7 +342,7 @@ export default function ClientHomePage({
       <div className="flex">
         {/* Sidebar */}
         <aside className="w-41 h-[calc(100vh-4rem)] ml-3 sticky top-16 overflow-y-auto flex flex-col">
-          <div className="p-4 mb-40">
+          <div className="p-4">
             <h2 className="text-3xl font-bold mb-4 mt-3">Genres</h2>
             <nav className="space-y-2">
               {genres.map((genre) => (
