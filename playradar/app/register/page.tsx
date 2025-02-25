@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "../components/ui/button";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import radarImage from "./radar.png";
 import { addUser, isEmailOrUsernameTaken } from "../services/dataBaseConfig";
-import ModeToggle from "@/components/themeSelector";
+import ModeToggle from "../components/themeSelector";
 
 export default function Register() {
   const router = useRouter();

@@ -19,21 +19,21 @@ import {
 } from "lucide-react";
 import { MdVolumeOff, MdVolumeUp } from "react-icons/md";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "../components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
+} from "../components/ui/select";
+import { Input } from "../components/ui/input";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import radarImage from "./radar.png";
 import videogameImage from "./placeholder.png";
-import ModeToggle from "@/components/themeSelector";
+import ModeToggle from "../components/themeSelector";
 import { fetchGameTrailer, getSearchedGames, getGames } from "../services/api";
 import { Game } from "../types/games.types";
 

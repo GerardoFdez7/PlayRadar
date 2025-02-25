@@ -2,12 +2,12 @@
 
 import { checkUser } from "../services/dataBaseConfig";
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "../components/ui/button";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import radarImage from "./radar.png";
-import ModeToggle from "@/components/themeSelector";
+import ModeToggle from "../components/themeSelector";
 
 export default function Login() {
   const router = useRouter();
