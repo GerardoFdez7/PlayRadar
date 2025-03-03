@@ -48,7 +48,7 @@ import { fetchGameTrailer, getSearchedGames, getGames } from "../services/api";
 import { Game } from "../types/games.types";
 import { auth } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Tooltip } from "@nextui-org/react";
+import { Tooltip } from "@mui/material";
 import {
   PcIcon,
   PlaystationIcon,
@@ -122,6 +122,10 @@ export default function ClientHomePage({
   initialNextUrl,
 }: ClientHomePageProps) {
   const router = useRouter();
+  const [activeTooltip, setActiveTooltip] = useState<{ 
+    type: string; 
+    gameId: number 
+  } | null>(null);
 
   // States for normal load
   const [games, setGames] = useState<Game[]>(
@@ -328,6 +332,13 @@ export default function ClientHomePage({
       });
     }
   }, [hoveredGameId, trailers]);
+
+  useEffect(() => {
+    if (activeTooltip) {
+      const timer = setTimeout(() => setActiveTooltip(null), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [activeTooltip]);
 
   return (
     <div className="min-h-screen bg-gray-300 dark:bg-gray-900 transition-colors duration-500">
@@ -611,95 +622,109 @@ export default function ClientHomePage({
                     <div className="flex items-center justify-between">
                       {/* "Play later" */}
                       <Tooltip
-                        content={
-                          <div className="bg-gray-200 text-dark dark:bg-gray-800 dark:text-white px-3 py-1 rounded-md text-sm">
-                            Log in to use this feature
-                          </div>
-                        }
+                        title="Log in to use this feature"
                         placement="bottom"
-                        color="default"
-                        isDisabled={!!user}
-                        classNames={{
-                          base: "before:bg-gray-800",
-                          content: "p-0 bg-transparent shadow-none",
+                        open={!user && 
+                          activeTooltip?.type === "play-later" && 
+                          activeTooltip?.gameId === games.id}
+                        onClose={() => setActiveTooltip(null)}
+                        disableFocusListener
+                        disableHoverListener
+                        disableTouchListener
+                        componentsProps={{
+                          tooltip: {
+                            className:
+                              "bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-white px-3 py-2 rounded-lg text-sm",
+                          },
                         }}
                       >
-                        <div className="inline-block">
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            className={`mr-4 ${
-                              !user ? "cursor-not-allowed" : ""
-                            }`}
-                            onClick={() => {
-                              if (!user) {
-                                // Opcional: mostrar un toast o redirigir a login
-                                return;
-                              }
-                              // Logic for button when user is authenticated
-                              alert("Loged in");
-                            }}
-                          >
-                            <Plus />
-                          </Button>
-                        </div>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className="mr-4"
+                          onClick={() => {
+                            if (!user) {
+                              setActiveTooltip({ type: "play-later", gameId: games.id });
+                            } else {
+                              alert("Logged in");
+                            }
+                          }}
+                        >
+                          <Plus />
+                        </Button>
                       </Tooltip>
 
-                      <Tooltip
-                        content={
-                          <div className="bg-gray-200 text-dark dark:bg-gray-800 dark:text-white px-3 py-1 rounded-md text-sm">
-                            Log in to use this feature
-                          </div>
-                        }
-                        placement="bottom"
-                        color="default"
-                        isDisabled={!!user}
-                        classNames={{
-                          base: "before:bg-gray-800",
-                          content: "p-0 bg-transparent shadow-none",
-                        }}
-                      >
-                        <div className="inline-block">
-                          {/* Like and Dislike */}
-                          <div className="flex items-center gap-1">
-                            <Button
-                              variant="ghost"
-                              className={`p-0 m-1 hover:bg-transparent hover:[&_svg]:fill-foreground/30 ${
-                                !user ? "cursor-not-allowed" : ""
-                              }`}
-                              onClick={() => {
-                                if (!user) {
-                                  // Nothing happens
-                                  return;
-                                }
-                                // Logic for button when user is authenticated
-                                alert("Loged in");
-                              }}
-                            >
-                              <ThumbsDown className="h-5 w-5" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              className={`p-0 m-1 hover:bg-transparent hover:[&_svg]:fill-foreground/30 ${
-                                !user ? "cursor-not-allowed" : ""
-                              }`}
-                              onClick={() => {
-                                if (!user) {
-                                  // Nothing happens
-                                  return;
-                                }
-                                // Logic for button when user is authenticated
-                                alert("Loged in");
-                              }}
-                            >
-                              <ThumbsUp className="h-5 w-5" />
-                            </Button>
-                            <span className="text-stext-muted-foreground">
-                              {games.ratings_count}
-                            </span>
-                          </div>
-                        </div>
-                      </Tooltip>
+                      {/* Like and Dislike */}
+                      <div className="flex items-center gap-1">
+                        <Tooltip
+                          title="Log in to use this feature"
+                          placement="bottom"
+                          open={!user && 
+                            activeTooltip?.type === "dislike" && 
+                            activeTooltip?.gameId === games.id}
+                          onClose={() => setActiveTooltip(null)}
+                          disableFocusListener
+                          disableHoverListener
+                          disableTouchListener
+                          componentsProps={{
+                            tooltip: {
+                              className:
+                                "bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-white px-3 py-2 rounded-lg text-sm",
+                            },
+                          }}
+                        >
+                          <Button
+                            variant="ghost"
+                            data-tooltip-id="login-tooltip"
+                            className={`p-0 m-1 hover:bg-transparent hover:[&_svg]:fill-foreground/30`}
+                            onClick={() => {
+                              if (!user) {
+                                setActiveTooltip({ type: "dislike", gameId: games.id });
+                              } else {
+                                alert("Logged in");
+                              }
+                            }}
+                          >
+                            <ThumbsDown className="h-5 w-5" />
+                          </Button>
+                        </Tooltip>
+
+                        <Tooltip
+                          title="Log in to use this feature"
+                          placement="bottom"
+                          open={!user && 
+                            activeTooltip?.type === "like" && 
+                            activeTooltip?.gameId === games.id}
+                          onClose={() => setActiveTooltip(null)}
+                          disableFocusListener
+                          disableHoverListener
+                          disableTouchListener
+                          componentsProps={{
+                            tooltip: {
+                              className:
+                                "bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-white px-3 py-2 rounded-lg text-sm",
+                            },
+                          }}
+                        >
+                          <Button
+                            variant="ghost"
+                            className={`p-0 m-1 hover:bg-transparent hover:[&_svg]:fill-foreground/30`}
+                            onClick={() => {
+                              if (!user) {
+                                setActiveTooltip({ type: "like", gameId: games.id });
+                              } else {
+                                alert("Logged in");
+                              }
+                            }}
+                          >
+                            <ThumbsUp className="h-5 w-5" />
+                          </Button>
+                        </Tooltip>
+
+                        <span className="text-stext-muted-foreground">
+                          {games.ratings_count}
+                        </span>
+                      </div>
                     </div>
 
                     {/* Expanded content on hover */}
