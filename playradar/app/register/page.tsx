@@ -1,16 +1,16 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Button } from "../components/ui/button";
-import GoogleComp from "../components/ui/google";
-import LoadingAnimation from "../components/ui/loader";
+import { Button } from "@/components/ui/button";
+import GoogleComp from "@/components/ui/google";
+import LoadingAnimation from "@/components/ui/loader";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import Image from "next/image";
 import radarImage from "./radar.png";
-import ModeToggle from "../components/themeSelector";
+import ModeToggle from "@/components/themeSelector";
 import { isEmailOrUsernameTaken } from "../services/dataBaseConfig";
 import { registerUser, handleGoogleLogin } from "../services/authentication";
+import Footer from "@/components/ui/footer";
 
 export default function Register() {
   const router = useRouter();
@@ -62,7 +62,7 @@ export default function Register() {
     } catch (error) {
       console.log("handleSubmit: ", error);
       setError("An unexpected error occurred.");
-    } 
+    }
   };
 
   const handleGoogleSignIn = async () => {
@@ -212,7 +212,7 @@ export default function Register() {
             disabled={isLoading}
           >
             {isLoading ? (
-              <div className= "inset-0 flex items-center justify-center">
+              <div className="inset-0 flex items-center justify-center">
                 <LoadingAnimation size={16} />
               </div>
             ) : (
@@ -237,22 +237,7 @@ export default function Register() {
       </div>
 
       {/* Footer */}
-      <footer className="mt-auto w-full py-6 px-4 text-center border-gray-400 dark:border-gray-500">
-        <div className="absolute left-1/2 -translate-x-1/2 w-[90vw] h-[2px] bg-gray-400 dark:bg-gray-500 rounded-full before:content-[''] before:absolute before:left-1/2 before:-translate-x-1/2 before:w-[10vw] before:h-full before:bg-inherit before:rounded-full" />
-        <p className="text-sm text-gray-900 dark:text-gray-400 pt-4">
-          © {new Date().getFullYear()} PlayRadar. All rights reserved.
-        </p>
-        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-          Developed by Gerardo Fernández.
-        </p>
-        <Link
-          href="https://gerardofernandez7.github.io/Portfolio/"
-          target="_blank"
-          className="text-sm text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300 transition-colors"
-        >
-          Contact
-        </Link>
-      </footer>
+      <Footer divClassName="w-[90vw]" />
     </main>
   );
 }

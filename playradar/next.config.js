@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  env: {
-    API_KEY: process.env.API_KEY,
-  },
   images: {
     remotePatterns: [
       {
@@ -10,8 +7,12 @@ const nextConfig = {
         hostname: 'media.rawg.io',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'playradar-a90bf.firebasestorage.app',
+      },
     ],
-    unoptimized: true,
+    unoptimized: process.env.NODE_ENV === 'production' ? false : true,
   },
 };
 

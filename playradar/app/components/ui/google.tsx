@@ -1,4 +1,5 @@
 import * as React from "react";
+
 const GoogleComp: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg
     viewBox="0 0 32 32"

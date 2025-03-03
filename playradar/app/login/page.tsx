@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Button } from "../components/ui/button";
-import GoogleComp from "../components/ui/google";
-import LoadingAnimation from "../components/ui/loader";
+import { Button } from "@/components/ui/button";
+import GoogleComp from "@/components/ui/google";
+import LoadingAnimation from "@/components/ui/loader";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import Image from "next/image";
 import radarImage from "./radar.png";
-import ModeToggle from "../components/themeSelector";
+import ModeToggle from "@/components/themeSelector";
 import { checkUser, handleGoogleLogin } from "../services/authentication";
+import Footer from "@/components/ui/footer";
 
 export default function Login() {
   const router = useRouter();
@@ -61,7 +61,7 @@ export default function Login() {
       console.log("handleGoogleSignIn: ", error);
       setError("An unexpected error occurred.");
       setIsLoading(false);
-    } 
+    }
   };
 
   return (
@@ -80,7 +80,7 @@ export default function Login() {
           height={80}
           className="w-30 h-30"
         />
-        <h1 className="text-6xl font-bold m-8 w-full dark:text-gray-200 font-playRadar">
+        <h1 className="sm:text-6xl text-2xl font-bold m-8 w-full dark:text-gray-200 font-playRadar">
           PlayRadar
         </h1>
       </div>
@@ -230,22 +230,7 @@ export default function Login() {
       </div>
 
       {/* Footer */}
-      <footer className="mt-auto w-full pt-6 px-4 text-center border-gray-400 dark:border-gray-500">
-        <div className="absolute left-1/2 -translate-x-1/2 w-[90vw] h-[2px] bg-gray-400 dark:bg-gray-500 rounded-full before:content-[''] before:absolute before:left-1/2 before:-translate-x-1/2 before:w-[10vw] before:h-full before:bg-inherit before:rounded-full" />
-        <p className="text-sm text-gray-900 dark:text-gray-400 pt-4">
-          © {new Date().getFullYear()} PlayRadar. All rights reserved.
-        </p>
-        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-          Developed by Gerardo Fernández.
-        </p>
-        <Link
-          href="https://gerardofernandez7.github.io/Portfolio/"
-          target="_blank"
-          className="text-sm text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300 transition-colors"
-        >
-          Contact
-        </Link>
-      </footer>
+      <Footer divClassName="w-[90vw]" />
     </main>
   );
 }
