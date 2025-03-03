@@ -2,12 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 import { Button } from "../components/ui/button";
+import GoogleComp from "../components/ui/google";
+import LoadingAnimation from "../components/ui/loader";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import radarImage from "./radar.png";
-import { addUser, isEmailOrUsernameTaken } from "../services/dataBaseConfig";
 import ModeToggle from "../components/themeSelector";
+import { isEmailOrUsernameTaken } from "../services/dataBaseConfig";
+import { registerUser, handleGoogleLogin } from "../services/authentication";
 
 export default function Register() {
   const router = useRouter();
@@ -16,6 +19,7 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [username, setUsername] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (error) {
@@ -28,36 +32,56 @@ export default function Register() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
 
-    // Password validation
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
+    try {
+      // Password validation
+      if (password !== confirmPassword) {
+        setError("Passwords do not match");
+        return;
+      }
+      if (password.length < 8) {
+        setError("Password must be at least 8 characters long");
+        return;
+      }
+      // Validation of existing user or email
+      const isTaken = await isEmailOrUsernameTaken(email, username);
+      if (isTaken) {
+        setError(
+          "Email or username is already registered. Please try another."
+        );
+        return;
+      } else {
+        const response = await registerUser(username, email, password);
+        if (response.success) {
+          router.push("/");
+        } else {
+          setError("Error during register, try again later.");
+        }
+      }
+    } catch (error) {
+      console.log("handleSubmit: ", error);
+      setError("An unexpected error occurred.");
+    } 
+  };
 
-    if (password.length < 8) {
-      setError("Password must be at least 8 characters long");
-      return;
-    }
-
-    // Validation of existing user or email
-    const isTaken = await isEmailOrUsernameTaken(email, username);
-    if (isTaken) {
-      setError("Email or username is already registered. Please try another.");
-      return;
-    }
-
-    // Logic to register the user
-    const success = await addUser(username, email, password);
-    if (success) {
-      router.push("/login");
-    } else {
-      setError("An error occurred while registering. Please try again.");
+  const handleGoogleSignIn = async () => {
+    setIsLoading(true);
+    try {
+      const response = await handleGoogleLogin();
+      if (response.success) {
+        router.push("/");
+      } else {
+        setError("An unexpected error occurred.");
+      }
+    } catch (error) {
+      console.log("handleGoogleSignIn: ", error);
+      setError("An unexpected error occurred.");
     }
   };
 
   return (
-    <main className="flex flex-col min-h-screen items-center justify-center p-24 bg-gray-300 dark:bg-gray-900 transition-colors duration-500">
+    <main className="min-h-screen flex flex-col items-center p-24 bg-gray-300 dark:bg-gray-900 transition-colors duration-500">
       {/* Theme button */}
       <div className="absolute top-4 right-4">
         <ModeToggle />
@@ -66,7 +90,7 @@ export default function Register() {
       {/* Header */}
       <div className="flex items-center">
         <Image
-          src={radarImage || "/placeholder.svg"}
+          src={radarImage}
           alt="PlayRadar Logo"
           width={80}
           height={80}
@@ -79,8 +103,8 @@ export default function Register() {
 
       {/* Send form */}
       <form
+        className="mb-6 w-full max-w-md mx-auto p-8 bg-gray-100 dark:bg-gray-800 shadow-xl rounded-xl transition-all duration-500 ease-in-out hover:transform hover:scale-105"
         onSubmit={handleSubmit}
-        className="mb-8 w-full max-w-md mx-auto p-8 bg-gray-100 dark:bg-gray-800 shadow-xl rounded-xl transition-all duration-500 ease-in-out hover:transform hover:scale-105"
       >
         {/* Handle errors */}
         {error && (
@@ -106,7 +130,7 @@ export default function Register() {
           </div>
         )}
 
-        {/* Form body */}    
+        {/* Form body */}
         <div className="mb-6">
           <label
             htmlFor="username"
@@ -176,16 +200,41 @@ export default function Register() {
             Already have an account?{" "}
             <a
               href="/login"
-              className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300"
+              className="text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100 underline"
             >
               Login
             </a>
           </p>
-          <Button type="submit" className="w-full">
-            Register
+          <Button
+            type="submit"
+            className="w-full rounded-full py-6 "
+            onClick={() => setError(null)}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <div className= "inset-0 flex items-center justify-center">
+                <LoadingAnimation size={16} />
+              </div>
+            ) : (
+              "Register"
+            )}
           </Button>
         </div>
       </form>
+
+      {/* Google */}
+      <div className="w-full max-w-md text-center mx-auto">
+        <Button
+          type="button"
+          className="w-full rounded-full py-6"
+          onClick={handleGoogleSignIn}
+        >
+          <div className="flex items-center">
+            Continue with Google
+            <GoogleComp className="w-8 ml-2 justify-center " />
+          </div>
+        </Button>
+      </div>
 
       {/* Footer */}
       <footer className="mt-auto w-full py-6 px-4 text-center border-gray-400 dark:border-gray-500">
