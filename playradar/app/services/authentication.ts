@@ -5,7 +5,8 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   User,
-  signOut 
+  signOut,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 
@@ -70,7 +71,7 @@ async function createUserRecordIfNotExists(
       username: user.displayName || usernameFallback,
       email: user.email,
       createdAt: new Date(),
-      liked: [],      
+      liked: [],
       disliked: [],
       play_later: [],
     });
@@ -96,6 +97,17 @@ export const logout = async () => {
   try {
     await signOut(auth);
   } catch (error) {
-    console.error('Logout error:', error);
+    console.error("Logout error:", error);
+  }
+};
+
+// Reset password
+export const handleForgotPassword = async (email: string) => {
+  try {
+    await sendPasswordResetEmail(auth, email);
+    return { success: true };
+  } catch (error) {
+    console.log("sendPasswordResetEmail error:", error);
+    return { success: false };
   }
 };

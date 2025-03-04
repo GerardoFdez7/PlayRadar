@@ -475,8 +475,16 @@ export default function ClientHomePage({
               </SelectContent>
             </Select>
             <Select
+              value={
+                selectedPlatform === "all"
+                  ? "all"
+                  : Object.keys(platformSlugToId).find(
+                      (key) => platformSlugToId[key] === selectedPlatform
+                    )
+              }
               onValueChange={(value) => {
-                const platformId = platformSlugToId[value] || "all";
+                const platformId =
+                  value === "all" ? "all" : platformSlugToId[value];
                 setSelectedPlatform(platformId);
               }}
             >

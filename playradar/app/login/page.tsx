@@ -8,16 +8,23 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import radarImage from "./radar.png";
 import ModeToggle from "@/components/themeSelector";
-import { checkUser, handleGoogleLogin } from "../services/authentication";
+import {
+  checkUser,
+  handleGoogleLogin,
+  handleForgotPassword,
+} from "../services/authentication";
 import Footer from "@/components/ui/footer";
 
 export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState("");
+  const [newPassEmail, setNewPassEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [message, setMessage] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   useEffect(() => {
     if (error) {
@@ -59,6 +66,25 @@ export default function Login() {
       }
     } catch (error) {
       console.log("handleGoogleSignIn: ", error);
+      setError("An unexpected error occurred.");
+      setIsLoading(false);
+    }
+  };
+
+  const forgetPassword = async () => {
+    setIsLoading(true);
+    try {
+      const response = await handleForgotPassword(newPassEmail);
+      if (response.success) {
+        setMessage("Mail sent! Check your inbox to reset your password.");
+        setTimeout(() => setShowForgotPassword(false), 5000);
+        setIsLoading(false);
+      } else {
+        setError("An unexpected error occurred sending your recovery email.");
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.log("forgetPassword: ", error);
       setError("An unexpected error occurred.");
       setIsLoading(false);
     }
@@ -127,6 +153,7 @@ export default function Login() {
             id="email"
             className="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
             value={email}
+            required
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
@@ -142,6 +169,7 @@ export default function Login() {
             id="password"
             className="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
             value={password}
+            required
             onChange={(e) => setPassword(e.target.value)}
           />
           <button
@@ -189,11 +217,11 @@ export default function Login() {
           </button>
         </div>
         <div className="text-center">
-          <p className="mb-4 text-gray-600 dark:text-gray-400">
+          <p className="mb-4 text-gray-600 dark:text-gray-500">
             Don&apos;t have an account?{" "}
             <a
               href="/register"
-              className="text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100 underline"
+              className="text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-100 underline"
             >
               Register
             </a>
@@ -216,7 +244,7 @@ export default function Login() {
       </form>
 
       {/* Google */}
-      <div className="w-full max-w-md mx-auto text-center">
+      <div className="w-full max-w-md mx-auto text-center mb-4">
         <Button
           type="button"
           className="w-full rounded-full py-6"
@@ -228,6 +256,55 @@ export default function Login() {
           </div>
         </Button>
       </div>
+
+      {/* Forgot */}
+      <button>
+        <a
+          onClick={() => setShowForgotPassword(true)}
+          className="text-gray-600 hover:text-gray-400 dark:text-gray-500 dark:hover:text-gray-100 underline"
+        >
+          Forgot your password?
+        </a>
+      </button>
+
+      {/* Pop up */}
+      {showForgotPassword && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg max-w-md w-full">
+            <h2 className="text-xl font-bold mb-4">Reset Password</h2>
+            <form onSubmit={forgetPassword}>
+              <input
+                type="email"
+                value={newPassEmail}
+                onChange={(e) => setNewPassEmail(e.target.value)}
+                placeholder="Enter your email"
+                className="w-full p-2 mb-4 border rounded dark:bg-gray-700 dark:border-gray-600"
+                required
+              />
+
+              {message && <p className="text-green-500 mb-4">{message}</p>}
+              {error && <p className="text-red-500 mb-4">{error}</p>}
+
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowForgotPassword(false)}
+                  className="px-4 py-2 text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100"
+                >
+                  Cancel
+                </button>
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="px-4 py-5 rounded-lg text-md"
+                >
+                  {isLoading ? "Sending..." : "Send Reset Email"}
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <Footer divClassName="w-[90vw]" />
