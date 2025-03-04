@@ -38,10 +38,12 @@ export default function Register() {
       // Password validation
       if (password !== confirmPassword) {
         setError("Passwords do not match");
+        setIsLoading(false);
         return;
       }
       if (password.length < 8) {
         setError("Password must be at least 8 characters long");
+        setIsLoading(false);
         return;
       }
       // Validation of existing user or email
@@ -50,6 +52,7 @@ export default function Register() {
         setError(
           "Email or username is already registered. Please try another."
         );
+        setIsLoading(false);
         return;
       } else {
         const response = await registerUser(username, email, password);
@@ -57,11 +60,13 @@ export default function Register() {
           router.push("/");
         } else {
           setError("Error during register, try again later.");
+          setIsLoading(false);
         }
       }
     } catch (error) {
       console.log("handleSubmit: ", error);
       setError("An unexpected error occurred.");
+      setIsLoading(false);
     }
   };
 
@@ -73,10 +78,12 @@ export default function Register() {
         router.push("/");
       } else {
         setError("An unexpected error occurred.");
+        setIsLoading(false);
       }
     } catch (error) {
       console.log("handleGoogleSignIn: ", error);
       setError("An unexpected error occurred.");
+      setIsLoading(false);
     }
   };
 

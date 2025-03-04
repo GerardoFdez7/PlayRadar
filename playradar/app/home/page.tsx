@@ -61,6 +61,7 @@ import {
 } from "@/components/ui/platforms";
 import Footer from "@/components/ui/footer";
 import Plus from "@/components/ui/plus";
+import Avatar from "@/components/ui/avatar";
 
 const genres = [
   { name: "Action", slug: "action", icon: <Swords className="w-4 h-4" /> },
@@ -122,9 +123,9 @@ export default function ClientHomePage({
   initialNextUrl,
 }: ClientHomePageProps) {
   const router = useRouter();
-  const [activeTooltip, setActiveTooltip] = useState<{ 
-    type: string; 
-    gameId: number 
+  const [activeTooltip, setActiveTooltip] = useState<{
+    type: string;
+    gameId: number;
   } | null>(null);
 
   // States for normal load
@@ -335,7 +336,7 @@ export default function ClientHomePage({
 
   useEffect(() => {
     if (activeTooltip) {
-      const timer = setTimeout(() => setActiveTooltip(null), 2000);
+      const timer = setTimeout(() => setActiveTooltip(null), 3000);
       return () => clearTimeout(timer);
     }
   }, [activeTooltip]);
@@ -383,13 +384,17 @@ export default function ClientHomePage({
           </div>
           {/* LOG IN button*/}
           <div className="absolute right-1 mr-20">
-            <button
-              onClick={() => router.push("/login")}
-              className="font-bold bg-transparent text-lg relative after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-[-4px] after:h-[4px] 
+            {user ? (
+              <Avatar />
+            ) : (
+              <button
+                onClick={() => router.push("/login")}
+                className="font-bold bg-transparent text-lg relative after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-[-4px] after:h-[4px] 
             after:bg-current after:transform after:origin-left after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100 after:rounded-full"
-            >
-              LOG IN
-            </button>
+              >
+                LOG IN
+              </button>
+            )}
           </div>
           {/* Theme button */}
           <div className="ml-4 mr-3">
@@ -622,11 +627,13 @@ export default function ClientHomePage({
                     <div className="flex items-center justify-between">
                       {/* "Play later" */}
                       <Tooltip
-                        title="Log in to use this feature"
+                        title="Log in to add game to play later"
                         placement="bottom"
-                        open={!user && 
-                          activeTooltip?.type === "play-later" && 
-                          activeTooltip?.gameId === games.id}
+                        open={
+                          !user &&
+                          activeTooltip?.type === "play-later" &&
+                          activeTooltip?.gameId === games.id
+                        }
                         onClose={() => setActiveTooltip(null)}
                         disableFocusListener
                         disableHoverListener
@@ -644,7 +651,10 @@ export default function ClientHomePage({
                           className="mr-4"
                           onClick={() => {
                             if (!user) {
-                              setActiveTooltip({ type: "play-later", gameId: games.id });
+                              setActiveTooltip({
+                                type: "play-later",
+                                gameId: games.id,
+                              });
                             } else {
                               alert("Logged in");
                             }
@@ -657,11 +667,13 @@ export default function ClientHomePage({
                       {/* Like and Dislike */}
                       <div className="flex items-center gap-1">
                         <Tooltip
-                          title="Log in to use this feature"
+                          title="Log in to add games you like"
                           placement="bottom"
-                          open={!user && 
-                            activeTooltip?.type === "dislike" && 
-                            activeTooltip?.gameId === games.id}
+                          open={
+                            !user &&
+                            activeTooltip?.type === "dislike" &&
+                            activeTooltip?.gameId === games.id
+                          }
                           onClose={() => setActiveTooltip(null)}
                           disableFocusListener
                           disableHoverListener
@@ -679,7 +691,10 @@ export default function ClientHomePage({
                             className={`p-0 m-1 hover:bg-transparent hover:[&_svg]:fill-foreground/30`}
                             onClick={() => {
                               if (!user) {
-                                setActiveTooltip({ type: "dislike", gameId: games.id });
+                                setActiveTooltip({
+                                  type: "dislike",
+                                  gameId: games.id,
+                                });
                               } else {
                                 alert("Logged in");
                               }
@@ -690,11 +705,13 @@ export default function ClientHomePage({
                         </Tooltip>
 
                         <Tooltip
-                          title="Log in to use this feature"
+                          title="Log in to add games you dislike"
                           placement="bottom"
-                          open={!user && 
-                            activeTooltip?.type === "like" && 
-                            activeTooltip?.gameId === games.id}
+                          open={
+                            !user &&
+                            activeTooltip?.type === "like" &&
+                            activeTooltip?.gameId === games.id
+                          }
                           onClose={() => setActiveTooltip(null)}
                           disableFocusListener
                           disableHoverListener
@@ -711,7 +728,10 @@ export default function ClientHomePage({
                             className={`p-0 m-1 hover:bg-transparent hover:[&_svg]:fill-foreground/30`}
                             onClick={() => {
                               if (!user) {
-                                setActiveTooltip({ type: "like", gameId: games.id });
+                                setActiveTooltip({
+                                  type: "like",
+                                  gameId: games.id,
+                                });
                               } else {
                                 alert("Logged in");
                               }

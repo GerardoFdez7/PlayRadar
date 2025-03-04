@@ -25,4 +25,5 @@ const GoogleComp: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
     />
   </svg>
 );
+
 export default GoogleComp;

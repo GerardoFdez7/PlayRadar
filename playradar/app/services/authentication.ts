@@ -4,7 +4,8 @@ import {
   signInWithPopup,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  User
+  User,
+  signOut 
 } from "firebase/auth";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 
@@ -28,6 +29,7 @@ export async function registerUser(
       email,
       createdAt: new Date(),
       liked: [],
+      disliked: [],
       play_later: [],
     });
 
@@ -68,7 +70,8 @@ async function createUserRecordIfNotExists(
       username: user.displayName || usernameFallback,
       email: user.email,
       createdAt: new Date(),
-      liked: [],
+      liked: [],      
+      disliked: [],
       play_later: [],
     });
   }
@@ -87,3 +90,12 @@ export async function handleGoogleLogin() {
     return { success: false };
   }
 }
+
+// Log out
+export const logout = async () => {
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.error('Logout error:', error);
+  }
+};
