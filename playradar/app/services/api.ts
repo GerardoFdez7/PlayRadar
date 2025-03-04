@@ -1,20 +1,41 @@
 const API_KEY = process.env.NEXT_PUBLIC_RAWG_API_KEY;
 
-export const getGames = async (url?: string) => {
+if (!API_KEY) {
+  throw new Error("Missing NEXT_PUBLIC_RAWG_API_KEY environment variable");
+}
+
+export const getGames = async (
+  url?: string,
+  genres?: string,
+  parent_platforms?: string 
+) => {
   try {
-    const apiUrl =
-      url ??
-      `https://api.rawg.io/api/games?key=${API_KEY}&ordering=-metacritic&page_size=40&dates=2015-01-01,2027-12-31`;
+    let apiUrl: string;
+
+    if (url) {
+      apiUrl = url;
+    } else {
+      const baseUrl = 'https://api.rawg.io/api/games';
+      const params = new URLSearchParams();
+      
+      params.append('key', API_KEY);
+      params.append('ordering', '-metacritic');
+      params.append('page_size', '40');
+      params.append('dates', '2015-01-01,2027-12-31');
+
+      if (genres) params.append('genres', genres);
+      if (parent_platforms) params.append('parent_platforms', parent_platforms); 
+
+      apiUrl = `${baseUrl}?${params.toString()}`;
+    }
+
     const res = await fetch(apiUrl);
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
-    console.log(`Request to API: ${res.url}`);
-    console.log(`Response status code: ${res.status}`);
-
     const data = await res.json();
-    return data; // { count, next, previous, results }
+    return data;
   } catch (error) {
-    console.error("Error en getGames:", error);
+    console.error("getGames error:", error);
     return null;
   }
 };
@@ -29,7 +50,7 @@ export const getSearchedGames = async (query: string, url?: string) => {
     const data = await res.json();
     return data; // { count, next, previous, results }
   } catch (error) {
-    console.error("Error en getSearchedGamesWithNext:", error);
+    console.error("getSearchedGamesWithNext error:", error);
     return null;
   }
 };
@@ -67,7 +88,7 @@ export const fetchGameTrailer = async (gameId: string) => {
     const res = await fetch(
       `https://api.rawg.io/api/games/${gameId}/movies?key=${API_KEY}`
     );
-    if (!res.ok) throw new Error("Error en la petición");
+    if (!res.ok) throw new Error("Request error");
     console.log(`Trailer request: ${res.url}`);
     console.log(`Trailer status code: ${res.status}`);
 

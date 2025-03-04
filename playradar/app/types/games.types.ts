@@ -17,7 +17,7 @@ export type Game = {
       id: number;
       name: string;
       slug: string;
-    }
+    };
   }[];
   ratings_count?: number;
   genres: Genre[];

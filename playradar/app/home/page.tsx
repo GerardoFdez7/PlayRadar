@@ -14,7 +14,6 @@ import {
   Users,
   Brush,
   ChevronDown,
-  //LogOut,
 } from "lucide-react";
 import {
   MdVolumeOff,
@@ -113,6 +112,17 @@ const genres = [
   { name: "Indie", slug: "indie", icon: <Brush className="w-4 h-4" /> },
 ];
 
+const platformSlugToId: { [key: string]: string } = {
+  pc: "1",
+  playstation: "2",
+  xbox: "3",
+  nintendo: "7",
+  linux: "6",
+  mac: "5",
+  ios: "4",
+  android: "8",
+};
+
 interface ClientHomePageProps {
   initialGames: Game[];
   initialNextUrl: string | null;
@@ -166,19 +176,7 @@ export default function ClientHomePage({
   // Call the API and establish filters
   useEffect(() => {
     const displayGames = searchTerm.trim() ? searchResults : games;
-    let updatedGames = [...displayGames];
-
-    if (selectedGenreSlug) {
-      updatedGames = updatedGames.filter((game) =>
-        game.genres?.some((g) => g.slug === selectedGenreSlug)
-      );
-    }
-
-    if (selectedPlatform !== "all") {
-      updatedGames = updatedGames.filter((game) =>
-        game.parent_platforms?.some((p) => p.platform.slug === selectedPlatform)
-      );
-    }
+    const updatedGames = [...displayGames];
 
     if (sortBy === "likes") {
       updatedGames.sort(
@@ -204,6 +202,28 @@ export default function ClientHomePage({
     searchTerm,
   ]);
 
+  // Get filtered games
+  useEffect(() => {
+    const fetchFilteredGames = async () => {
+      if (!searchTerm.trim()) {
+        const platformId =
+          selectedPlatform !== "all" ? selectedPlatform : undefined;
+        const genreSlug = selectedGenreSlug ? selectedGenreSlug : undefined;
+        const data = await getGames(undefined, genreSlug, platformId);
+
+        if (data) {
+          setGames(data.results);
+          setNextUrl(data.next);
+        }
+      }
+    };
+
+    // Solo hacer fetch si NO estamos en modo búsqueda
+    if (!searchTerm.trim()) {
+      fetchFilteredGames();
+    }
+  }, [selectedGenreSlug, selectedPlatform, searchTerm]);
+
   // More games
   const loadMoreGames = useCallback(async () => {
     if (!nextUrl || isLoading) return;
@@ -221,6 +241,11 @@ export default function ClientHomePage({
     const fetchInitialSearch = async () => {
       if (searchTerm.trim()) {
         setIsLoading(true);
+
+        // Clear filters when starting search
+        setSelectedGenreSlug(null);
+        setSelectedPlatform("all");
+
         const data = await getSearchedGames(searchTerm);
         if (data && Array.isArray(data.results)) {
           setSearchResults(data.results);
@@ -449,7 +474,12 @@ export default function ClientHomePage({
                 <SelectItem value="release">Release Date</SelectItem>
               </SelectContent>
             </Select>
-            <Select onValueChange={(value) => setSelectedPlatform(value)}>
+            <Select
+              onValueChange={(value) => {
+                const platformId = platformSlugToId[value] || "all";
+                setSelectedPlatform(platformId);
+              }}
+            >
               <SelectTrigger className="w-[180px] border border-gray-400">
                 <SelectValue placeholder="Platforms" />
                 <ChevronDown className="h-5 w-5 opacity-80" />
