@@ -1,19 +1,19 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import GoogleComp from "@/components/ui/google";
-import LoadingAnimation from "@/components/ui/loader";
+import { Button } from "@/app/components/ui/Button";
+import GoogleComp from "@/app/components/ui/GoogleLogo";
+import LoadingAnimation from "@/app/components/ui/Loader";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import radarImage from "./radar.png";
-import ModeToggle from "@/components/features/themeSelector";
+import ModeToggle from "@/app/components/features/ThemeSelector";
 import {
   checkUser,
   handleGoogleLogin,
   handleForgotPassword,
 } from "../services/authentication";
-import Footer from "@/app/components/layout/footer";
+import Footer from "@/app/components/layout/Footer";
 
 export default function Login() {
   const router = useRouter();
