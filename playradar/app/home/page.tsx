@@ -42,10 +42,10 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import radarImage from "./radar.png";
 import videogameImage from "./placeholder.png";
-import ModeToggle from "@/components/themeSelector";
+import ModeToggle from "@/components/features/themeSelector";
 import { fetchGameTrailer, getSearchedGames, getGames } from "../services/api";
 import { Game } from "../types/games.types";
-import { auth } from "../firebase";
+import { auth } from "../lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Tooltip } from "@mui/material";
 import {
@@ -58,9 +58,10 @@ import {
   IosIcon,
   AndroidIcon,
 } from "@/components/ui/platforms";
-import Footer from "@/components/ui/footer";
+import Footer from "@/app/components/layout/footer";
 import Plus from "@/components/ui/plus";
 import Avatar from "@/components/ui/avatar";
+import { useGamePreferences } from "../hooks/useGamePreferences";
 
 const genres = [
   { name: "Action", slug: "action", icon: <Swords className="w-4 h-4" /> },
@@ -133,10 +134,6 @@ export default function ClientHomePage({
   initialNextUrl,
 }: ClientHomePageProps) {
   const router = useRouter();
-  const [activeTooltip, setActiveTooltip] = useState<{
-    type: string;
-    gameId: number;
-  } | null>(null);
 
   // States for normal load
   const [games, setGames] = useState<Game[]>(
@@ -172,6 +169,15 @@ export default function ClientHomePage({
 
   // Sentinel for the infinite scroll
   const sentinelRef = useRef<HTMLDivElement | null>(null);
+
+  // Card states
+  const [activeTooltip, setActiveTooltip] = useState<{
+    type: string;
+    gameId: number;
+  } | null>(null);
+
+  const { userLikes, userDislikes, handleLikeToggle, handleDislikeToggle } =
+    useGamePreferences();
 
   // Call the API and establish filters
   useEffect(() => {
@@ -705,7 +711,7 @@ export default function ClientHomePage({
                       {/* Like and Dislike */}
                       <div className="flex items-center gap-1">
                         <Tooltip
-                          title="Log in to add games you like"
+                          title="Log in to add games you dislike"
                           placement="bottom"
                           open={
                             !user &&
@@ -726,7 +732,11 @@ export default function ClientHomePage({
                           <Button
                             variant="ghost"
                             data-tooltip-id="login-tooltip"
-                            className={`p-0 m-1 hover:bg-transparent hover:[&_svg]:fill-foreground/30`}
+                            className={`p-0 m-1 hover:bg-transparent transition-all duration-300 transform ${
+                              userDislikes.includes(games.id.toString())
+                                ? "text-primary scale-110"
+                                : "hover:[&_svg]:fill-foreground/30"
+                            }`}
                             onClick={() => {
                               if (!user) {
                                 setActiveTooltip({
@@ -734,16 +744,34 @@ export default function ClientHomePage({
                                   gameId: games.id,
                                 });
                               } else {
-                                alert("Logged in");
+                                // Animation
+                                const button =
+                                  document.activeElement as HTMLElement;
+                                button?.classList.add("animate-ping-once");
+                                setTimeout(
+                                  () =>
+                                    button?.classList.remove(
+                                      "animate-ping-once"
+                                    ),
+                                  300
+                                );
+
+                                handleDislikeToggle(games.id.toString());
                               }
                             }}
                           >
-                            <ThumbsDown className="h-5 w-5" />
+                            <ThumbsDown
+                              className={`h-5 w-5 transition-transform duration-300 ${
+                                userDislikes.includes(games.id.toString())
+                                  ? "fill-current"
+                                  : ""
+                              }`}
+                            />
                           </Button>
                         </Tooltip>
 
                         <Tooltip
-                          title="Log in to add games you dislike"
+                          title="Log in to add games you like"
                           placement="bottom"
                           open={
                             !user &&
@@ -763,7 +791,11 @@ export default function ClientHomePage({
                         >
                           <Button
                             variant="ghost"
-                            className={`p-0 m-1 hover:bg-transparent hover:[&_svg]:fill-foreground/30`}
+                            className={`p-0 m-1 hover:bg-transparent transition-all duration-300 transform ${
+                              userLikes.includes(games.id.toString())
+                                ? "text-primary scale-110"
+                                : "hover:[&_svg]:fill-foreground/30"
+                            }`}
                             onClick={() => {
                               if (!user) {
                                 setActiveTooltip({
@@ -771,11 +803,29 @@ export default function ClientHomePage({
                                   gameId: games.id,
                                 });
                               } else {
-                                alert("Logged in");
+                                // Animation
+                                const button =
+                                  document.activeElement as HTMLElement;
+                                button?.classList.add("animate-ping-once");
+                                setTimeout(
+                                  () =>
+                                    button?.classList.remove(
+                                      "animate-ping-once"
+                                    ),
+                                  300
+                                );
+
+                                handleLikeToggle(games.id.toString());
                               }
                             }}
                           >
-                            <ThumbsUp className="h-5 w-5" />
+                            <ThumbsUp
+                              className={`h-5 w-5 transition-transform duration-300 ${
+                                userLikes.includes(games.id.toString())
+                                  ? "fill-current"
+                                  : ""
+                              }`}
+                            />
                           </Button>
                         </Tooltip>
 

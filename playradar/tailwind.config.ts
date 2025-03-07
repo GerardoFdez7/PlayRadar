@@ -20,6 +20,15 @@ module.exports = {
       },
     },
     extend: {
+      keyframes: {
+        "ping-once": {
+          "0%, 100%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.2)" }
+        }
+      },
+      animation: {
+        "ping-once": "ping-once 0.3s ease-in-out"
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

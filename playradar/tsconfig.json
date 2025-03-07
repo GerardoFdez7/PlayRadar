@@ -4,7 +4,7 @@
     "paths": {
       "@/*": ["./*"], 
       "@/components/*": ["./app/components/*"],
-      "@/lib/*": ["./lib/*"]
+      "@/lib/*": ["app/lib/*"]
     },
     "target": "ES2017",
     "lib": [
@@ -35,7 +35,7 @@
     ".next/types/**/*.ts",
     "next-env.d.ts",
     "out/types/**/*.ts"
-, "app/firebase.js"  ],
+, "app/lib/firebase.js"  ],
   "exclude": [
     "node_modules"
   ]

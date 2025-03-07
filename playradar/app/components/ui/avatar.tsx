@@ -9,28 +9,26 @@ import {
 } from "@/components/ui/themeDropdown";
 import { logout } from "../../services/authentication";
 import { useRouter } from "next/navigation";
-import useUserProfile from '../../hooks/getUsername';
+import useUserProfile from "../../hooks/getUsername";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../../firebase";
+import { auth } from "../../lib/firebase";
 import { User } from "firebase/auth";
 
-
-
 const getInitials = (user: User | null) => {
-  if (!user) return 'U';
-  
+  if (!user) return "U";
+
   // Get displayName from Firebase Auth
   if (user.displayName) {
-    const names = user.displayName.split(' ');
-    return `${names[0][0]}${names.length > 1 ? names[1][0] : ''}`.toUpperCase();
+    const names = user.displayName.split(" ");
+    return `${names[0][0]}${names.length > 1 ? names[1][0] : ""}`.toUpperCase();
   }
-  
+
   // If there is no displayName, use email
   if (user.email) {
     return user.email[0].toUpperCase();
   }
-  
-  return 'U';
+
+  return "U";
 };
 
 export default function Avatar() {
@@ -43,13 +41,14 @@ export default function Avatar() {
     return getInitials(user || null);
   };
 
-
   const handleLogout = async () => {
     await logout();
+    window.location.reload();
     router.refresh();
   };
 
-  if (loading) return <div className="h-10 w-10 rounded-full bg-gray-300 animate-pulse" />;
+  if (loading)
+    return <div className="h-10 w-10 rounded-full bg-gray-300 animate-pulse" />;
 
   return (
     <DropdownMenu>
@@ -83,4 +82,4 @@ export default function Avatar() {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-};
+}

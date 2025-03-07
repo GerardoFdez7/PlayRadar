@@ -7,10 +7,10 @@ import LoadingAnimation from "@/components/ui/loader";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import radarImage from "./radar.png";
-import ModeToggle from "@/components/themeSelector";
-import { isEmailOrUsernameTaken } from "../services/dataBaseConfig";
-import { registerUser, handleGoogleLogin } from "../services/authentication";
-import Footer from "@/components/ui/footer";
+import ModeToggle from "@/components/features/themeSelector";
+import { isEmailOrUsernameTaken } from "../../services/dataBaseConfig";
+import { registerUser, handleGoogleLogin } from "../../services/authentication";
+import Footer from "@/app/components/layout/footer";
 
 export default function Register() {
   const router = useRouter();
