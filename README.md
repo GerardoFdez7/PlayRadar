@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PlayRadar
 
-## Getting Started
+**Scroll, click, play… repeat!**
 
-First, run the development server:
+PlayRadar is your ultimate hub for discovering the next video game you'll love. Our website taps into an extensive API boasting millions of video games, offering you personalized recommendations and a dynamic way to explore new titles. Whether you're a casual gamer or a hardcore enthusiast, PlayRadar helps you stay ahead of the curve.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Table of Contents
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- [About](#about)
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## About
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+PlayRadar is built with modern web technologies including Next.js, React, and TypeScript, ensuring a fast, responsive, and intuitive user experience. We harness the power of Firebase for authentication, database management, and real-time updates, making your interaction with the site seamless and secure.
 
-## Learn More
+Our unique content-based recommendation algorithm analyzes your gaming preferences and browsing habits, serving you tailored suggestions so you can always find that perfect next game to dive into.
 
-To learn more about Next.js, take a look at the following resources:
+## Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Massive Game Database:** Access millions of video games from a comprehensive API.
+- **Personalized Recommendations:** Our intelligent algorithm curates suggestions based on your interests.
+- **Seamless Navigation:** Enjoy a smooth and interactive interface powered by Next.js and React.
+- **Real-Time Updates:** Stay informed with live data updates thanks to Firebase integration.
+- **Modern Design:** An engaging, user-friendly design that keeps you coming back for more.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Technology Stack
 
-## Deploy on Vercel
+- **Next.js:** For fast, server-side rendering and dynamic routing.
+- **React:** For building an interactive and efficient user interface.
+- **TypeScript:** Enhancing code quality and reliability.
+- **Firebase:** Managing authentication, real-time database operations, and hosting.
+- **Custom Content-Based Recommendation Algorithm:** Driving personalized game discovery.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Contact
+For any inquiries, suggestions, or just to say hello, feel free to reach out:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Email: fer23763@uvg.edu.gt
+LinkedIn: www.linkedin.com/in/gerardofernández
+
+License
+Developed by Gerardo Fernández.
+
+Happy gaming and enjoy exploring PlayRadar!

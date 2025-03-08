@@ -396,11 +396,11 @@ export default function ClientHomePage({
           <div className="flex-1 bg-gray-100 dark:bg-gray-800 flex rounded-full justify-center max-w-3xl h-14 mx-8 mt-2 mr-24">
             <div className="relative w-full h-full flex items-center">
               <div className="absolute left-2 flex items-center">
-                <Search className="h-4 w-4 text-muted-foreground" />
+                <Search className="h-5 w-5 ml-2 text-muted-foreground" />
               </div>
               <Input
                 placeholder="Search games"
-                className="pl-8 w-full border-0 bg-transparent shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 ring-0 outline-none"
+                className="pl-8 ml-4 w-full border-0 bg-transparent shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 ring-0 outline-none"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
