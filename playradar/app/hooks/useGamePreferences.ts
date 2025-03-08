@@ -44,18 +44,18 @@ export function useGamePreferences() {
       const userRef = doc(db, "users", user.uid);
 
       if (userLikes.includes(gameId)) {
-        // Si ya está en likes, quitarlo
+        // If it's already in likes, remove it
         await updateDoc(userRef, {
           liked: arrayRemove(gameId),
         });
         setUserLikes(userLikes.filter((id) => id !== gameId));
       } else {
-        // Si no está en likes, agregarlo y quitarlo de dislikes si existe
+        // If it is not in likes, add it and remove it from dislikes if it exists
         const updates: UpdateData<DocumentData> = {
           liked: arrayUnion(gameId),
         };
 
-        // Si está en dislikes, quitarlo de ahí
+        // If it's in dislikes, remove it from there
         if (userDislikes.includes(gameId)) {
           updates.disliked = arrayRemove(gameId);
           setUserDislikes(userDislikes.filter((id) => id !== gameId));
@@ -77,18 +77,18 @@ export function useGamePreferences() {
       const userRef = doc(db, "users", user.uid);
 
       if (userDislikes.includes(gameId)) {
-        // Si ya está en dislikes, quitarlo
+        // If it's already in dislikes, remove it
         await updateDoc(userRef, {
           disliked: arrayRemove(gameId),
         });
         setUserDislikes(userDislikes.filter((id) => id !== gameId));
       } else {
-        // Si no está en dislikes, agregarlo y quitarlo de likes si existe
+        // If it is not in dislikes, add it and remove it from likes if it exists
         const updates: UpdateData<DocumentData> = {
           disliked: arrayUnion(gameId),
         };
 
-        // Si está en likes, quitarlo de ahí
+        // If it's in likes, remove it from there
         if (userLikes.includes(gameId)) {
           updates.liked = arrayRemove(gameId);
           setUserLikes(userLikes.filter((id) => id !== gameId));

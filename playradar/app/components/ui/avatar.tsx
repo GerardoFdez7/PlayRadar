@@ -9,7 +9,7 @@ import {
 } from "@/app/components/ui/ThemeDropdown";
 import { logout } from "../../services/authentication";
 import { useRouter } from "next/navigation";
-import useUserProfile from "../../hooks/getUsername";
+import useUserProfile from "../../hooks/useUsername";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../lib/firebase";
 import { User } from "firebase/auth";

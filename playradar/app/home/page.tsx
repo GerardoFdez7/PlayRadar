@@ -22,27 +22,28 @@ import {
 } from "react-icons/md";
 import { IoExtensionPuzzleOutline } from "react-icons/io5";
 import { FaGun } from "react-icons/fa6";
+import CheckIcon from "@/app/components/ui/CheckIcon";
 import { GiFloatingPlatforms } from "react-icons/gi";
-import LoadingAnimation from "@/app/components/ui/Loader";
+import LoadingAnimation from "@/components/ui/Loader";
 import {
   PiBoxingGloveBold,
   PiStrategy,
   PiCubeTransparentLight,
 } from "react-icons/pi";
-import { Button } from "@/app/components/ui/Button";
+import { Button } from "@/components/ui/Button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/app/components/ui/Select";
-import { Input } from "@/app/components/ui/Input";
+} from "@/components/ui/Select";
+import { Input } from "@/components/ui/Input";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import radarImage from "./radar.png";
 import videogameImage from "./placeholder.png";
-import ModeToggle from "@/app/components/features/ThemeSelector";
+import ModeToggle from "@/components/features/ThemeSelector";
 import { fetchGameTrailer, getSearchedGames, getGames } from "../services/api";
 import { Game } from "../types/games.types";
 import { auth } from "../lib/firebase";
@@ -59,9 +60,10 @@ import {
   AndroidIcon,
 } from "@/app/components/ui/Platforms";
 import Footer from "@/components/layout/Footer";
-import Plus from "@/app/components/ui/PlusIcon";
+import PlusIcon from "@/app/components/ui/PlusIcon";
 import Avatar from "@/app/components/ui/Avatar";
 import { useGamePreferences } from "../hooks/useGamePreferences";
+import { usePlayLater } from "../hooks/usePlayLater";
 
 const genres = [
   { name: "Action", slug: "action", icon: <Swords className="w-4 h-4" /> },
@@ -178,6 +180,8 @@ export default function ClientHomePage({
 
   const { userLikes, userDislikes, handleLikeToggle, handleDislikeToggle } =
     useGamePreferences();
+
+  const { userPlayLater, handlePlayLaterToggle } = usePlayLater();
 
   // Call the API and establish filters
   useEffect(() => {
@@ -692,7 +696,11 @@ export default function ClientHomePage({
                         <Button
                           size="icon"
                           variant="ghost"
-                          className="mr-4"
+                          className={`p-0 mr-4 transition-all duration-300 transform ${
+                            userPlayLater.includes(games.id.toString())
+                              ? "text-primary scale-110"
+                              : "hover:[&_svg]:fill-foreground/30"
+                          }`}
                           onClick={() => {
                             if (!user) {
                               setActiveTooltip({
@@ -700,11 +708,17 @@ export default function ClientHomePage({
                                 gameId: games.id,
                               });
                             } else {
-                              alert("Logged in");
+                              // Enter to the list of play_later
+                              
+                              handlePlayLaterToggle(games.id.toString());
                             }
                           }}
                         >
-                          <Plus />
+                          {userPlayLater.includes(games.id.toString()) ? (
+                            <CheckIcon />
+                          ) : (
+                            <PlusIcon />
+                          )}
                         </Button>
                       </Tooltip>
 
@@ -744,7 +758,7 @@ export default function ClientHomePage({
                                   gameId: games.id,
                                 });
                               } else {
-                                // Animation
+                                // Enter to the list of dislikes
                                 const button =
                                   document.activeElement as HTMLElement;
                                 button?.classList.add("animate-ping-once");
@@ -803,7 +817,7 @@ export default function ClientHomePage({
                                   gameId: games.id,
                                 });
                               } else {
-                                // Animation
+                                // Enter to the list of likes
                                 const button =
                                   document.activeElement as HTMLElement;
                                 button?.classList.add("animate-ping-once");

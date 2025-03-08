@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Button } from "@/app/components/ui/Button";
-import GoogleComp from "@/app/components/ui/GoogleLogo";
+import GoogleLogo from "@/app/components/ui/GoogleLogo";
 import LoadingAnimation from "@/app/components/ui/Loader";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -252,7 +252,7 @@ export default function Login() {
         >
           <div className="flex items-center">
             Continue with Google
-            <GoogleComp className="w-8 ml-2 justify-center" />
+            <GoogleLogo className="w-8 ml-2 justify-center" />
           </div>
         </Button>
       </div>

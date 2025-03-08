@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const GoogleComp: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+const GoogleLogo: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg
     viewBox="0 0 32 32"
     fill="none"
@@ -26,4 +26,4 @@ const GoogleComp: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   </svg>
 );
 
-export default GoogleComp;
+export default GoogleLogo;
