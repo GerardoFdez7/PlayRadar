@@ -1,12 +1,12 @@
 "use client";
 
-import { Button } from "@/app/components/ui/button";
+import { Button } from "@/app/components/ui/Button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/app/components/ui/themeDropdown";
+} from "@/app/components/ui/ThemeDropdown";
 import { logout } from "../../services/authentication";
 import { useRouter } from "next/navigation";
 import useUserProfile from "../../hooks/useUsername";
