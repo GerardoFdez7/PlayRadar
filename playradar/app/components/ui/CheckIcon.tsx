@@ -8,9 +8,9 @@ const CheckIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    stroke-width="4"
-    stroke-linecap="round"
-    stroke-linejoin="round"
+    strokeWidth="4"
+    strokeLinecap="round"
+    strokeLinejoin="round"
     className="lucide lucide-check rotate-0 transition-transform duration-600"
     {...props}
   >

@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Button } from "@/app/components/ui/Button";
-import GoogleLogo from "@/app/components/ui/GoogleLogo";
-import LoadingAnimation from "@/app/components/ui/Loader";
+import { Button } from "../components/ui/Button";
+import GoogleLogo from "../components/ui/GoogleLogo";
+import LoadingAnimation from "../components/ui/Loader";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import radarImage from "./radar.png";
-import ModeToggle from "@/app/components/features/ThemeSelector";
+import ModeToggle from "../components/features/ThemeSelector";
 import {
   checkUser,
   handleGoogleLogin,
