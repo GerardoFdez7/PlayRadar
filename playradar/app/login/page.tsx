@@ -2,18 +2,18 @@
 
 import React, { useState, useEffect } from "react";
 import { Button } from "@/app/components/ui/Button";
-import GoogleLogo from "@/app/components/ui/GoogleLogo";
-import LoadingAnimation from "@/app/components/ui/Loader";
+import GoogleLogo from "@/app/components/ui/googleLogo";
+import LoadingAnimation from "@/app/components/ui/loader";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import radarImage from "./radar.png";
-import ModeToggle from "@/app/components/features/ThemeSelector";
+import ModeToggle from "@/app/components/features/themeSelector";
 import {
   checkUser,
   handleGoogleLogin,
   handleForgotPassword,
 } from "../services/authentication";
-import Footer from "@/app/components/layout/Footer";
+import Footer from "@/app/components/layout/footer";
 
 export default function Login() {
   const router = useRouter();

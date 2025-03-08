@@ -6,7 +6,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/app/components/ui/ThemeDropdown";
+} from "@/app/components/ui/themeDropdown";
 import { logout } from "../../services/authentication";
 import { useRouter } from "next/navigation";
 import useUserProfile from "../../hooks/useUsername";

@@ -24,7 +24,7 @@ import { IoExtensionPuzzleOutline } from "react-icons/io5";
 import { FaGun } from "react-icons/fa6";
 import CheckIcon from "@/app/components/ui/CheckIcon";
 import { GiFloatingPlatforms } from "react-icons/gi";
-import LoadingAnimation from "@/components/ui/Loader";
+import LoadingAnimation from "@/app/components/ui/loader";
 import {
   PiBoxingGloveBold,
   PiStrategy,
@@ -37,13 +37,13 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/Select";
-import { Input } from "@/components/ui/Input";
+} from "@/app/components/ui/select";
+import { Input } from "@/app/components/ui/input";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import radarImage from "./radar.png";
 import videogameImage from "./placeholder.png";
-import ModeToggle from "@/components/features/ThemeSelector";
+import ModeToggle from "@/app/components/features/themeSelector";
 import { fetchGameTrailer, getSearchedGames, getGames } from "../services/api";
 import { Game } from "../types/games.types";
 import { auth } from "../lib/firebase";
@@ -58,9 +58,9 @@ import {
   LinuxIcon,
   IosIcon,
   AndroidIcon,
-} from "@/app/components/ui/Platforms";
-import Footer from "@/components/layout/Footer";
-import PlusIcon from "@/app/components/ui/PlusIcon";
+} from "@/app/components/ui/platforms";
+import Footer from "@/app/components/layout/footer";
+import PlusIcon from "@/app/components/ui/plusIcon";
 import Avatar from "@/app/components/ui/Avatar";
 import { useGamePreferences } from "../hooks/useGamePreferences";
 import { usePlayLater } from "../hooks/usePlayLater";
@@ -709,7 +709,7 @@ export default function ClientHomePage({
                               });
                             } else {
                               // Enter to the list of play_later
-                              
+
                               handlePlayLaterToggle(games.id.toString());
                             }
                           }}
