@@ -22,28 +22,28 @@ import {
 } from "react-icons/md";
 import { IoExtensionPuzzleOutline } from "react-icons/io5";
 import { FaGun } from "react-icons/fa6";
-import CheckIcon from "@/app/components/ui/CheckIcon";
+import CheckIcon from "@/components/ui/checkIcon";
 import { GiFloatingPlatforms } from "react-icons/gi";
-import LoadingAnimation from "@/app/components/ui/loader";
+import LoadingAnimation from "@/components/ui/loader";
 import {
   PiBoxingGloveBold,
   PiStrategy,
   PiCubeTransparentLight,
 } from "react-icons/pi";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/app/components/ui/select";
-import { Input } from "@/app/components/ui/input";
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import radarImage from "./radar.png";
 import videogameImage from "./placeholder.png";
-import ModeToggle from "@/app/components/features/themeSelector";
+import ModeToggle from "@/components/features/themeSelector";
 import { fetchGameTrailer, getSearchedGames, getGames } from "../services/api";
 import { Game } from "../types/games.types";
 import { auth } from "../lib/firebase";
@@ -59,9 +59,9 @@ import {
   IosIcon,
   AndroidIcon,
 } from "@/app/components/ui/platforms";
-import Footer from "@/app/components/layout/footer";
-import PlusIcon from "@/app/components/ui/plusIcon";
-import Avatar from "@/app/components/ui/Avatar";
+import Footer from "@/components/layout/footer";
+import PlusIcon from "@/components/ui/plusIcon";
+import Avatar from "@/components/ui/avatar";
 import { useGamePreferences } from "../hooks/useGamePreferences";
 import { usePlayLater } from "../hooks/usePlayLater";
 
