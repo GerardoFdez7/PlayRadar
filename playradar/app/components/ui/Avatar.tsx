@@ -48,7 +48,7 @@ export default function Avatar() {
   };
 
   if (loading)
-    return <div className="h-10 w-10 rounded-full bg-gray-300 animate-pulse" />;
+    return <div className="w-10 h-10 bg-gray-300 rounded-full animate-pulse" />;
 
   return (
     <DropdownMenu>
@@ -75,7 +75,7 @@ export default function Avatar() {
         )}
         <DropdownMenuItem
           onClick={handleLogout}
-          className="cursor-pointer text-red-600 hover:bg-red-50/50"
+          className="text-red-600 cursor-pointer hover:bg-red-50/50"
         >
           Sign out
         </DropdownMenuItem>

@@ -377,37 +377,37 @@ export default function ClientHomePage({
   }, [activeTooltip]);
 
   return (
-    <div className="min-h-screen bg-gray-300 dark:bg-gray-900 transition-colors duration-500">
+    <div className="min-h-screen transition-colors duration-500 bg-gray-300 dark:bg-gray-900">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full backdrop-blur supports-[backdrop-filter] ">
-        <div className="flex h-16 items-center justify-between py-12 px-4 max-w-none">
+        <div className="flex items-center justify-between h-16 px-4 py-12 max-w-none">
           {/* Logo */}
-          <div className="flex items-center gap-4 flex-shrink-0">
+          <div className="flex items-center flex-shrink-0 gap-4">
             <div className="w-[85px] h-[85px] cursor-pointer ml-3">
               <Image
                 src={radarImage}
                 alt="Radar"
-                className="w-full h-full object-contain mt-2"
+                className="object-contain w-full h-full mt-2"
                 onClick={() => window.location.reload()}
               />
             </div>
           </div>
           {/* Search bar */}
-          <div className="flex-1 bg-gray-100 dark:bg-gray-800 flex rounded-full justify-center max-w-3xl h-14 mx-8 mt-2 mr-24">
-            <div className="relative w-full h-full flex items-center">
-              <div className="absolute left-2 flex items-center">
-                <Search className="h-5 w-5 ml-2 text-muted-foreground" />
+          <div className="flex justify-center flex-1 max-w-3xl mx-8 mt-2 mr-24 bg-gray-100 rounded-full dark:bg-gray-800 h-14">
+            <div className="relative flex items-center w-full h-full">
+              <div className="absolute flex items-center left-2">
+                <Search className="w-5 h-5 ml-2 text-muted-foreground" />
               </div>
               <Input
                 placeholder="Search games"
-                className="pl-8 ml-4 w-full border-0 bg-transparent shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 ring-0 outline-none"
+                className="w-full pl-8 ml-4 bg-transparent border-0 shadow-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ring-0"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
               {/* X button to clear search */}
               {searchTerm && (
                 <button
-                  className="absolute right-7 font-semibold"
+                  className="absolute font-semibold right-7"
                   onClick={() => {
                     setSearchTerm("");
                   }}
@@ -418,7 +418,7 @@ export default function ClientHomePage({
             </div>
           </div>
           {/* LOG IN button*/}
-          <div className="absolute right-1 mr-20">
+          <div className="absolute mr-20 right-1">
             {user ? (
               <Avatar />
             ) : (
@@ -441,7 +441,7 @@ export default function ClientHomePage({
         {/* Sidebar */}
         <aside className="w-41 h-[calc(100vh-4rem)] ml-3 sticky top-16 overflow-y-auto flex flex-col">
           <div className="p-4">
-            <h2 className="text-3xl font-bold mb-4 mt-3">Genres</h2>
+            <h2 className="mt-3 mb-4 text-3xl font-bold">Genres</h2>
             <nav className="space-y-2">
               {genres.map((genre) => (
                 <button
@@ -469,14 +469,14 @@ export default function ClientHomePage({
 
         {/* Main Content */}
         <main className="flex-1 p-6 mr-3">
-          <h1 className="text-5xl font-bold font-playRadar mb-3 ">PlayRadar</h1>
-          <p className="text-lg mb-6">Scroll, click, play… repeat!</p>
+          <h1 className="mb-3 text-5xl font-bold font-playRadar ">PlayRadar</h1>
+          <p className="mb-6 text-lg">Scroll, click, play… repeat!</p>
           {/* Filters */}
           <div className="flex gap-4 mb-6">
             <Select onValueChange={(value) => setSortBy(value)}>
               <SelectTrigger className="w-[180px] border border-gray-400">
                 <SelectValue placeholder={"Order by"} />
-                <ChevronDown className="h-5 w-5 opacity-80" />
+                <ChevronDown className="w-5 h-5 opacity-80" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="likes">Likes</SelectItem>
@@ -500,7 +500,7 @@ export default function ClientHomePage({
             >
               <SelectTrigger className="w-[180px] border border-gray-400">
                 <SelectValue placeholder="Platforms" />
-                <ChevronDown className="h-5 w-5 opacity-80" />
+                <ChevronDown className="w-5 h-5 opacity-80" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All</SelectItem>
@@ -517,7 +517,7 @@ export default function ClientHomePage({
           </div>
 
           {/* Games Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filteredGames?.map((games) => (
               <div
                 key={games.id}
@@ -540,7 +540,7 @@ export default function ClientHomePage({
                   }));
                 }}
               >
-                <div className="aspect-video relative">
+                <div className="relative aspect-video">
                   {/* Video trailer */}
                   {trailers[games.id.toString()] && (
                     <>
@@ -552,7 +552,7 @@ export default function ClientHomePage({
                         autoPlay
                         muted={muted}
                         loop
-                        className="object-cover w-full h-full absolute inset-0 z-10 transition-opacity duration-500 group-hover:opacity-100 opacity-0"
+                        className="absolute inset-0 z-10 object-cover w-full h-full transition-opacity duration-500 opacity-0 group-hover:opacity-100"
                         style={{ pointerEvents: "none" }}
                         onLoadedData={() => {
                           // Play video when ready
@@ -564,7 +564,7 @@ export default function ClientHomePage({
                       {/* Mute button */}
                       <button
                         onClick={() => setMuted((prev) => !prev)}
-                        className="absolute bottom-2 right-2 z-30 bg-gray-700/50 p-2 rounded-full hover:bg-gray-700/75 transition-all"
+                        className="absolute z-30 p-2 transition-all rounded-full bottom-2 right-2 bg-gray-700/50 hover:bg-gray-700/75"
                       >
                         {muted ? (
                           <MdVolumeOff className="w-6 h-6 opacity-50 hover:opacity-100" />
@@ -580,7 +580,7 @@ export default function ClientHomePage({
                     games.short_screenshots &&
                     games.short_screenshots.length > 0 && (
                       <div
-                        className="absolute inset-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 isolate"
+                        className="absolute inset-0 z-10 transition-opacity duration-500 opacity-0 group-hover:opacity-100 isolate"
                         onMouseMove={(e) => handleScreenshotHover(e, games)}
                       >
                         <Image
@@ -595,10 +595,10 @@ export default function ClientHomePage({
                         />
 
                         {/* Position indicator */}
-                        <div className="absolute bottom-0 left-0 right-0 p-2 z-10">
+                        <div className="absolute bottom-0 left-0 right-0 z-10 p-2">
                           <div className="flex flex-col gap-1">
                             {/* Position counter */}
-                            <div className="flex justify-between items-center"></div>
+                            <div className="flex items-center justify-between"></div>
 
                             {/* Interactive progress bar */}
                             <div className="flex gap-3">
@@ -636,11 +636,11 @@ export default function ClientHomePage({
                 {/* Card information */}
                 <div className="mt-2">
                   {/* Platforms icons*/}
-                  <div className="absolute left-5 flex gap-1">
+                  <div className="absolute flex gap-1 left-5">
                     {games.parent_platforms?.map((parent_platforms) => (
                       <span
                         key={parent_platforms.platform.slug}
-                        className="w-6 h-6 flex items-center justify-center"
+                        className="flex items-center justify-center w-6 h-6"
                       >
                         {parent_platforms.platform.slug === "pc" && <PcIcon />}
                         {parent_platforms.platform.slug === "playstation" && (
@@ -850,19 +850,19 @@ export default function ClientHomePage({
                     </div>
 
                     {/* Expanded content on hover */}
-                    <div className="absolute left-0 right-0 bg-card mt-2 pr-6 pl-6 rounded-xl">
-                      <div className="transition-all duration-300 transform origin-top scale-y-0 h-0 group-hover:scale-y-100 group-hover:h-auto">
+                    <div className="absolute left-0 right-0 pl-6 pr-6 mt-2 bg-card rounded-xl">
+                      <div className="h-0 transition-all duration-300 origin-top transform scale-y-0 group-hover:scale-y-100 group-hover:h-auto">
                         {/* Genre */}
-                        <div className="flex justify-between items-center mb-2">
+                        <div className="flex items-center justify-between mb-2">
                           <span className="text-sm">Genre</span>
                           <span className="text-sm text-right">
                             {games.genres.map((genre) => genre.name).join(", ")}
                           </span>
                         </div>
                         {/* Line */}
-                        <div className="h-px bg-gradient-to-r from-transparent via-gray-800 dark:via-gray-200 to-transparent my-2" />
+                        <div className="h-px my-2 bg-gradient-to-r from-transparent via-gray-800 dark:via-gray-200 to-transparent" />
                         {/* Release */}
-                        <div className="flex justify-between items-center mt-2 mb-4">
+                        <div className="flex items-center justify-between mt-2 mb-4">
                           <span className="text-sm">Released</span>
                           <span className="text-sm">
                             {new Date(games.released).toLocaleDateString()}
