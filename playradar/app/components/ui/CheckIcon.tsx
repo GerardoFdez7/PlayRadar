@@ -11,7 +11,7 @@ const CheckIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
     strokeWidth="4"
     strokeLinecap="round"
     strokeLinejoin="round"
-    className="lucide lucide-check rotate-0 transition-transform duration-600"
+    className="transition-transform rotate-0 lucide lucide-check duration-600"
     {...props}
   >
     <path d="M20 6 9 17l-5-5" />

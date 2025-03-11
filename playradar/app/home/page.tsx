@@ -1,35 +1,10 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import {
-  Search,
-  ThumbsUp,
-  ThumbsDown,
-  Swords,
-  Compass,
-  Gamepad2,
-  WalletCardsIcon as Cards,
-  Target,
-  GraduationCap,
-  Users,
-  Brush,
-  ChevronDown,
-} from "lucide-react";
-import {
-  MdVolumeOff,
-  MdVolumeUp,
-  MdOutlineSportsBasketball,
-} from "react-icons/md";
-import { IoExtensionPuzzleOutline } from "react-icons/io5";
-import { FaGun } from "react-icons/fa6";
+import { Search, ThumbsUp, ThumbsDown, ChevronDown } from "lucide-react";
+import { MdVolumeOff, MdVolumeUp } from "react-icons/md";
 import CheckIcon from "@/app/components/ui/CheckIcon";
-import { GiFloatingPlatforms } from "react-icons/gi";
 import LoadingAnimation from "@/app/components/ui/Loader";
-import {
-  PiBoxingGloveBold,
-  PiStrategy,
-  PiCubeTransparentLight,
-} from "react-icons/pi";
 import { Button } from "@/app/components/ui/Button";
 import {
   Select,
@@ -60,71 +35,12 @@ import {
   AndroidIcon,
 } from "@/app/components/ui/Platforms";
 import Footer from "@/app/components/layout/Footer";
+import MobileSidebar from "@/components/layout/MobileSidebar";
 import PlusIcon from "@/app/components/ui/PlusIcon";
-import Avatar from "@/app/components/ui/Avatar";
+import Avatar from "@/app/components/features/Avatar";
 import { useGamePreferences } from "../hooks/useGamePreferences";
 import { usePlayLater } from "../hooks/usePlayLater";
-
-const genres = [
-  { name: "Action", slug: "action", icon: <Swords className="w-4 h-4" /> },
-  {
-    name: "Fighting",
-    slug: "fighting",
-    icon: <PiBoxingGloveBold className="w-4 h-4" />,
-  },
-  { name: "Shooter", slug: "shooter", icon: <FaGun className="w-4 h-4" /> },
-  {
-    name: "Platformer",
-    slug: "platformer",
-    icon: <GiFloatingPlatforms className="w-4 h-4" />,
-  },
-  {
-    name: "Sports",
-    slug: "sports",
-    icon: <MdOutlineSportsBasketball className="w-4 h-4" />,
-  },
-  {
-    name: "Strategy",
-    slug: "strategy",
-    icon: <PiStrategy className="w-4 h-4" />,
-  },
-  {
-    name: "Simulation",
-    slug: "simulation",
-    icon: <PiCubeTransparentLight className="w-4 h-4" />,
-  },
-  {
-    name: "Adventure",
-    slug: "adventure",
-    icon: <Compass className="w-4 h-4" />,
-  },
-  { name: "Arcade", slug: "arcade", icon: <Gamepad2 className="w-4 h-4" /> },
-  { name: "Card", slug: "card", icon: <Cards className="w-4 h-4" /> },
-  { name: "Casual", slug: "casual", icon: <Target className="w-4 h-4" /> },
-  {
-    name: "Educational",
-    slug: "educational",
-    icon: <GraduationCap className="w-4 h-4" />,
-  },
-  {
-    name: "Puzzle",
-    slug: "puzzle",
-    icon: <IoExtensionPuzzleOutline className="w-4 h-4" />,
-  },
-  { name: "Family", slug: "family", icon: <Users className="w-4 h-4" /> },
-  { name: "Indie", slug: "indie", icon: <Brush className="w-4 h-4" /> },
-];
-
-const platformSlugToId: { [key: string]: string } = {
-  pc: "1",
-  playstation: "2",
-  xbox: "3",
-  nintendo: "7",
-  linux: "6",
-  mac: "5",
-  ios: "4",
-  android: "8",
-};
+import { genres, platformSlugToId } from "@/app/types/games-consts.types";
 
 interface ClientHomePageProps {
   initialGames: Game[];
@@ -183,6 +99,9 @@ export default function ClientHomePage({
 
   const { userPlayLater, handlePlayLaterToggle } = usePlayLater();
 
+  // Mobile Menu State
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   // Call the API and establish filters
   useEffect(() => {
     const displayGames = searchTerm.trim() ? searchResults : games;
@@ -228,7 +147,7 @@ export default function ClientHomePage({
       }
     };
 
-    // Solo hacer fetch si NO estamos en modo búsqueda
+    // Only do fetch if we are NOT in search mode
     if (!searchTerm.trim()) {
       fetchFilteredGames();
     }
@@ -379,11 +298,11 @@ export default function ClientHomePage({
   return (
     <div className="min-h-screen transition-colors duration-500 bg-gray-300 dark:bg-gray-900">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full backdrop-blur supports-[backdrop-filter] ">
+      <header className="sticky mb-2 top-0 z-50 w-full backdrop-blur supports-[backdrop-filter]">
         <div className="flex items-center justify-between h-16 px-4 py-12 max-w-none">
           {/* Logo */}
-          <div className="flex items-center flex-shrink-0 gap-4">
-            <div className="w-[85px] h-[85px] cursor-pointer ml-3">
+          <div className="flex items-center flex-shrink-0 gap-4 mr-4">
+            <div className="w-[85px] h-[85px] cursor-pointer">
               <Image
                 src={radarImage}
                 alt="Radar"
@@ -393,7 +312,7 @@ export default function ClientHomePage({
             </div>
           </div>
           {/* Search bar */}
-          <div className="flex justify-center flex-1 max-w-3xl mx-8 mt-2 mr-24 bg-gray-100 rounded-full dark:bg-gray-800 h-14">
+          <div className="flex justify-center flex-1 max-w-3xl mt-2 bg-gray-100 rounded-full dark:bg-gray-800 h-14">
             <div className="relative flex items-center w-full h-full">
               <div className="absolute flex items-center left-2">
                 <Search className="w-5 h-5 ml-2 text-muted-foreground" />
@@ -418,7 +337,7 @@ export default function ClientHomePage({
             </div>
           </div>
           {/* LOG IN button*/}
-          <div className="absolute mr-20 right-1">
+          <div className="items-center hidden gap-4 ml-4 min-[640px]:flex">
             {user ? (
               <Avatar />
             ) : (
@@ -430,18 +349,26 @@ export default function ClientHomePage({
                 LOG IN
               </button>
             )}
-          </div>
-          {/* Theme button */}
-          <div className="ml-4 mr-3">
             <ModeToggle />
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="min-[640px]:hidden pl-2">
+            <button
+              className=""
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              <MobileSidebar />
+            </button>
           </div>
         </div>
       </header>
+
       <div className="flex">
         {/* Sidebar */}
-        <aside className="w-41 h-[calc(100vh-4rem)] ml-3 sticky top-16 overflow-y-auto flex flex-col">
-          <div className="p-4">
-            <h2 className="mt-3 mb-4 text-3xl font-bold">Genres</h2>
+        <aside className="max-[640px]:hidden w-41 h-[calc(100vh-4rem)] ml-3 sticky top-16 overflow-y-auto flex flex-col">
+          <div className="flex-1 p-4">
+            <h2 className="mb-4 text-3xl font-bold">Genres</h2>
             <nav className="space-y-2">
               {genres.map((genre) => (
                 <button
@@ -464,15 +391,19 @@ export default function ClientHomePage({
             </nav>
           </div>
           {/* Footer */}
-          <Footer className="w-[10vw]" />
+          <div className="flex justify-center">
+            <Footer className="w-[10vw]" />
+          </div>
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-6 mr-3">
-          <h1 className="mb-3 text-5xl font-bold font-playRadar ">PlayRadar</h1>
+        <main className="flex-1 p-3">
+          <h1 className="mb-3 max-[400px]:text-[12vw] text-5xl font-bold font-playRadar ">
+            PlayRadar
+          </h1>
           <p className="mb-6 text-lg">Scroll, click, play… repeat!</p>
           {/* Filters */}
-          <div className="flex gap-4 mb-6">
+          <div className="flex gap-4 mb-6 max-[440px]:w-[85vw]">
             <Select onValueChange={(value) => setSortBy(value)}>
               <SelectTrigger className="w-[180px] border border-gray-400">
                 <SelectValue placeholder={"Order by"} />
@@ -517,11 +448,11 @@ export default function ClientHomePage({
           </div>
 
           {/* Games Grid */}
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid px-3 grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 max-[440px]:justify-items-center max-[440px]:px-0">
             {filteredGames?.map((games) => (
               <div
                 key={games.id}
-                className="group relative bg-card rounded-xl transition-all duration-300 hover:scale-110 overflow-visible hover:z-[40]"
+                className="group items-center relative bg-card rounded-xl max-[440px]:w-[85vw] transition-all duration-300 hover:scale-110 overflow-visible hover:z-[40]"
                 onMouseEnter={() => {
                   handleHoverGame(games); // Update trailers
                   setHoveredGameId(games.id);
