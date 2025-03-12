@@ -1,3 +1,4 @@
+export const dynamic = 'force-static';
 export default function NotFound() {
     return (
       <div className="grid h-screen place-items-center">
