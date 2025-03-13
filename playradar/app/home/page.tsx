@@ -3,22 +3,22 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Search, ThumbsUp, ThumbsDown, ChevronDown } from "lucide-react";
 import { MdVolumeOff, MdVolumeUp } from "react-icons/md";
-import CheckIcon from "@/app/components/ui/CheckIcon";
-import LoadingAnimation from "@/app/components/ui/Loader";
-import { Button } from "@/app/components/ui/Button";
+import CheckIcon from "@/components/ui/CheckIcon";
+import LoadingAnimation from "@/components/ui/Loader";
+import { Button } from "@/components/ui/Button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/app/components/ui/Select";
-import { Input } from "@/app/components/ui/Input";
+} from "@/components/ui/Select";
+import { Input } from "@/components/ui/Input";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import radarImage from "./radar.png";
-import videogameImage from "./placeholder.png";
-import ModeToggle from "@/app/components/features/ThemeSelector";
+import radarImage from "../assets/radar.png";
+import videogameImage from "../assets/placeholder.png";
+import ModeToggle from "@/components/features/ThemeSelector";
 import { fetchGameTrailer, getSearchedGames, getGames } from "../services/api";
 import { Game } from "../types/games.types";
 import { auth } from "../lib/firebase";
@@ -40,7 +40,7 @@ import PlusIcon from "@/app/components/ui/PlusIcon";
 import Avatar from "@/app/components/features/Avatar";
 import { useGamePreferences } from "../hooks/useGamePreferences";
 import { usePlayLater } from "../hooks/usePlayLater";
-import { genres, platformSlugToId } from "@/app/types/games-consts.types";
+import { genres, platformSlugToId } from "@/components/consts/games.consts";
 
 interface ClientHomePageProps {
   initialGames: Game[];

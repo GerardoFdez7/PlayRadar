@@ -226,7 +226,7 @@ export default function Register() {
         </div>
       </div>
 
-      <Footer divClassName="w-[90vw]"/>
+      <Footer divClassName="w-[90vw]" />
     </main>
   );
 }

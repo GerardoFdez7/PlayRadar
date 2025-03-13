@@ -1,5 +1,5 @@
 import ModeToggle from "@/app/components/features/ThemeSelector";
-import radarImage from "../../login/radar.png";
+import radarImage from "../../assets/radar.png";
 import Image from "next/image";
 
 interface HeaderAuthProps {
@@ -16,7 +16,7 @@ const HeaderAuth: React.FC<HeaderAuthProps> = ({ className = "" }) => {
           alt="PlayRadar Logo"
           width={80}
           height={80}
-          className="w-30 h-30 mx-2"
+          className="mx-2 w-30 h-30"
         />
         <h1 className="max-[370px]:text-[12vw] text-5xl sm:text-6xl mr-2 font-bold w-full dark:text-gray-200 font-playRadar">
           PlayRadar
