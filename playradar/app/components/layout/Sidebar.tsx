@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { genres } from "@/app/types/games-consts.types";
+import { genres } from "@/components/consts/games.consts";
 import Footer from "@/app/components/layout/Footer";
 
 interface SidebarProps {
