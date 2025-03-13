@@ -29,8 +29,4 @@ const LogInButton: React.FC<LogInButtonProps> = ({ className = "" }) => {
   );
 };
 
-<<<<<<< HEAD
 export default LogInButton;
-=======
-export default LogInButton;
->>>>>>> development
