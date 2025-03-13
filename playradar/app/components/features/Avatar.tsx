@@ -1,17 +1,17 @@
 "use client";
 
-import { Button } from "@/app/components/ui/Button";
+import { Button } from "@/ui/Button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/app/components/ui/ThemeDropdown";
-import { logout } from "../../services/authentication";
+} from "@/ui/ThemeDropdown";
+import { logout } from "@/services/authentication";
 import { useRouter } from "next/navigation";
-import useUserProfile from "../../hooks/useUsername";
+import useUserProfile from "@/hooks/useUsername";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../../lib/firebase";
+import { auth } from "@/lib/firebase";
 import { User } from "firebase/auth";
 
 const getInitials = (user: User | null) => {

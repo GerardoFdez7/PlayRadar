@@ -3,25 +3,25 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Search, ThumbsUp, ThumbsDown, ChevronDown } from "lucide-react";
 import { MdVolumeOff, MdVolumeUp } from "react-icons/md";
-import CheckIcon from "@/components/ui/CheckIcon";
-import LoadingAnimation from "@/components/ui/Loader";
-import { Button } from "@/components/ui/Button";
+import CheckIcon from "@/ui/CheckIcon";
+import LoadingAnimation from "@/ui/Loader";
+import { Button } from "@/ui/Button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/Select";
-import { Input } from "@/components/ui/Input";
+} from "@/ui/Select";
+import { Input } from "@/ui/Input";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import radarImage from "../assets/radar.png";
-import videogameImage from "../assets/placeholder.png";
-import ModeToggle from "@/components/features/ThemeSelector";
-import { fetchGameTrailer, getSearchedGames, getGames } from "../services/api";
-import { Game } from "../types/games.types";
-import { auth } from "../lib/firebase";
+import radarImage from "@/assets/radar.png";
+import videogameImage from "@/assets/placeholder.png";
+import ModeToggle from "@/features/ThemeSelector";
+import { fetchGameTrailer, getSearchedGames, getGames } from "@/services/api";
+import { Game } from "@/types/games.types";
+import { auth } from "@/lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Tooltip } from "@mui/material";
 import {
@@ -33,14 +33,14 @@ import {
   LinuxIcon,
   IosIcon,
   AndroidIcon,
-} from "@/app/components/ui/Platforms";
-import Footer from "@/app/components/layout/Footer";
-import MobileSidebar from "@/components/layout/MobileSidebar";
-import PlusIcon from "@/app/components/ui/PlusIcon";
-import Avatar from "@/app/components/features/Avatar";
-import { useGamePreferences } from "../hooks/useGamePreferences";
-import { usePlayLater } from "../hooks/usePlayLater";
-import { genres, platformSlugToId } from "@/components/consts/games.consts";
+} from "@/ui/Platforms";
+import MobileSidebar from "@/layout/MobileSidebar";
+import Sidebar from "@/layout/Sidebar";
+import PlusIcon from "@/ui/PlusIcon";
+import Avatar from "@/features/Avatar";
+import { useGamePreferences } from "@/hooks/useGamePreferences";
+import { usePlayLater } from "@/hooks/usePlayLater";
+import { platformSlugToId } from "@/consts/games.consts";
 
 interface ClientHomePageProps {
   initialGames: Game[];
@@ -296,37 +296,37 @@ export default function ClientHomePage({
   }, [activeTooltip]);
 
   return (
-    <div className="min-h-screen transition-colors duration-500 bg-gray-300 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-300 transition-colors duration-500 dark:bg-gray-900">
       {/* Header */}
       <header className="sticky mb-2 top-0 z-50 w-full backdrop-blur supports-[backdrop-filter]">
-        <div className="flex items-center justify-between h-16 px-4 py-12 max-w-none">
+        <div className="flex justify-between items-center px-4 py-12 max-w-none h-16">
           {/* Logo */}
-          <div className="flex items-center flex-shrink-0 gap-4 mr-4">
+          <div className="flex flex-shrink-0 gap-4 items-center mr-4">
             <div className="w-[85px] h-[85px] cursor-pointer">
               <Image
                 src={radarImage}
                 alt="Radar"
-                className="object-contain w-full h-full mt-2"
+                className="object-contain mt-2 w-full h-full"
                 onClick={() => window.location.reload()}
               />
             </div>
           </div>
           {/* Search bar */}
-          <div className="flex justify-center flex-1 max-w-3xl mt-2 bg-gray-100 rounded-full dark:bg-gray-800 h-14">
-            <div className="relative flex items-center w-full h-full">
-              <div className="absolute flex items-center left-2">
-                <Search className="w-5 h-5 ml-2 text-muted-foreground" />
+          <div className="flex flex-1 justify-center mt-2 max-w-3xl h-14 bg-gray-100 rounded-full dark:bg-gray-800">
+            <div className="flex relative items-center w-full h-full">
+              <div className="flex absolute left-2 items-center">
+                <Search className="ml-2 w-5 h-5 text-muted-foreground" />
               </div>
               <Input
                 placeholder="Search games"
-                className="w-full pl-8 ml-4 bg-transparent border-0 shadow-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ring-0"
+                className="pl-8 ml-4 w-full bg-transparent border-0 ring-0 shadow-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
               {/* X button to clear search */}
               {searchTerm && (
                 <button
-                  className="absolute font-semibold right-7"
+                  className="absolute right-7 font-semibold"
                   onClick={() => {
                     setSearchTerm("");
                   }}
@@ -337,7 +337,7 @@ export default function ClientHomePage({
             </div>
           </div>
           {/* LOG IN button*/}
-          <div className="items-center hidden gap-4 ml-4 min-[640px]:flex">
+          <div className="items-center hidden gap-4 ml-4 min-[767px]:flex">
             {user ? (
               <Avatar />
             ) : (
@@ -353,48 +353,26 @@ export default function ClientHomePage({
           </div>
 
           {/* Mobile menu button */}
-          <div className="min-[640px]:hidden pl-2">
+          <div className="min-[767px]:hidden pl-2">
             <button
               className=""
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              <MobileSidebar />
+              <MobileSidebar
+                selectedGenreSlug={selectedGenreSlug}
+                onGenreSelect={setSelectedGenreSlug}
+              />
             </button>
           </div>
         </div>
       </header>
 
       <div className="flex">
-        {/* Sidebar */}
-        <aside className="max-[640px]:hidden w-41 h-[calc(100vh-4rem)] ml-3 sticky top-16 overflow-y-auto flex flex-col">
-          <div className="flex-1 p-4">
-            <h2 className="mb-4 text-3xl font-bold">Genres</h2>
-            <nav className="space-y-2">
-              {genres.map((genre) => (
-                <button
-                  key={genre.slug}
-                  onClick={() =>
-                    setSelectedGenreSlug((prev) =>
-                      prev === genre.slug ? null : genre.slug
-                    )
-                  }
-                  className={`w-full flex items-center px-3 py-2 rounded-lg text-sm transition-colors ${
-                    selectedGenreSlug === genre.slug
-                      ? "bg-primary text-primary-foreground"
-                      : "hover:bg-accent/50"
-                  }`}
-                >
-                  <span className="mr-2">{genre.icon}</span>
-                  {genre.name}
-                </button>
-              ))}
-            </nav>
-          </div>
-          {/* Footer */}
-          <div className="flex justify-center">
-            <Footer className="w-[10vw]" />
-          </div>
-        </aside>
+        <Sidebar
+          className="min-[767px]:flex hidden"
+          selectedGenreSlug={selectedGenreSlug}
+          onGenreSelect={setSelectedGenreSlug}
+        />
 
         {/* Main Content */}
         <main className="flex-1 p-3">
@@ -483,7 +461,7 @@ export default function ClientHomePage({
                         autoPlay
                         muted={muted}
                         loop
-                        className="absolute inset-0 z-10 object-cover w-full h-full transition-opacity duration-500 opacity-0 group-hover:opacity-100"
+                        className="object-cover absolute inset-0 z-10 w-full h-full opacity-0 transition-opacity duration-500 group-hover:opacity-100"
                         style={{ pointerEvents: "none" }}
                         onLoadedData={() => {
                           // Play video when ready
@@ -495,7 +473,7 @@ export default function ClientHomePage({
                       {/* Mute button */}
                       <button
                         onClick={() => setMuted((prev) => !prev)}
-                        className="absolute z-30 p-2 transition-all rounded-full bottom-2 right-2 bg-gray-700/50 hover:bg-gray-700/75"
+                        className="absolute right-2 bottom-2 z-30 p-2 rounded-full transition-all bg-gray-700/50 hover:bg-gray-700/75"
                       >
                         {muted ? (
                           <MdVolumeOff className="w-6 h-6 opacity-50 hover:opacity-100" />
@@ -511,7 +489,7 @@ export default function ClientHomePage({
                     games.short_screenshots &&
                     games.short_screenshots.length > 0 && (
                       <div
-                        className="absolute inset-0 z-10 transition-opacity duration-500 opacity-0 group-hover:opacity-100 isolate"
+                        className="isolate absolute inset-0 z-10 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
                         onMouseMove={(e) => handleScreenshotHover(e, games)}
                       >
                         <Image
@@ -526,10 +504,10 @@ export default function ClientHomePage({
                         />
 
                         {/* Position indicator */}
-                        <div className="absolute bottom-0 left-0 right-0 z-10 p-2">
+                        <div className="absolute right-0 bottom-0 left-0 z-10 p-2">
                           <div className="flex flex-col gap-1">
                             {/* Position counter */}
-                            <div className="flex items-center justify-between"></div>
+                            <div className="flex justify-between items-center"></div>
 
                             {/* Interactive progress bar */}
                             <div className="flex gap-3">
@@ -567,11 +545,11 @@ export default function ClientHomePage({
                 {/* Card information */}
                 <div className="mt-2">
                   {/* Platforms icons*/}
-                  <div className="absolute flex gap-1 left-5">
+                  <div className="flex absolute left-5 gap-1">
                     {games.parent_platforms?.map((parent_platforms) => (
                       <span
                         key={parent_platforms.platform.slug}
-                        className="flex items-center justify-center w-6 h-6"
+                        className="flex justify-center items-center w-6 h-6"
                       >
                         {parent_platforms.platform.slug === "pc" && <PcIcon />}
                         {parent_platforms.platform.slug === "playstation" && (
@@ -600,10 +578,10 @@ export default function ClientHomePage({
                   </div>
 
                   <div className="p-6">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-semibold truncate ">{games.name}</h3>
+                    <div className="flex justify-between items-center">
+                      <h3 className="font-semibold truncate">{games.name}</h3>
                     </div>
-                    <div className="flex items-center justify-between">
+                    <div className="flex justify-between items-center">
                       {/* "Play later" */}
                       <Tooltip
                         title="Log in to add game to play later"
@@ -654,7 +632,7 @@ export default function ClientHomePage({
                       </Tooltip>
 
                       {/* Like and Dislike */}
-                      <div className="flex items-center gap-1">
+                      <div className="flex gap-1 items-center">
                         <Tooltip
                           title="Log in to add games you dislike"
                           placement="bottom"
@@ -781,19 +759,19 @@ export default function ClientHomePage({
                     </div>
 
                     {/* Expanded content on hover */}
-                    <div className="absolute left-0 right-0 pl-6 pr-6 mt-2 bg-card rounded-xl">
-                      <div className="h-0 transition-all duration-300 origin-top transform scale-y-0 group-hover:scale-y-100 group-hover:h-auto">
+                    <div className="absolute right-0 left-0 pr-6 pl-6 mt-2 rounded-xl bg-card">
+                      <div className="h-0 transition-all duration-300 transform origin-top scale-y-0 group-hover:scale-y-100 group-hover:h-auto">
                         {/* Genre */}
-                        <div className="flex items-center justify-between mb-2">
+                        <div className="flex justify-between items-center mb-2">
                           <span className="text-sm">Genre</span>
                           <span className="text-sm text-right">
                             {games.genres.map((genre) => genre.name).join(", ")}
                           </span>
                         </div>
                         {/* Line */}
-                        <div className="h-px my-2 bg-gradient-to-r from-transparent via-gray-800 dark:via-gray-200 to-transparent" />
+                        <div className="my-2 h-px bg-gradient-to-r from-transparent via-gray-800 to-transparent dark:via-gray-200" />
                         {/* Release */}
-                        <div className="flex items-center justify-between mt-2 mb-4">
+                        <div className="flex justify-between items-center mt-2 mb-4">
                           <span className="text-sm">Released</span>
                           <span className="text-sm">
                             {new Date(games.released).toLocaleDateString()}

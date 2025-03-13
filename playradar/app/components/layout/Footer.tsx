@@ -2,19 +2,15 @@ import Link from "next/link";
 
 interface FooterProps {
   className?: string;
-  divClassName?: string;
 }
 
-const Footer: React.FC<FooterProps> = ({
-  className = "",
-  divClassName = "",
-}) => {
+const Footer: React.FC<FooterProps> = ({ className = "" }) => {
   return (
     <footer
-      className={`mt-auto pt-6 px-4 text-center border-gray-400 dark:border-gray-500 ${className}`}
+      className={`px-4 pt-4 mt-auto text-center border-gray-400 dark:border-gray-500 ${className}`}
     >
       <div
-        className={`absolute left-1/2 -translate-x-1/2 h-[2px] bg-gray-400 dark:bg-gray-500 rounded-full before:content-[''] before:absolute before:left-1/2 before:-translate-x-1/2 before:w-[10vw] before:h-full before:bg-inherit before:rounded-full ${divClassName}`}
+        className={`w-[90%] mx-auto absolute left-1/2 -translate-x-1/2 h-[2px] bg-gray-400 dark:bg-gray-500 rounded-full before:content-[''] before:absolute before:left-1/2 before:-translate-x-1/2 before:w-[10vw] before:h-full before:bg-inherit before:rounded-full`}
       />
 
       <p className="pt-4 text-sm text-gray-900 dark:text-gray-400">

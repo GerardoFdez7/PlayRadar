@@ -1,8 +1,8 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { auth } from "../../lib/firebase";
+import { auth } from "@/lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import Avatar from "@/app/components/features/Avatar";
+import Avatar from "@/features/Avatar";
 
 interface LogInButtonProps {
   className?: string;

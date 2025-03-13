@@ -1,5 +1,5 @@
-import ModeToggle from "@/app/components/features/ThemeSelector";
-import radarImage from "../../assets/radar.png";
+import ModeToggle from "@/features/ThemeSelector";
+import radarImage from "@/assets/radar.png";
 import Image from "next/image";
 
 interface HeaderAuthProps {

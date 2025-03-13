@@ -4,6 +4,14 @@
     "paths": {
       "@/*": ["./*"], 
       "@/components/*": ["./app/components/*"],
+      "@/features/*": ["./app/components/features/*"],
+      "@/layout/*": ["./app/components/layout/*"],
+      "@/ui/*": ["./app/components/ui/*"],    
+      "@/consts/*": ["./app/components/consts/*"],  
+      "@/hooks/*": ["app/hooks/*"],      
+      "@/types/*": ["app/types/*"],      
+      "@/services/*": ["app/services/*"],  
+      "@/assets/*": ["app/assets/*"],    
       "@/lib/*": ["app/lib/*"]
     },
     "target": "ES2017",

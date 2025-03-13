@@ -1,17 +1,17 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Button } from "@/app/components/ui/Button";
-import GoogleLogo from "@/app/components/ui/GoogleLogo";
-import LoadingAnimation from "@/app/components/ui/Loader";
+import { Button } from "@/ui/Button";
+import GoogleLogo from "@/ui/GoogleLogo";
+import LoadingAnimation from "@/ui/Loader";
 import { useRouter } from "next/navigation";
 import {
   checkUser,
   handleGoogleLogin,
   handleForgotPassword,
 } from "../services/authentication";
-import Footer from "@/app/components/layout/Footer";
-import HeaderAuth from "@/components/layout/HeaderAuth";
+import Footer from "@/layout/Footer";
+import HeaderAuth from "@/layout/HeaderAuth";
 
 export default function Login() {
   const router = useRouter();
@@ -295,7 +295,7 @@ export default function Login() {
         )}
       </div>
 
-      <Footer divClassName="w-[90vw]" />
+      <Footer />
     </main>
   );
 }
