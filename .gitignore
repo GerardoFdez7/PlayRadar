@@ -134,3 +134,7 @@ dist
 .docker-data/
 docker-compose.override.yml
 .vercel
+
+# Storybook
+*storybook.log
+.storybook

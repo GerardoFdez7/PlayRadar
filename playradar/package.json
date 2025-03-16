@@ -9,7 +9,9 @@
     "lint": "next lint",
     "docker:dev": "docker-compose -f docker-compose.dev.yml up",
     "docker:dev:build": "docker-compose -f docker-compose.dev.yml up --build",
-    "docker:dev:down": "docker-compose -f docker-compose.dev.yml down"
+    "docker:dev:down": "docker-compose -f docker-compose.dev.yml down",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "proxy": {
     "/api/*": {
@@ -49,16 +51,32 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@chromatic-com/storybook": "^3.2.6",
     "@eslint/eslintrc": "^3",
+    "@storybook/addon-essentials": "^8.6.6",
+    "@storybook/addon-interactions": "^8.6.6",
+    "@storybook/addon-onboarding": "^8.6.6",
+    "@storybook/addon-webpack5-compiler-swc": "^3.0.0",
+    "@storybook/blocks": "^8.6.6",
+    "@storybook/react": "^8.6.6",
+    "@storybook/react-webpack5": "^8.6.6",
+    "@storybook/test": "^8.6.6",
     "@types/node": "^20",
     "@types/react": "19.0.7",
     "@types/react-dom": "^19",
     "@types/react-image-gallery": "^1.2.4",
     "eslint": "^9",
     "eslint-config-next": "15.1.4",
+    "eslint-plugin-storybook": "^0.11.4",
     "file-loader": "^6.2.0",
     "postcss": "^8",
+    "storybook": "^8.6.6",
     "tailwindcss": "^3.4.17",
     "typescript": "5.7.3"
+  },
+  "eslintConfig": {
+    "extends": [
+      "plugin:storybook/recommended"
+    ]
   }
 }
