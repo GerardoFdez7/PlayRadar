@@ -4,10 +4,10 @@ import React from "react";
 import Drawer from "@mui/joy/Drawer";
 import { CssVarsProvider } from "@mui/joy/styles";
 import { useTheme } from "next-themes";
-import HamburguerIcon from "@/ui/HamburguerIcon";
-import Sidebar from "@/layout/Sidebar";
-import LogInButton from "@/ui/LogInButton";
-import ModeToggle from "@/features/ThemeSelector";
+import HamburguerIcon from "@/components/ui/HamburguerIcon";
+import Sidebar from "@/components/layout/Sidebar";
+import LogInButton from "@/components/ui/LogInButton";
+import ModeToggle from "@/components/features/ThemeSelector";
 
 interface MobileSidebarContentProps {
   selectedGenreSlug: string | null;

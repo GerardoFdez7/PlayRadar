@@ -1,5 +1,5 @@
-import { genres } from "@/consts/games.consts";
-import Footer from "@/layout/Footer";
+import { genres } from "@/components/consts/games.consts";
+import Footer from "@/components/layout/Footer";
 
 interface SidebarProps {
   className?: string;

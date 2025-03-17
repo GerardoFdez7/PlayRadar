@@ -2,7 +2,7 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import { auth } from "@/lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import Avatar from "@/features/Avatar";
+import Avatar from "@/components/features/Avatar";
 
 interface LogInButtonProps {
   className?: string;
@@ -13,7 +13,7 @@ const LogInButton: React.FC<LogInButtonProps> = ({ className = "" }) => {
   const [user] = useAuthState(auth);
 
   return (
-    <div className={`gap-4 ml-4 ${className}`}>
+    <div className={`gap-4 ${className}`}>
       {user ? (
         <Avatar />
       ) : (

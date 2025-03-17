@@ -1,4 +1,4 @@
-import ModeToggle from "@/features/ThemeSelector";
+import ModeToggle from "@/components/features/ThemeSelector";
 import radarImage from "@/assets/radar.png";
 import Image from "next/image";
 

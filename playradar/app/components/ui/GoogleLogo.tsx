@@ -3,6 +3,8 @@ import * as React from "react";
 const GoogleLogo: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg
     viewBox="0 0 32 32"
+    width="32"
+    height="32"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     {...props}
