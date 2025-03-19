@@ -1,6 +1,7 @@
 import ModeToggle from "@/components/features/ThemeSelector";
 import radarImage from "@/assets/radar.png";
 import Image from "next/image";
+import { GoHome } from "@/components/ui/GoHome";
 
 interface HeaderAuthProps {
   className?: string;
@@ -11,6 +12,9 @@ const HeaderAuth: React.FC<HeaderAuthProps> = ({ className = "" }) => {
     <header className={`${className}`}>
       {/* Title */}
       <div className="flex items-center mt-16 mb-2 lg:mt-24">
+        {/* Back button */}
+        <GoHome className="absolute top-4 left-4" />
+        {/* Logo */}
         <Image
           src={radarImage}
           alt="PlayRadar Logo"
@@ -22,7 +26,6 @@ const HeaderAuth: React.FC<HeaderAuthProps> = ({ className = "" }) => {
           PlayRadar
         </h1>
       </div>
-
       {/* Theme button */}
       <div className="absolute top-4 right-4">
         <ModeToggle />

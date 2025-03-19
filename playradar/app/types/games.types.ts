@@ -1,37 +1,48 @@
-export type Genre = {
-  id: number;
-  name: string;
-  slug: string;
-  games_count?: number;
-  image_background?: string;
-};
+import {
+  Genre,
+  ShortScreenshot,
+  Trailer,
+  Platform,
+  Store,
+  Developer,
+  Publisher,
+  ESRBRating,
+  Tag,
+} from "./lists.types";
 
 export type Game = {
   id: number;
-  name: string;
-  background_image: string;
-  released: string;
   slug: string;
-  parent_platforms?: {
-    platform: {
-      id: number;
-      name: string;
-      slug: string;
-    };
-  }[];
-  ratings_count?: number;
+  name: string;
+  released: string;
   genres: Genre[];
-  short_screenshots?: {
-    id: number;
-    image: string;
-  }[];
+  ratings_count?: number;
+  background_image: string;
+  short_screenshots?: ShortScreenshot[];
+  parent_platforms?: Platform[];
 };
 
-export type Trailer = {
+export type GameDetails = {
   id: number;
   name: string;
-  preview: string;
-  data: {
-    max: string;
-  };
+  slug: string;
+  description_raw: string;
+  genres: Genre[];
+  released: string;
+  ratings_count?: number;
+  platforms?: Platform[];
+  stores?: Store[];
+  developers?: Developer[];
+  publishers?: Publisher[];
+  website?: string;
+  esrb_rating?: ESRBRating;
+  tags?: Tag[];
+  metacritic?: number;
+  metacritic_url?: string;
+  // The requirements are within each Platform
+};
+
+export type GameMedia = {
+  movies: Trailer[];
+  short_screenshots: ShortScreenshot[];
 };

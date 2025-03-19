@@ -4,10 +4,11 @@ if (!API_KEY) {
   throw new Error("Missing NEXT_PUBLIC_RAWG_API_KEY environment variable");
 }
 
+// Home Games List
 export const getGames = async (
   url?: string,
   genres?: string,
-  parent_platforms?: string 
+  parent_platforms?: string
 ) => {
   try {
     let apiUrl: string;
@@ -15,16 +16,16 @@ export const getGames = async (
     if (url) {
       apiUrl = url;
     } else {
-      const baseUrl = 'https://api.rawg.io/api/games';
+      const baseUrl = "https://api.rawg.io/api/games";
       const params = new URLSearchParams();
-      
-      params.append('key', API_KEY);
-      params.append('ordering', '-metacritic');
-      params.append('page_size', '40');
-      params.append('dates', '2015-01-01,2027-12-31');
 
-      if (genres) params.append('genres', genres);
-      if (parent_platforms) params.append('parent_platforms', parent_platforms); 
+      params.append("key", API_KEY);
+      params.append("ordering", "-metacritic");
+      params.append("page_size", "40");
+      params.append("dates", "2015-01-01,2027-12-31");
+
+      if (genres) params.append("genres", genres);
+      if (parent_platforms) params.append("parent_platforms", parent_platforms);
 
       apiUrl = `${baseUrl}?${params.toString()}`;
     }
@@ -40,6 +41,7 @@ export const getGames = async (
   }
 };
 
+// Specific game Search
 export const getSearchedGames = async (query: string, url?: string) => {
   try {
     const apiUrl =
@@ -55,14 +57,13 @@ export const getSearchedGames = async (query: string, url?: string) => {
   }
 };
 
+// Specific Game Details
 export const getGameDetails = async (slug: string) => {
   try {
     const res = await fetch(
       `https://api.rawg.io/api/games/${slug}?key=${API_KEY}`
     );
-    console.log(`Fetch response status: ${res.status}`);
     const data = await res.json();
-    console.log(`Fetched game details:`, data);
     return data;
   } catch (error) {
     console.error("Error fetching game details:", error);
@@ -70,6 +71,23 @@ export const getGameDetails = async (slug: string) => {
   }
 };
 
+// First Trailer
+export const getGameTrailer = async (slug: string) => {
+  try {
+    const res = await fetch(
+      `https://api.rawg.io/api/games/${slug}/movies?key=${API_KEY}`
+    );
+    if (!res.ok) throw new Error("Request error");
+
+    const data = await res.json();
+    return data.results[0]?.data?.max || null;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+// List of screenshots
 export const getGameScreenshots = async (slug: string) => {
   try {
     const res = await fetch(
@@ -83,21 +101,35 @@ export const getGameScreenshots = async (slug: string) => {
   }
 };
 
-export const fetchGameTrailer = async (gameId: string) => {
+// List of trailers
+export const getGameTrailers = async (slug: string) => {
   try {
     const res = await fetch(
-      `https://api.rawg.io/api/games/${gameId}/movies?key=${API_KEY}`
+      `https://api.rawg.io/api/games/${slug}/movies?key=${API_KEY}`
     );
     if (!res.ok) throw new Error("Request error");
-    console.log(`Trailer request: ${res.url}`);
-    console.log(`Trailer status code: ${res.status}`);
 
     const data = await res.json();
-    console.log("API Response:", data);
-
-    return data.results[0]?.data?.max || null;
+    return data.results;
   } catch (error) {
     console.error(error);
     return null;
+  }
+};
+
+export const getGameMedia = async (slug: string) => {
+  try {
+    const [screenshots, trailers] = await Promise.all([
+      getGameScreenshots(slug),
+      getGameTrailers(slug),
+    ]);
+
+    return {
+      screenshots: screenshots || [],
+      trailers: trailers || [],
+    };
+  } catch (error) {
+    console.error("Error fetching game media:", error);
+    return { screenshots: [], trailers: [] };
   }
 };

@@ -1,11 +1,9 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Search, ThumbsUp, ThumbsDown, ChevronDown } from "lucide-react";
+import { Search, ChevronDown } from "lucide-react";
 import { MdVolumeOff, MdVolumeUp } from "react-icons/md";
-import CheckIcon from "@/ui/CheckIcon";
 import LoadingAnimation from "@/ui/Loader";
-import { Button } from "@/ui/Button";
 import {
   Select,
   SelectContent,
@@ -19,11 +17,10 @@ import { useRouter } from "next/navigation";
 import radarImage from "@/assets/radar.png";
 import videogameImage from "@/assets/placeholder.png";
 import ModeToggle from "@/features/ThemeSelector";
-import { fetchGameTrailer, getSearchedGames, getGames } from "@/services/api";
+import { getGameTrailer, getSearchedGames, getGames } from "@/services/api";
 import { Game } from "@/types/games.types";
 import { auth } from "@/lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Tooltip } from "@mui/material";
 import {
   PcIcon,
   PlaystationIcon,
@@ -36,11 +33,11 @@ import {
 } from "@/ui/Platforms";
 import MobileSidebar from "@/layout/MobileSidebar";
 import Sidebar from "@/layout/Sidebar";
-import PlusIcon from "@/ui/PlusIcon";
 import Avatar from "@/features/Avatar";
 import { useGamePreferences } from "@/hooks/useGamePreferences";
 import { usePlayLater } from "@/hooks/usePlayLater";
 import { platformSlugToId } from "@/consts/games.consts";
+import { GameActions } from "@/features/GameActions";
 
 interface ClientHomePageProps {
   initialGames: Game[];
@@ -266,7 +263,7 @@ export default function ClientHomePage({
   const handleHoverGame = async (game: Game) => {
     const identifier = game.id.toString();
     if (!trailers[identifier]) {
-      const trailerUrl = await fetchGameTrailer(identifier);
+      const trailerUrl = await getGameTrailer(identifier);
       if (trailerUrl) {
         setTrailers((prev) => ({
           ...prev,
@@ -578,185 +575,27 @@ export default function ClientHomePage({
                   </div>
 
                   <div className="p-6">
-                    <div className="flex justify-between items-center">
-                      <h3 className="font-semibold truncate">{games.name}</h3>
+
+                    <div
+                      className=""
+                      onClick={() => router.push(`/${games.slug}`)}
+                    >
+                      <h3 className="font-semibold truncate cursor-pointer transition-colors hover:text-gray-500 dark:hover:text-gray-400">{games.name}</h3>
                     </div>
-                    <div className="flex justify-between items-center">
-                      {/* "Play later" */}
-                      <Tooltip
-                        title="Log in to add game to play later"
-                        placement="bottom"
-                        open={
-                          !user &&
-                          activeTooltip?.type === "play-later" &&
-                          activeTooltip?.gameId === games.id
-                        }
-                        onClose={() => setActiveTooltip(null)}
-                        disableFocusListener
-                        disableHoverListener
-                        disableTouchListener
-                        componentsProps={{
-                          tooltip: {
-                            className:
-                              "bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-white px-3 py-2 rounded-lg text-sm",
-                          },
-                        }}
-                      >
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          className={`p-0 mr-4 transition-all duration-300 transform ${
-                            userPlayLater.includes(games.id.toString())
-                              ? "text-primary scale-110"
-                              : "hover:[&_svg]:fill-foreground/30"
-                          }`}
-                          onClick={() => {
-                            if (!user) {
-                              setActiveTooltip({
-                                type: "play-later",
-                                gameId: games.id,
-                              });
-                            } else {
-                              // Enter to the list of play_later
 
-                              handlePlayLaterToggle(games.id.toString());
-                            }
-                          }}
-                        >
-                          {userPlayLater.includes(games.id.toString()) ? (
-                            <CheckIcon />
-                          ) : (
-                            <PlusIcon />
-                          )}
-                        </Button>
-                      </Tooltip>
-
-                      {/* Like and Dislike */}
-                      <div className="flex gap-1 items-center">
-                        <Tooltip
-                          title="Log in to add games you dislike"
-                          placement="bottom"
-                          open={
-                            !user &&
-                            activeTooltip?.type === "dislike" &&
-                            activeTooltip?.gameId === games.id
-                          }
-                          onClose={() => setActiveTooltip(null)}
-                          disableFocusListener
-                          disableHoverListener
-                          disableTouchListener
-                          componentsProps={{
-                            tooltip: {
-                              className:
-                                "bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-white px-3 py-2 rounded-lg text-sm",
-                            },
-                          }}
-                        >
-                          <Button
-                            variant="ghost"
-                            data-tooltip-id="login-tooltip"
-                            className={`p-0 m-1 hover:bg-transparent transition-all duration-300 transform ${
-                              userDislikes.includes(games.id.toString())
-                                ? "text-primary scale-110"
-                                : "hover:[&_svg]:fill-foreground/30"
-                            }`}
-                            onClick={() => {
-                              if (!user) {
-                                setActiveTooltip({
-                                  type: "dislike",
-                                  gameId: games.id,
-                                });
-                              } else {
-                                // Enter to the list of dislikes
-                                const button =
-                                  document.activeElement as HTMLElement;
-                                button?.classList.add("animate-ping-once");
-                                setTimeout(
-                                  () =>
-                                    button?.classList.remove(
-                                      "animate-ping-once"
-                                    ),
-                                  300
-                                );
-
-                                handleDislikeToggle(games.id.toString());
-                              }
-                            }}
-                          >
-                            <ThumbsDown
-                              className={`h-5 w-5 transition-transform duration-300 ${
-                                userDislikes.includes(games.id.toString())
-                                  ? "fill-current"
-                                  : ""
-                              }`}
-                            />
-                          </Button>
-                        </Tooltip>
-
-                        <Tooltip
-                          title="Log in to add games you like"
-                          placement="bottom"
-                          open={
-                            !user &&
-                            activeTooltip?.type === "like" &&
-                            activeTooltip?.gameId === games.id
-                          }
-                          onClose={() => setActiveTooltip(null)}
-                          disableFocusListener
-                          disableHoverListener
-                          disableTouchListener
-                          componentsProps={{
-                            tooltip: {
-                              className:
-                                "bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-white px-3 py-2 rounded-lg text-sm",
-                            },
-                          }}
-                        >
-                          <Button
-                            variant="ghost"
-                            className={`p-0 m-1 hover:bg-transparent transition-all duration-300 transform ${
-                              userLikes.includes(games.id.toString())
-                                ? "text-primary scale-110"
-                                : "hover:[&_svg]:fill-foreground/30"
-                            }`}
-                            onClick={() => {
-                              if (!user) {
-                                setActiveTooltip({
-                                  type: "like",
-                                  gameId: games.id,
-                                });
-                              } else {
-                                // Enter to the list of likes
-                                const button =
-                                  document.activeElement as HTMLElement;
-                                button?.classList.add("animate-ping-once");
-                                setTimeout(
-                                  () =>
-                                    button?.classList.remove(
-                                      "animate-ping-once"
-                                    ),
-                                  300
-                                );
-
-                                handleLikeToggle(games.id.toString());
-                              }
-                            }}
-                          >
-                            <ThumbsUp
-                              className={`h-5 w-5 transition-transform duration-300 ${
-                                userLikes.includes(games.id.toString())
-                                  ? "fill-current"
-                                  : ""
-                              }`}
-                            />
-                          </Button>
-                        </Tooltip>
-
-                        <span className="text-stext-muted-foreground">
-                          {games.ratings_count}
-                        </span>
-                      </div>
-                    </div>
+                    <GameActions
+                      gameId={games.id}
+                      user={!!user}
+                      activeTooltip={activeTooltip}
+                      setActiveTooltip={setActiveTooltip}
+                      playLater={userPlayLater}
+                      dislikes={userDislikes}
+                      likes={userLikes}
+                      handlePlayLater={handlePlayLaterToggle}
+                      handleDislike={handleDislikeToggle}
+                      handleLike={handleLikeToggle}
+                      ratingsCount={games.ratings_count || 0}
+                    />
 
                     {/* Expanded content on hover */}
                     <div className="absolute right-0 left-0 pr-6 pl-6 mt-2 rounded-xl bg-card">
