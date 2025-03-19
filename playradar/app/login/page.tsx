@@ -5,6 +5,7 @@ import { Button } from "@/ui/Button";
 import GoogleLogo from "@/ui/GoogleLogo";
 import LoadingAnimation from "@/ui/Loader";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   checkUser,
   handleGoogleLogin,
@@ -205,12 +206,12 @@ export default function Login() {
           <div className="text-center">
             <p className="mb-4 text-gray-600 dark:text-gray-500">
               Don&apos;t have an account?{" "}
-              <a
+              <Link
                 href="/register"
                 className="text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-100 underline"
               >
                 Register
-              </a>
+                </Link>
             </p>
             <Button
               type="submit"

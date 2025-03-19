@@ -5,6 +5,7 @@ import { Button } from "@/ui/Button";
 import GoogleComp from "@/ui/GoogleLogo";
 import LoadingAnimation from "@/ui/Loader";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { isEmailOrUsernameTaken } from "@/services/dataBaseConfig";
 import { registerUser, handleGoogleLogin } from "@/services/authentication";
 import Footer from "@/layout/Footer";
@@ -187,12 +188,12 @@ export default function Register() {
           <div className="text-center">
             <p className="mb-4 text-gray-600 dark:text-gray-500">
               Already have an account?{" "}
-              <a
+              <Link
                 href="/login"
                 className="text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-100 underline"
               >
                 Login
-              </a>
+              </Link>
             </p>
             <Button
               type="submit"
