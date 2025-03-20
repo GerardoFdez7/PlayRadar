@@ -14,7 +14,7 @@ import {
 import { Input } from "@/ui/Input";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import radarImage from "@/assets/radar.png";
+import logo from "@/assets/logo.png";
 import videogameImage from "@/assets/placeholder.png";
 import ModeToggle from "@/features/ThemeSelector";
 import { getGameTrailer, getSearchedGames, getGames } from "@/services/api";
@@ -291,15 +291,14 @@ export default function ClientHomePage({
       <header className="sticky mb-2 top-0 z-50 w-full backdrop-blur supports-[backdrop-filter]">
         <div className="flex justify-between items-center px-4 py-12 max-w-none h-16">
           {/* Logo */}
-          <div className="flex flex-shrink-0 gap-4 items-center mr-4">
-            <div className="w-[85px] h-[85px] cursor-pointer">
+            <div className="mt-4 mr-4 cursor-pointer">
               <Image
-                src={radarImage}
+                src={logo}
                 alt="Radar"
-                className="object-contain mt-2 w-full h-full"
+                width={80}
+                height={80}
                 onClick={() => window.location.reload()}
               />
-            </div>
           </div>
           {/* Search bar */}
           <div className="flex flex-1 justify-center mt-2 max-w-3xl h-14 bg-gray-100 rounded-full dark:bg-gray-800">
@@ -573,7 +572,7 @@ export default function ClientHomePage({
                       className=""
                       onClick={() => router.push(`/${games.slug}`)}
                     >
-                      <h3 className="font-semibold truncate cursor-pointer transition-colors hover:text-gray-500 dark:hover:text-gray-400">{games.name}</h3>
+                      <h3 className="font-semibold truncate transition-colors cursor-pointer hover:text-gray-500 dark:hover:text-gray-400">{games.name}</h3>
                     </div>
 
                     <GameActions

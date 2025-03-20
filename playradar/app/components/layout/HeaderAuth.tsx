@@ -1,5 +1,5 @@
 import ModeToggle from "@/components/features/ThemeSelector";
-import radarImage from "@/assets/radar.png";
+import logo from "@/assets/logo.png";
 import Image from "next/image";
 import { GoHome } from "@/components/ui/GoHome";
 
@@ -16,7 +16,7 @@ const HeaderAuth: React.FC<HeaderAuthProps> = ({ className = "" }) => {
         <GoHome className="absolute top-4 left-4" />
         {/* Logo */}
         <Image
-          src={radarImage}
+          src={logo}
           alt="PlayRadar Logo"
           width={80}
           height={80}
