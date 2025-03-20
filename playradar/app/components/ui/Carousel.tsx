@@ -53,7 +53,7 @@ const Carousel = (props: CarouselProps) => {
   }, [emblaMainApi, onSelect]);
 
   return (
-    <div className="embla m-8">
+    <div className="embla sm:m-8">
       <div className="overflow-hidden rounded-lg" ref={emblaMainRef}>
         <div className="flex gap-4">
           {orderedItems.map((item) => (

@@ -10,7 +10,7 @@ import {
   checkUser,
   handleGoogleLogin,
   handleForgotPassword,
-} from "../services/authentication";
+} from "@/services/authentication";
 import Footer from "@/layout/Footer";
 import HeaderAuth from "@/layout/HeaderAuth";
 

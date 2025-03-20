@@ -34,8 +34,6 @@ import {
 import MobileSidebar from "@/layout/MobileSidebar";
 import Sidebar from "@/layout/Sidebar";
 import Avatar from "@/features/Avatar";
-import { useGamePreferences } from "@/hooks/useGamePreferences";
-import { usePlayLater } from "@/hooks/usePlayLater";
 import { platformSlugToId } from "@/consts/games.consts";
 import { GameActions } from "@/features/GameActions";
 
@@ -90,11 +88,6 @@ export default function ClientHomePage({
     type: string;
     gameId: number;
   } | null>(null);
-
-  const { userLikes, userDislikes, handleLikeToggle, handleDislikeToggle } =
-    useGamePreferences();
-
-  const { userPlayLater, handlePlayLaterToggle } = usePlayLater();
 
   // Mobile Menu State
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -588,12 +581,6 @@ export default function ClientHomePage({
                       user={!!user}
                       activeTooltip={activeTooltip}
                       setActiveTooltip={setActiveTooltip}
-                      playLater={userPlayLater}
-                      dislikes={userDislikes}
-                      likes={userLikes}
-                      handlePlayLater={handlePlayLaterToggle}
-                      handleDislike={handleDislikeToggle}
-                      handleLike={handleLikeToggle}
                       ratingsCount={games.ratings_count || 0}
                     />
 

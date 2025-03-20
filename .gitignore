@@ -137,4 +137,3 @@ docker-compose.override.yml
 
 # Storybook
 *storybook.log
-.storybook
