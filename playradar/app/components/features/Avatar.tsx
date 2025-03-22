@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/Button";
 import {
   DropdownMenu,
@@ -37,7 +35,10 @@ export default function Avatar() {
   const router = useRouter();
 
   const getDisplayInitials = () => {
-    if (username) return username.slice(0, 2).toUpperCase();
+    if (username) {
+      const names = username.split(" ");
+      return `${names[0][0]}${names.length > 1 ? names[1][0] : ""}`.toUpperCase();
+    }
     return getInitials(user || null);
   };
 

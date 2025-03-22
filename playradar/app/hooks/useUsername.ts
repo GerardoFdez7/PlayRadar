@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { User } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../lib/firebase";
+import { db } from "@/lib/firebase";
 
 const useUserProfile = (user: User | null) => {
   const [username, setUsername] = useState<string | null>(null);

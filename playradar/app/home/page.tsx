@@ -65,7 +65,7 @@ export default function ClientHomePage({
     null
   );
   const [selectedPlatform, setSelectedPlatform] = useState<string>("all");
-  const [sortBy, setSortBy] = useState<string>("likes");
+  const [sortBy, setSortBy] = useState<string>("default"); 
   const [filteredGames, setFilteredGames] = useState<Game[]>(games);
   const [trailers, setTrailers] = useState<Record<string, string>>({});
   const [hoveredGameId, setHoveredGameId] = useState<string | number | null>(
@@ -110,7 +110,7 @@ export default function ClientHomePage({
     } else if (sortBy === "name") {
       updatedGames.sort((a, b) => a.name.localeCompare(b.name));
     }
-
+    // Removed default sorting logic
     setFilteredGames(updatedGames);
   }, [
     selectedPlatform,
@@ -377,6 +377,7 @@ export default function ClientHomePage({
                 <ChevronDown className="w-5 h-5 opacity-80" />
               </SelectTrigger>
               <SelectContent>
+              <SelectItem value="default">Default</SelectItem>
                 <SelectItem value="likes">Likes</SelectItem>
                 <SelectItem value="name">Name</SelectItem>
                 <SelectItem value="release">Release Date</SelectItem>
@@ -385,7 +386,7 @@ export default function ClientHomePage({
             <Select
               value={
                 selectedPlatform === "all"
-                  ? "all"
+                  ? undefined  
                   : Object.keys(platformSlugToId).find(
                       (key) => platformSlugToId[key] === selectedPlatform
                     )

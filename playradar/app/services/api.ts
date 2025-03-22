@@ -20,7 +20,7 @@ export const getGames = async (
       const params = new URLSearchParams();
 
       params.append("key", API_KEY);
-      params.append("ordering", "-metacritic");
+      params.append("ordering", "-rating_count");
       params.append("page_size", "40");
       params.append("dates", "2015-01-01,2027-12-31");
 
