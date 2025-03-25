@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/ThemeDropdown";
 import { logout } from "@/services/authentication";
 import { useRouter } from "next/navigation";
-import useUserProfile from "@/hooks/useUsername";
+import { useUsername } from "@/app/hooks/useUserProfile";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/lib/firebase";
 import { User } from "firebase/auth";
@@ -31,13 +31,19 @@ const getInitials = (user: User | null) => {
 
 export default function Avatar() {
   const [user, loading] = useAuthState(auth);
-  const username = useUserProfile(user || null);
+  const username = useUsername(user || null);
   const router = useRouter();
+
+  const handleProfileClick = () => {
+    router.push("/profile");
+  };
 
   const getDisplayInitials = () => {
     if (username) {
       const names = username.split(" ");
-      return `${names[0][0]}${names.length > 1 ? names[1][0] : ""}`.toUpperCase();
+      return `${names[0][0]}${
+        names.length > 1 ? names[1][0] : ""
+      }`.toUpperCase();
     }
     return getInitials(user || null);
   };
@@ -70,13 +76,16 @@ export default function Avatar() {
 
       <DropdownMenuContent align="end" className="min-w-[200px]">
         {username && (
-          <div className="px-2 py-1.5 text-sm font-medium text-muted-foreground">
+          <button
+            onClick={handleProfileClick}
+            className="px-2 py-1.5 text-sm font-medium text-muted-foreground hover:bg-accent/50 hover:text-foreground cursor-pointer w-full text-left"
+          >
             {username || user?.email || "Anonymous User"}
-          </div>
+          </button>
         )}
         <DropdownMenuItem
           onClick={handleLogout}
-          className="text-red-600 cursor-pointer hover:bg-red-50/50"
+          className="text-red-600 cursor-pointer hover:bg-accent/50"
         >
           Sign out
         </DropdownMenuItem>

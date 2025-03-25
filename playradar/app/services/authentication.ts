@@ -32,6 +32,8 @@ export async function registerUser(
       liked: [],
       disliked: [],
       play_later: [],
+      genres: [],
+      platforms: [],
     });
 
     return { success: true, user };
@@ -74,6 +76,8 @@ async function createUserRecordIfNotExists(
       liked: [],
       disliked: [],
       play_later: [],
+      genres: [],
+      platforms: [],
     });
   }
 }

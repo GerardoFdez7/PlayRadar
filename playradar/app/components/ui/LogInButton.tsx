@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 import { auth } from "@/lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";

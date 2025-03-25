@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 
 const GoogleLogo: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg

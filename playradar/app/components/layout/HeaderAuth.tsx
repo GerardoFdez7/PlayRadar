@@ -1,7 +1,7 @@
 import ModeToggle from "@/components/features/ThemeSelector";
 import logo from "@/assets/logo.png";
 import Image from "next/image";
-import { GoHome } from "@/components/ui/GoHome";
+import { GoBack } from "@/app/components/ui/GoBack";
 
 interface HeaderAuthProps {
   className?: string;
@@ -13,7 +13,7 @@ const HeaderAuth: React.FC<HeaderAuthProps> = ({ className = "" }) => {
       {/* Title */}
       <div className="flex items-center mt-16 mb-2 lg:mt-24">
         {/* Back button */}
-        <GoHome className="absolute top-4 left-4" />
+        <GoBack className="absolute top-4 left-4" />
         {/* Logo */}
         <Image
           src={logo}

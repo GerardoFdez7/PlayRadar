@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import Drawer from "@mui/joy/Drawer";
 import { CssVarsProvider } from "@mui/joy/styles";
@@ -59,7 +57,7 @@ function MobileSidebarContent({
   );
 }
 
-// Update main component to pass props
+// Main component to pass props
 export default function MobileSidebar({
   selectedGenreSlug,
   onGenreSelect

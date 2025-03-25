@@ -57,6 +57,22 @@ export const getSearchedGames = async (query: string, url?: string) => {
   }
 };
 
+// Profile Games List
+export const getGamesByIds = async (ids: string[]) => {
+  try {
+    const idList = ids.join(',');
+    const res = await fetch(
+      `https://api.rawg.io/api/games?key=${API_KEY}&ids=${idList}&page_size=40`
+    );
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    const data = await res.json();
+    return data.results || [];
+  } catch (error) {
+    console.error("Error fetching games by IDs:", error);
+    return [];
+  }
+};
+
 // Specific Game Details
 export const getGameDetails = async (slug: string) => {
   try {
@@ -72,10 +88,10 @@ export const getGameDetails = async (slug: string) => {
 };
 
 // First Trailer
-export const getGameTrailer = async (slug: string) => {
+export const getGameTrailer = async (gameId: string) => {
   try {
     const res = await fetch(
-      `https://api.rawg.io/api/games/${slug}/movies?key=${API_KEY}`
+      `https://api.rawg.io/api/games/${gameId}/movies?key=${API_KEY}`
     );
     if (!res.ok) throw new Error("Request error");
 

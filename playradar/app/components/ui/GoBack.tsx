@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import LoaderSmall from "@/components/ui/LoaderSmall"
 import React from "react"
 
-export const GoHome = React.forwardRef<
+export const GoBack = React.forwardRef<
   HTMLButtonElement,
   React.ComponentPropsWithoutRef<typeof Button>
 >(({ className, ...props }, ref) => {
@@ -19,7 +19,7 @@ export const GoHome = React.forwardRef<
       className={cn("", className)}
       onClick={() => {
         setIsLoading(true)
-        setTimeout(() => router.push("/"), 0)
+        setTimeout(() => router.back(), 0)
       }}
       {...props}
     >
@@ -35,4 +35,4 @@ export const GoHome = React.forwardRef<
   )
 })
 
-GoHome.displayName = "GoHome"
+GoBack.displayName = "GoBack"

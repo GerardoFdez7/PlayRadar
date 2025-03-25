@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { useParams } from "next/navigation";
 import { useDetailGame } from "@/hooks/useDetailGame";
+import useTooltip from "@/hooks/useTooltip";
 import HeaderGame from "@/components/layout/HeaderGame";
 import Footer from "@/components/layout/Footer";
 import MainGame from "@/components/layout/MainGame";
@@ -14,10 +14,7 @@ import { auth } from "@/lib/firebase";
 export default function GameDetailsPage() {
   const { slug } = useParams();
   const { gameDetails, gameMedia, error } = useDetailGame(slug as string);
-  const [activeTooltip, setActiveTooltip] = useState<{
-    type: string;
-    gameId: number;
-  } | null>(null);
+  const { activeTooltip, setActiveTooltip } = useTooltip();
   const [user] = useAuthState(auth);
 
   if (error) {
