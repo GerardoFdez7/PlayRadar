@@ -1,7 +1,6 @@
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Game } from "@/types/games.types";
-import { useDetailGame } from "@/hooks/useDetailGame";
 import { MdVolumeOff, MdVolumeUp } from "react-icons/md";
 import { platforms } from "@/consts/games.consts";
 import { GameActions } from "@/features/GameActions";
@@ -40,14 +39,12 @@ export default function CardGame({
   setActiveTooltip,
 }: CardGameProps) {
   const router = useRouter();
-  const { prefetchGame } = useDetailGame(games.slug);
 
   return (
     <div
       className="group items-center relative bg-card rounded-xl max-[440px]:w-[85vw] transition-all duration-300 hover:scale-110 overflow-visible hover:z-[40]"
       onMouseEnter={() => {
         getTrailerOfHoveredGame(games);
-        prefetchGame();
       }}
       onMouseLeave={() => {
         const video = videoRefs.current[games.id];

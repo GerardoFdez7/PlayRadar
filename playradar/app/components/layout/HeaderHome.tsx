@@ -1,3 +1,4 @@
+import React from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Search } from "lucide-react";
@@ -27,6 +28,11 @@ export default function HeaderHome({
   setSelectedGenreSlug,
 }: HeaderHomeProps) {
   const router = useRouter();
+  const [hasMounted, setHasMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   return (
     <header className="sticky mb-2 top-0 z-50 w-full backdrop-blur supports-[backdrop-filter]">
@@ -68,7 +74,7 @@ export default function HeaderHome({
         </div>
         {/* LOG IN button*/}
         <div className="items-center hidden gap-4 ml-4 min-[767px]:flex">
-          {user ? (
+          {hasMounted && (user ? (
             <Avatar />
           ) : (
             <button
@@ -78,7 +84,7 @@ export default function HeaderHome({
             >
               LOG IN
             </button>
-          )}
+          ))}
           <ModeToggle />
         </div>
 

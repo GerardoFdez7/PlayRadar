@@ -21,7 +21,7 @@ export const getGames = async (
 
       params.append("key", API_KEY);
       params.append("ordering", "-metacritic");
-      params.append("page_size", "40");
+      params.append("page_size", "12");
       params.append("dates", "2015-01-01,2027-12-31");
 
       if (genres) params.append("genres", genres);
@@ -58,7 +58,7 @@ export const getRecomendations = async (
 
       params.append("key", API_KEY);
       params.append("ordering", "-rating_count");
-      params.append("page_size", "40");
+      params.append("page_size", "12");
       params.append("dates", "2015-01-01,2027-12-31");
 
       const userGenres = genres?.split(',') || [];
@@ -71,7 +71,6 @@ export const getRecomendations = async (
     }  
     const res = await fetch(apiUrl);
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-    console.log("getRecommendations: ",res)
 
     const data = await res.json();
     return data;
@@ -86,7 +85,7 @@ export const getSearchedGames = async (query: string, url?: string) => {
   try {
     const apiUrl =
       url ??
-      `https://api.rawg.io/api/games?key=${API_KEY}&search=${query}&page_size=40`;
+      `https://api.rawg.io/api/games?key=${API_KEY}&search=${query}&page_size=8`;
     const res = await fetch(apiUrl);
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
     const data = await res.json();
