@@ -14,9 +14,12 @@ export default function HomePage({}) {
   const [user] = useAuthState(auth);
   // Mobile Menu State
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  // Tab state
+  const [selectedTab, setSelectedTab] = useState<"home" | "for-you">("home");
   // API calls states
   const {
     filteredGames,
+    recommendedGames,
     isLoading,
     searchTerm,
     setSearchTerm,
@@ -27,7 +30,7 @@ export default function HomePage({}) {
     setSortBy,
     loadMoreGames,
     loadMoreSearchResults,
-  } = useGames([], null);
+  } = useGames([], null, selectedTab === "for-you");
   // Card states
   const { activeTooltip, setActiveTooltip } = useTooltip();
   const {
@@ -61,6 +64,7 @@ export default function HomePage({}) {
         selectedGenreSlug={selectedGenreSlug}
         setSelectedGenreSlug={setSelectedGenreSlug}
         filteredGames={filteredGames}
+        recommendedGames={recommendedGames}
         isLoading={isLoading}
         sentinelRef={sentinelRef}
         setSortBy={setSortBy}
@@ -76,7 +80,8 @@ export default function HomePage({}) {
         currentScreenshotIndex={currentScreenshotIndex}
         getTrailerOfHoveredGame={getTrailerOfHoveredGame}
         user={!!user}
-      />     
+        onTabChange={setSelectedTab}
+      />
     </div>
   );
 }

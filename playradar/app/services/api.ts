@@ -20,7 +20,7 @@ export const getGames = async (
       const params = new URLSearchParams();
 
       params.append("key", API_KEY);
-      params.append("ordering", "-rating_count");
+      params.append("ordering", "-metacritic");
       params.append("page_size", "40");
       params.append("dates", "2015-01-01,2027-12-31");
 
@@ -32,6 +32,46 @@ export const getGames = async (
 
     const res = await fetch(apiUrl);
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error("getGames error:", error);
+    return null;
+  }
+};
+
+// For you Games List
+export const getRecomendations = async (
+  url?: string,
+  genres?: string,
+  parent_platforms?: string
+) => {
+  try {
+    let apiUrl: string;
+
+    if (url) {
+      apiUrl = url;
+    } else {
+      const baseUrl = "https://api.rawg.io/api/games";
+      const params = new URLSearchParams();
+
+      params.append("key", API_KEY);
+      params.append("ordering", "-rating_count");
+      params.append("page_size", "40");
+      params.append("dates", "2015-01-01,2027-12-31");
+
+      const userGenres = genres?.split(',') || [];
+      const userPlatforms = parent_platforms?.split(',') || [];
+
+      if (userGenres.length > 0) params.append("genres", userGenres.join(','));
+      if (userPlatforms.length > 0) params.append("parent_platforms", userPlatforms.join(','));
+
+      apiUrl = `${baseUrl}?${params.toString()}`;
+    }  
+    const res = await fetch(apiUrl);
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    console.log("getRecommendations: ",res)
 
     const data = await res.json();
     return data;

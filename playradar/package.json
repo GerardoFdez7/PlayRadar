@@ -10,9 +10,7 @@
     "docker:dev": "docker-compose -f docker-compose.dev.yml up",
     "docker:dev:build": "docker-compose -f docker-compose.dev.yml up --build",
     "docker:dev:down": "docker-compose -f docker-compose.dev.yml down",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "postbuild": "npm run build-storybook"
+    "storybook": "storybook dev -p 6006"
   },
   "proxy": {
     "/api/*": {

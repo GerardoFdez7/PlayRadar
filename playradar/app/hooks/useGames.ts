@@ -1,11 +1,14 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { getSearchedGames, getGames } from "@/services/api";
+import { getSearchedGames, getGames, getRecomendations } from "@/services/api";
 import { Game } from "@/types/games.types";
 import { sortGames } from "@/consts/games.consts";
+import useGenre from "@/hooks/useGenre";
+import usePlatforms from "@/hooks/usePlatforms";
 
 export default function useGames(
   initialGames: Game[],
-  initialNextUrl: string | null
+  initialNextUrl: string | null,
+  isRecommendations: boolean = false
 ) {
   const [games, setGames] = useState<Game[]>(
     Array.isArray(initialGames) ? initialGames : []
@@ -20,24 +23,66 @@ export default function useGames(
   );
   const [selectedPlatform, setSelectedPlatform] = useState("all");
   const [sortBy, setSortBy] = useState("default");
+  const { userGenres } = useGenre();
+  const { userPlatforms } = usePlatforms();
 
-  // Get filtered games
+  // Get filtered games or recommendations
   const fetchFilteredGames = useCallback(async () => {
-    const platformId =
-      selectedPlatform !== "all" ? selectedPlatform : undefined;
-    const genreSlug = selectedGenreSlug ?? undefined;
-    
-    setIsLoading(true); 
-    try {
-      const data = await getGames(undefined, genreSlug, platformId);
-      if (data) {
-        setGames(data.results);
-        setNextUrl(data.next);
+    if (isRecommendations) {
+      // Prevent API call if no preferences selected
+      if (userGenres.length === 0 || userPlatforms.length === 0) {
+        setGames([]);
+        setNextUrl(null);
+        return;
       }
-    } finally {
-      setIsLoading(false);
+
+      const genreFilters = [
+        ...userGenres,
+        ...(selectedGenreSlug ? [selectedGenreSlug] : []),
+      ].filter(Boolean);
+
+      const platformFilters = [
+        ...userPlatforms,
+        ...(selectedPlatform !== "all" ? [selectedPlatform] : []),
+      ].filter(Boolean);
+
+      setIsLoading(true);
+      try {
+        const data = await getRecomendations(
+          undefined,
+          genreFilters.join(","),
+          platformFilters.join(",")
+        );
+        if (data) {
+          setGames(data.results);
+          setNextUrl(data.next);
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      const platformId =
+        selectedPlatform !== "all" ? selectedPlatform : undefined;
+      const genreSlug = selectedGenreSlug ?? undefined;
+
+      setIsLoading(true);
+      try {
+        const data = await getGames(undefined, genreSlug, platformId);
+        if (data) {
+          setGames(data.results);
+          setNextUrl(data.next);
+        }
+      } finally {
+        setIsLoading(false);
+      }
     }
-  }, [selectedGenreSlug, selectedPlatform]);
+  }, [
+    isRecommendations,
+    selectedGenreSlug,
+    selectedPlatform,
+    userGenres,
+    userPlatforms,
+  ]);
 
   // Memoize sorted rendered games
   const sortedGames = useMemo(() => {
@@ -47,6 +92,17 @@ export default function useGames(
 
   // Memoize filtered rendered games
   const filteredGames = useMemo(() => {
+    return sortedGames.filter(
+      (game) =>
+        selectedPlatform === "all" ||
+        game.parent_platforms?.some(
+          (p) => p.platform.id.toString() === selectedPlatform
+        )
+    );
+  }, [sortedGames, selectedPlatform]);
+
+  // Memoize recommended rendered games
+  const recommendedGames = useMemo(() => {
     return sortedGames.filter(
       (game) =>
         selectedPlatform === "all" ||
@@ -108,7 +164,7 @@ export default function useGames(
   useEffect(() => {
     let isActive = true;
     const debouncer = setTimeout(() => {
-      if (!searchTerm.trim() && isActive) {        
+      if (!searchTerm.trim() && isActive) {
         fetchFilteredGames();
       }
     }, 100);
@@ -121,6 +177,7 @@ export default function useGames(
 
   return {
     filteredGames,
+    recommendedGames,
     isLoading,
     searchTerm,
     setSearchTerm,
