@@ -132,8 +132,8 @@ export default function MainHome({
           <TabsList className="flex justify-center gap-6 mb-6 w-full bg-transparent">
             <TabsTrigger
               value="home"
-              className="font-bold text-lg 2xl:text-xl  relative after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-[-4px] after:h-[4px] 
-            after:bg-current after:transform after:origin-left after:scale-x-0 after:transition-transform after:duration-500 data-[state=active]:after:scale-x-100 hover:after:scale-x-100 after:rounded-full bg-gray-300 dark:bg-gray-900"
+              className="font-bold text-lg 2xl:text-xl relative after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-[-4px] after:h-[4px] 
+            after:bg-current after:transform after:origin-left after:scale-x-0 after:transition-transform after:duration-500 data-[state=active]:after:scale-x-100 hover:after:scale-x-100 after:rounded-full data-[state=active]:bg-gray-300 dark:bg-gray-900"
             >
               Home
             </TabsTrigger>
@@ -141,7 +141,7 @@ export default function MainHome({
             <TabsTrigger
               value="for-you"
               className="font-bold text-lg 2xl:text-xl relative after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-[-4px] after:h-[4px]
-            after:bg-current after:transform after:origin-left after:scale-x-0 after:transition-transform after:duration-500 data-[state=active]:after:scale-x-100 hover:after:scale-x-100 after:rounded-full bg-gray-300 dark:bg-gray-900"
+            after:bg-current after:transform after:origin-left after:scale-x-0 after:transition-transform after:duration-500 data-[state=active]:after:scale-x-100 hover:after:scale-x-100 after:rounded-full data-[state=active]:bg-gray-300 dark:bg-gray-900"
             >
               For You
             </TabsTrigger>

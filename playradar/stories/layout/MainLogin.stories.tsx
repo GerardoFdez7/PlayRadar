@@ -29,22 +29,6 @@ export const Default: Story = {
     setError: () => {},
     setShowForgotPassword: () => {},
     setNewPassEmail: () => {},
-    handleSubmit: (e) => e.preventDefault(),
     handleGoogleSignIn: () => console.log("Google sign-in clicked"),
-    forgetPassword: (e) => e.preventDefault(),
-  },
-};
-
-export const WithError: Story = {
-  args: {
-    ...Default.args,
-    error: "Invalid email or password",
-  },
-};
-
-export const LoadingState: Story = {
-  args: {
-    ...Default.args,
-    isLoading: true,
   },
 };

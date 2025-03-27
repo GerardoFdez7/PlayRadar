@@ -21,26 +21,11 @@ export const Default: Story = {
     password: "",
     confirmPassword: "",
     isLoading: false,
-    handleSubmit: (e) => e.preventDefault(),
     handleGoogleSignIn: () => console.log("Google sign-in clicked"),
     setError: () => {},
     setUsername: () => {},
     setEmail: () => {},
     setPassword: () => {},
     setConfirmPassword: () => {},
-  },
-};
-
-export const WithError: Story = {
-  args: {
-    ...Default.args,
-    error: "Registration failed: Invalid email format",
-  },
-};
-
-export const LoadingState: Story = {
-  args: {
-    ...Default.args,
-    isLoading: true,
   },
 };

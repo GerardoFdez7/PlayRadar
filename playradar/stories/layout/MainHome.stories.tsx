@@ -27,6 +27,30 @@ const mockGames: Game[] = [
     short_screenshots: [],
     ratings_count: 200,
     isAvailable: true
+  },
+  {
+    id: 3,
+    name: 'Sample Game 3',
+    slug: 'sample-game-3',
+    released: '2023-02-01',
+    genres: [{ id: 2, name: 'Adventure', slug: 'adventure' }],
+    background_image: '/sample-image2.jpg',
+    parent_platforms: [{ platform: { id: 3, name: 'PlayStation', slug: 'playstation' } }],
+    short_screenshots: [],
+    ratings_count: 400,
+    isAvailable: true
+  },
+  {
+    id: 4,
+    name: 'Sample Game 4',
+    slug: 'sample-game-4',
+    released: '2023-02-01',
+    genres: [{ id: 4, name: 'Adventure', slug: 'adventure' }],
+    background_image: '/sample-image2.jpg',
+    parent_platforms: [{ platform: { id: 4, name: 'PlayStation', slug: 'playstation' } }],
+    short_screenshots: [],
+    ratings_count: 5600,
+    isAvailable: true
   }
 ] as unknown as Game[];
 
@@ -59,6 +83,7 @@ export const Default: StoryObj<typeof MainHome> = {
 Default.args = {
   user: true,
   filteredGames: mockGames,
+  recommendedGames: mockGames,  
   isLoading: false,
   selectedGenreSlug: null,
   selectedPlatform: 'all',
@@ -75,5 +100,6 @@ Default.args = {
   setMuted: () => {},
   handleScreenshotHover: () => {},
   getTrailerOfHoveredGame: () => {},
-  setActiveTooltip: () => {}
+  setActiveTooltip: () => {},
+  onTabChange: () => {},
 };
