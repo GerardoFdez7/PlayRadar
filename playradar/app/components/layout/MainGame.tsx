@@ -1,29 +1,56 @@
-import { GameDetails, GameMedia } from "@/types/games.types";
+"use client";
+
+import { useParams } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
+import { useDetailGame } from "@/hooks/useDetailGame";
+import useTooltip from "@/hooks/useTooltip";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import { Badge } from "@/components/ui/Badge";
 import { GameActions } from "@/components/features/GameActions";
 import { Requirements } from "@/components/ui/Requirements";
 import Carousel from "@/components/ui/Carousel";
-import Skeleton from "react-loading-skeleton";
 import { ExternalLink } from "lucide-react";
-import { Dispatch, SetStateAction } from "react";
 
-interface MainGameProps {
-  gameDetails: GameDetails;
-  gameMedia: GameMedia | null;
-  user: boolean;
-  activeTooltip: { type: string; gameId: number } | null;
-  setActiveTooltip: Dispatch<
-    SetStateAction<{ type: string; gameId: number } | null>
-  >;  
-}
+export function MainGame() {
+  const { slug } = useParams();
+  const { gameDetails, gameMedia, error } = useDetailGame(slug as string);
+  const { activeTooltip, setActiveTooltip } = useTooltip();
+  const { userAuthenticated } = useAuth();
 
-export function MainGame({
-  gameDetails,
-  gameMedia,
-  user,
-  activeTooltip,
-  setActiveTooltip,
-}: MainGameProps) {
+  if (error) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <p className="text-red-500">{error}</p>
+      </div>
+    );
+  }
+
+  if (!gameDetails) {
+    return (
+      <div className="container px-6 mx-auto mt-20 rounded-lg">
+        {/* Skeleton for Title */}
+        <Skeleton
+          height={60}
+          width="70%"
+          className="mb-6"
+          baseColor="var(--skeleton-base)"
+          highlightColor="var(--skeleton-highlight)"
+        />
+
+        {/* Skeleton Carousel */}
+        {[...Array(1)].map((_, i) => (
+          <Skeleton
+            key={i}
+            height={400}
+            baseColor="var(--skeleton-base)"
+            highlightColor="var(--skeleton-highlight)"
+          />
+        ))}
+      </div>
+    );
+  }
+
   const carouselItems = [
     ...(gameMedia?.short_screenshots || []).map((screenshot) => ({
       id: `screenshot-${screenshot.id}`,
@@ -74,7 +101,7 @@ export function MainGame({
       <div className="lg:mx-20 mx-4">
         <GameActions
           gameId={gameDetails.id}
-          user={!!user}
+          user={!userAuthenticated}
           activeTooltip={activeTooltip}
           setActiveTooltip={setActiveTooltip}
           ratingsCount={gameDetails.ratings_count || 0}

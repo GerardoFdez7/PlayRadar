@@ -1,4 +1,15 @@
-import { Game } from "@/types/games.types";
+"use client";
+
+import { useState, useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { useProfile } from "@/hooks/useProfile";
+import { useGamePreferences } from "@/hooks/useGamePreferences";
+import { usePlayLater } from "@/hooks/usePlayLater";
+import useGenre from "@/hooks/useGenre";
+import usePlatforms from "@/hooks/usePlatforms";
+import { useUsername, useUpdateUsername } from "@/hooks/useUserProfile";
+import useMultimedia from "@/hooks/useMultimedia";
+import useTooltip from "@/hooks/useTooltip";
 import AvatarProfile from "@/components/features/AvatarProfile";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -9,71 +20,53 @@ import { genres, platforms } from "@/components/consts/games.consts";
 import Loader from "@/components/ui/Loader";
 import CardGame from "@/ui/CardGame";
 
-interface MainProfileProps {
-  username: string | null;
-  editingUsername: boolean;
-  setEditingUsername: (value: boolean) => void;
-  tempUsername: string;
-  setTempUsername: (value: string) => void;
-  saveUsername: () => Promise<void>;
-  cancelEditUsername: () => void;
-  userGenres: string[];
-  handleGenreToggle: (slug: string) => void;
-  userPlatforms: string[];
-  handlePlatformToggle: (id: string) => void;
-  likedGames: Game[];
-  dislikedGames: Game[];
-  playLaterGames: Game[];
-  isLoadingLiked: boolean;
-  isLoadingDisliked: boolean;
-  isLoadingPlayLater: boolean;
-  userAuthenticated: boolean;
-  // Multimedia props
-  videoRefs: React.MutableRefObject<{ [key: string]: HTMLVideoElement | null }>;
-  trailers: Record<string, string>;
-  muted: boolean;
-  setMuted: React.Dispatch<React.SetStateAction<boolean>>;
-  handleScreenshotHover: (
-    e: React.MouseEvent<HTMLDivElement>,
-    game: Game
-  ) => void;
-  currentScreenshotIndex: Record<number, number>;
-  getTrailerOfHoveredGame: (game: Game) => void;
-  activeTooltip: { type: string; gameId: number } | null;
-  setActiveTooltip: React.Dispatch<
-    React.SetStateAction<{ type: string; gameId: number } | null>
-  >;
-}
+export function MainProfile() {
+  const { userAuthenticated } = useAuth();
+  const [editingUsername, setEditingUsername] = useState(false);
+  const [tempUsername, setTempUsername] = useState("");
+  const username = useUsername(userAuthenticated);
+  const { updateUsername } = useUpdateUsername(userAuthenticated);
+  // Handle genre and platform toggles
+  const { userGenres, handleGenreToggle } = useGenre();
+  const { userPlatforms, handlePlatformToggle } = usePlatforms();
+  // Get user lists
+  const { userLikes, userDislikes } = useGamePreferences();
+  const { userPlayLater } = usePlayLater();
+  const {
+    likedGames,
+    dislikedGames,
+    playLaterGames,
+    isLoadingLiked,
+    isLoadingDisliked,
+    isLoadingPlayLater,
+  } = useProfile(userLikes, userDislikes, userPlayLater);
+  // Card states
+  const { activeTooltip, setActiveTooltip } = useTooltip();
+  const {
+    videoRefs,
+    trailers,
+    muted,
+    setMuted,
+    handleScreenshotHover,
+    currentScreenshotIndex,
+    getTrailerOfHoveredGame,
+  } = useMultimedia();
 
-export function MainProfile({
-  username,
-  editingUsername,
-  setEditingUsername,
-  tempUsername,
-  setTempUsername,
-  saveUsername,
-  cancelEditUsername,
-  userGenres,
-  handleGenreToggle,
-  userPlatforms,
-  handlePlatformToggle,
-  likedGames,
-  dislikedGames,
-  playLaterGames,
-  isLoadingLiked,
-  isLoadingDisliked,
-  isLoadingPlayLater,
-  userAuthenticated,
-  videoRefs,
-  trailers,
-  muted,
-  setMuted,
-  handleScreenshotHover,
-  currentScreenshotIndex,
-  getTrailerOfHoveredGame,
-  activeTooltip,
-  setActiveTooltip,
-}: MainProfileProps) {
+  const cancelEditUsername = () => {
+    setTempUsername(username || "");
+    setEditingUsername(false);
+  };
+
+  useEffect(() => {
+    setTempUsername(username || "");
+  }, [username]);
+
+  const saveUsername = async () => {
+    await updateUsername(tempUsername);
+    window.location.reload();
+    setEditingUsername(false);
+  };
+
   return (
     <main className="mx-10">
       {/* Username Section */}
@@ -206,7 +199,7 @@ export function MainProfile({
                     setMuted={setMuted}
                     handleScreenshotHover={handleScreenshotHover}
                     currentScreenshotIndex={currentScreenshotIndex}
-                    user={userAuthenticated}
+                    user={!userAuthenticated}
                     activeTooltip={activeTooltip}
                     setActiveTooltip={setActiveTooltip}
                   />
@@ -235,7 +228,7 @@ export function MainProfile({
                     setMuted={setMuted}
                     handleScreenshotHover={handleScreenshotHover}
                     currentScreenshotIndex={currentScreenshotIndex}
-                    user={userAuthenticated}
+                    user={!userAuthenticated}
                     activeTooltip={activeTooltip}
                     setActiveTooltip={setActiveTooltip}
                   />
@@ -264,7 +257,7 @@ export function MainProfile({
                     setMuted={setMuted}
                     handleScreenshotHover={handleScreenshotHover}
                     currentScreenshotIndex={currentScreenshotIndex}
-                    user={userAuthenticated}
+                    user={!userAuthenticated}
                     activeTooltip={activeTooltip}
                     setActiveTooltip={setActiveTooltip}
                   />

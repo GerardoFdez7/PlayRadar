@@ -39,7 +39,7 @@ interface MainHomeProps {
   setActiveTooltip: React.Dispatch<
     React.SetStateAction<{ type: string; gameId: number } | null>
   >;
-  onTabChange: (tab: 'home' | 'for-you') => void;
+  onTabChange: (tab: "home" | "for-you") => void;
 }
 
 export default function MainHome({
@@ -124,8 +124,10 @@ export default function MainHome({
           </Select>
         </div>
 
-        <Tabs defaultValue="home" className="w-full"
-          onValueChange={(value) => onTabChange(value as 'home' | 'for-you')}
+        <Tabs
+          defaultValue="home"
+          className="w-full"
+          onValueChange={(value) => onTabChange(value as "home" | "for-you")}
         >
           <TabsList className="flex justify-center gap-6 mb-6 w-full bg-transparent">
             <TabsTrigger
@@ -166,46 +168,51 @@ export default function MainHome({
               {/* Detect end of the list */}
               <div ref={sentinelRef}></div>
             </div>
-            {isLoading && <LoadingAnimation size={50} />}            
+            {isLoading && <LoadingAnimation size={50} />}
           </TabsContent>
 
           <TabsContent value="for-you">
-          {!user ? (
+            {!user ? (
               <div className="text-center p-6">
-                <p className="text-lg mb-2">Log in so you can start discovering your next new favorite game</p>
+                <p className="text-lg mb-2">
+                  Log in so you can start discovering your next new favorite
+                  game
+                </p>
                 <Smile className="w-12 h-12 mx-auto text-primary" />
               </div>
             ) : recommendedGames.length === 0 ? (
               <div className="text-center p-6">
-                <p className="text-lg mb-2">Select your favorite genres and platforms in your profile so we can recommend games just for you!</p>
+                <p className="text-lg mb-2">
+                  Select your favorite genres and platforms in your profile so
+                  we can recommend games just for you!
+                </p>
                 <Gamepad className="w-12 h-12 mx-auto text-primary" />
               </div>
             ) : (
-          <div className="grid px-3 grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 max-[440px]:justify-items-center max-[440px]:px-0">
-              {recommendedGames?.map((games) => (
-                <CardGame
-                  key={games.id}
-                  games={games}
-                  getTrailerOfHoveredGame={getTrailerOfHoveredGame}
-                  videoRefs={videoRefs}
-                  trailers={trailers}
-                  muted={muted}
-                  setMuted={setMuted}
-                  handleScreenshotHover={handleScreenshotHover}
-                  currentScreenshotIndex={currentScreenshotIndex}
-                  user={user}
-                  activeTooltip={activeTooltip}
-                  setActiveTooltip={setActiveTooltip}
-                />
-              ))}
-              {/* Detect end of the list */}
-              <div ref={sentinelRef}></div>
-            </div>
+              <div className="grid px-3 grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 max-[440px]:justify-items-center max-[440px]:px-0">
+                {recommendedGames?.map((games) => (
+                  <CardGame
+                    key={games.id}
+                    games={games}
+                    getTrailerOfHoveredGame={getTrailerOfHoveredGame}
+                    videoRefs={videoRefs}
+                    trailers={trailers}
+                    muted={muted}
+                    setMuted={setMuted}
+                    handleScreenshotHover={handleScreenshotHover}
+                    currentScreenshotIndex={currentScreenshotIndex}
+                    user={user}
+                    activeTooltip={activeTooltip}
+                    setActiveTooltip={setActiveTooltip}
+                  />
+                ))}
+                {/* Detect end of the list */}
+                <div ref={sentinelRef}></div>
+              </div>
             )}
             {isLoading && <LoadingAnimation size={50} />}
           </TabsContent>
         </Tabs>
-                
       </div>
     </main>
   );

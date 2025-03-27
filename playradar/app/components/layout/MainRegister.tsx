@@ -1,39 +1,89 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { isEmailOrUsernameTaken } from "@/services/dataBaseConfig";
+import { registerUser, handleGoogleLogin } from "@/services/authentication";
+import Link from "next/link";
 import { Button } from "@/ui/Button";
 import GoogleComp from "@/ui/GoogleLogo";
 import LoadingAnimation from "@/ui/Loader";
-import Link from "next/link";
 
-interface MainRegisterProps {
-  error: string | null;
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  isLoading: boolean;
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  handleGoogleSignIn: () => void;
-  setError: (error: string | null) => void;
-  setUsername: (username: string) => void;
-  setEmail: (email: string) => void;
-  setPassword: (password: string) => void;
-  setConfirmPassword: (password: string) => void;
-}
+export default function MainRegister() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-export default function MainRegister({
-  error,
-  username,
-  email,
-  password,
-  confirmPassword,
-  isLoading,
-  handleSubmit,
-  handleGoogleSignIn,
-  setError,
-  setUsername,
-  setEmail,
-  setPassword,
-  setConfirmPassword,
-}: MainRegisterProps) {
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      // Password validation
+      if (password !== confirmPassword) {
+        setError("Passwords do not match");
+        setIsLoading(false);
+        return;
+      }
+      if (password.length < 8) {
+        setError("Password must be at least 8 characters long");
+        setIsLoading(false);
+        return;
+      }
+      // Validation of existing user or email
+      const isTaken = await isEmailOrUsernameTaken(email, username);
+      if (isTaken) {
+        setError(
+          "Email or username is already registered. Please try another."
+        );
+        setIsLoading(false);
+        return;
+      } else {
+        const response = await registerUser(username, email, password);
+        if (response.success) {
+          router.push("/");
+        } else {
+          setError("Error during register, try again later.");
+          setIsLoading(false);
+        }
+      }
+    } catch (error) {
+      console.log("handleSubmit: ", error);
+      setError("An unexpected error occurred.");
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setIsLoading(true);
+    try {
+      const response = await handleGoogleLogin();
+      if (response.success) {
+        router.push("/");
+      } else {
+        setError("An unexpected error occurred.");
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.log("handleGoogleSignIn: ", error);
+      setError("An unexpected error occurred.");
+      setIsLoading(false);
+    }
+  };
+
   return (
     <main className="w-full px-6 flex-1">
       {/* form */}
