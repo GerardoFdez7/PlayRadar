@@ -1,7 +1,8 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '@/app/lib/firebase';
 import { useDetailGame } from '@/hooks/useDetailGame';
 import useTooltip from '@/hooks/useTooltip';
 import Skeleton from 'react-loading-skeleton';
@@ -16,7 +17,7 @@ export function MainGame() {
   const { slug } = useParams();
   const { gameDetails, gameMedia, error } = useDetailGame(slug as string);
   const { activeTooltip, setActiveTooltip } = useTooltip();
-  const { userAuthenticated } = useAuth();
+  const [user] = useAuthState(auth);
 
   if (error) {
     return (
@@ -101,7 +102,7 @@ export function MainGame() {
       <div className="lg:mx-20 mx-4">
         <GameActions
           gameId={gameDetails.id}
-          user={!userAuthenticated}
+          user={!!user}
           activeTooltip={activeTooltip}
           setActiveTooltip={setActiveTooltip}
           ratingsCount={gameDetails.ratings_count || 0}

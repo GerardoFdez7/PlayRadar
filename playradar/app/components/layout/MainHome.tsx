@@ -160,7 +160,7 @@ export default function MainHome({
                   setMuted={setMuted}
                   handleScreenshotHover={handleScreenshotHover}
                   currentScreenshotIndex={currentScreenshotIndex}
-                  user={!user}
+                  user={user}
                   activeTooltip={activeTooltip}
                   setActiveTooltip={setActiveTooltip}
                 />
