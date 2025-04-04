@@ -1,16 +1,17 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import HeaderProfile from "@/components/layout/HeaderProfile";
+import type { Meta, StoryObj } from '@storybook/react';
+import HeaderProfile from '@/components/layout/HeaderProfile';
 
 const meta: Meta<typeof HeaderProfile> = {
-  title: "Components/Layout/HeaderProfile",
+  title: 'Components/Layout/HeaderProfile',
   component: HeaderProfile,
   parameters: {
-    layout: "fullscreen",
+    layout: 'fullscreen',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;
+
 type Story = StoryObj<typeof HeaderProfile>;
 
 export const Default: Story = {

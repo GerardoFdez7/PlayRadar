@@ -1,6 +1,6 @@
-import HeaderAuth from "@/layout/HeaderAuth";
-import MainRegister from "@/components/layout/MainRegister";
-import Footer from "@/layout/Footer";
+import HeaderAuth from '@/layout/HeaderAuth';
+import MainRegister from '@/components/layout/MainRegister';
+import Footer from '@/layout/Footer';
 
 export default function Register() {
   return (

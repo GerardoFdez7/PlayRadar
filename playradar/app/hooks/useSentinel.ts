@@ -1,9 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 export default function useSentinel(
   loadMore: () => void,
   loadMoreSearch: () => void,
-  searchTerm: string
+  searchTerm: string,
 ) {
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
@@ -22,12 +22,12 @@ export default function useSentinel(
         }
       },
       {
-        rootMargin: "50px",
+        rootMargin: '50px',
         threshold: 0.0,
-      }
+      },
     );
 
-    // Save the position of the sentinel 
+    // Save the position of the sentinel
     const currentSentinel = sentinelRef.current;
     if (currentSentinel) {
       observer.observe(currentSentinel);

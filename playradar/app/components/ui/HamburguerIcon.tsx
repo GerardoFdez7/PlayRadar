@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const HamburguerIcon = ({ open }: { open: boolean }) => {
   return (
@@ -30,7 +30,7 @@ const StyledWrapper = styled.div<StyledWrapperProps>`
     svg {
       height: 3em;
       transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
-      transform: ${(props) => (props.open ? "rotate(-45deg)" : "none")};
+      transform: ${(props) => (props.open ? 'rotate(-45deg)' : 'none')};
     }
 
     .line {
@@ -38,7 +38,8 @@ const StyledWrapper = styled.div<StyledWrapperProps>`
       stroke-linecap: round;
       stroke-linejoin: round;
       stroke-width: 3;
-      transition: stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1),
+      transition:
+        stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1),
         stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
     }
 

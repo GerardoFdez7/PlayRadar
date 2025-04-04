@@ -1,18 +1,18 @@
-import { Game } from "@/types/games.types";
-import CardGame from "@/ui/CardGame";
-import { ChevronDown } from "lucide-react";
-import LoadingAnimation from "@/ui/Loader";
+import { Game } from '@/types/games.types';
+import CardGame from '@/ui/CardGame';
+import { ChevronDown } from 'lucide-react';
+import LoadingAnimation from '@/ui/Loader';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/ui/Select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
-import { Smile, Gamepad } from "lucide-react";
-import Sidebar from "@/layout/Sidebar";
-import { platforms } from "@/consts/games.consts";
+} from '@/ui/Select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import { Smile, Gamepad } from 'lucide-react';
+import Sidebar from '@/layout/Sidebar';
+import { platforms } from '@/consts/games.consts';
 
 interface MainHomeProps {
   user: boolean;
@@ -31,7 +31,7 @@ interface MainHomeProps {
   setMuted: React.Dispatch<React.SetStateAction<boolean>>;
   handleScreenshotHover: (
     e: React.MouseEvent<HTMLDivElement>,
-    game: Game
+    game: Game,
   ) => void;
   currentScreenshotIndex: Record<number, number>;
   getTrailerOfHoveredGame: (game: Game) => void;
@@ -39,7 +39,7 @@ interface MainHomeProps {
   setActiveTooltip: React.Dispatch<
     React.SetStateAction<{ type: string; gameId: number } | null>
   >;
-  onTabChange: (tab: "home" | "for-you") => void;
+  onTabChange: (tab: 'home' | 'for-you') => void;
 }
 
 export default function MainHome({
@@ -74,7 +74,7 @@ export default function MainHome({
 
       {/* Main Content */}
       <div className="flex-1 p-3">
-        <h1 className="mb-3 max-[400px]:text-[12vw] text-5xl font-bold font-playRadar ">
+        <h1 className="mb-3 max-[400px]:text-[12vw] text-5xl font-bold font-playRadar">
           PlayRadar
         </h1>
         <p className="mb-6 text-lg">Scroll, click, play… repeat!</p>
@@ -82,7 +82,7 @@ export default function MainHome({
         <div className="flex gap-4 mb-6 max-[440px]:w-[85vw]">
           <Select onValueChange={(value) => setSortBy(value)}>
             <SelectTrigger className="w-[180px] border border-gray-400">
-              <SelectValue placeholder={"Order by"} />
+              <SelectValue placeholder={'Order by'} />
               <ChevronDown className="w-5 h-5 opacity-80" />
             </SelectTrigger>
             <SelectContent>
@@ -94,16 +94,16 @@ export default function MainHome({
           </Select>
           <Select
             value={
-              selectedPlatform === "all"
-                ? "all"
+              selectedPlatform === 'all'
+                ? 'all'
                 : platforms.find((p) => p.id === selectedPlatform)?.slug
             }
             onValueChange={(value) => {
               const platformId =
-                value === "all"
-                  ? "all"
+                value === 'all'
+                  ? 'all'
                   : platforms.find((p) => p.slug === value)?.id;
-              setSelectedPlatform(platformId || "all");
+              setSelectedPlatform(platformId || 'all');
             }}
           >
             <SelectTrigger className="w-[180px] border border-gray-400">
@@ -127,7 +127,7 @@ export default function MainHome({
         <Tabs
           defaultValue="home"
           className="w-full"
-          onValueChange={(value) => onTabChange(value as "home" | "for-you")}
+          onValueChange={(value) => onTabChange(value as 'home' | 'for-you')}
         >
           <TabsList className="flex justify-center gap-6 mb-6 w-full bg-transparent">
             <TabsTrigger
@@ -160,7 +160,7 @@ export default function MainHome({
                   setMuted={setMuted}
                   handleScreenshotHover={handleScreenshotHover}
                   currentScreenshotIndex={currentScreenshotIndex}
-                  user={user}
+                  user={!user}
                   activeTooltip={activeTooltip}
                   setActiveTooltip={setActiveTooltip}
                 />

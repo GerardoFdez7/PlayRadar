@@ -1,5 +1,5 @@
-import { genres } from "@/components/consts/games.consts";
-import Footer from "@/components/layout/Footer";
+import { genres } from '@/components/consts/games.consts';
+import Footer from '@/components/layout/Footer';
 
 interface SidebarProps {
   className?: string;
@@ -10,9 +10,9 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
-  className = "",
-  h2ClassName = "",
-  spanClassName = "",
+  className = '',
+  h2ClassName = '',
+  spanClassName = '',
   selectedGenreSlug,
   onGenreSelect,
 }) => {
@@ -29,13 +29,13 @@ const Sidebar: React.FC<SidebarProps> = ({
               key={genre.slug}
               onClick={() =>
                 onGenreSelect(
-                  selectedGenreSlug === genre.slug ? null : genre.slug
+                  selectedGenreSlug === genre.slug ? null : genre.slug,
                 )
               }
               className={`w-full flex items-center px-3 py-2 rounded-lg text-sm transition-colors ${
                 selectedGenreSlug === genre.slug
-                  ? "bg-primary text-primary-foreground"
-                  : "hover:bg-accent/50"
+                  ? 'bg-primary text-primary-foreground'
+                  : 'hover:bg-accent/50'
               }`}
             >
               <span className={`flex items-center ${spanClassName}`}>
@@ -46,7 +46,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           ))}
         </nav>
       </div>
-        <Footer />
+      <Footer />
     </aside>
   );
 };

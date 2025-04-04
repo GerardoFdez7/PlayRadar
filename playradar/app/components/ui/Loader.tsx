@@ -1,5 +1,5 @@
-import React from "react";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import React from 'react';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 interface LoadingAnimationProps {
   className?: string;
@@ -7,7 +7,7 @@ interface LoadingAnimationProps {
 }
 
 const LoadingAnimation: React.FC<LoadingAnimationProps> = ({
-  className = "",
+  className = '',
   size = 50,
 }) => {
   return (

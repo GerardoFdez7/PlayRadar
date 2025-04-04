@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { isEmailOrUsernameTaken } from "@/services/dataBaseConfig";
-import { registerUser, handleGoogleLogin } from "@/services/authentication";
-import Link from "next/link";
-import { Button } from "@/ui/Button";
-import GoogleComp from "@/ui/GoogleLogo";
-import LoadingAnimation from "@/ui/Loader";
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { handleGoogleLogin } from '@/services/authentication';
+import { checkUserExists, registerUser } from '@/services/requests';
+import Link from 'next/link';
+import { Button } from '@/ui/Button';
+import GoogleComp from '@/ui/GoogleLogo';
+import LoadingAnimation from '@/ui/Loader';
 
 export default function MainRegister() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [username, setUsername] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -34,35 +34,39 @@ export default function MainRegister() {
     try {
       // Password validation
       if (password !== confirmPassword) {
-        setError("Passwords do not match");
+        setError('Passwords do not match');
         setIsLoading(false);
         return;
       }
       if (password.length < 8) {
-        setError("Password must be at least 8 characters long");
+        setError('Password must be at least 8 characters long');
         setIsLoading(false);
         return;
       }
       // Validation of existing user or email
-      const isTaken = await isEmailOrUsernameTaken(email, username);
-      if (isTaken) {
+      const checkResult = await checkUserExists(email, username);
+
+      if (checkResult.taken) {
         setError(
-          "Email or username is already registered. Please try another."
+          'Email or username is already registered. Please try another.',
         );
         setIsLoading(false);
         return;
       } else {
-        const response = await registerUser(username, email, password);
-        if (response.success) {
-          router.push("/");
+        const registrationResult = await registerUser({
+          username,
+          email,
+          password,
+        });
+        if (registrationResult.success) {
+          router.push('/');
         } else {
-          setError("Error during register, try again later.");
+          setError('Error during register, try again later.');
           setIsLoading(false);
         }
       }
-    } catch (error) {
-      console.log("handleSubmit: ", error);
-      setError("An unexpected error occurred.");
+    } catch (_error) {
+      setError('An unexpected error occurred.');
       setIsLoading(false);
     }
   };
@@ -72,14 +76,13 @@ export default function MainRegister() {
     try {
       const response = await handleGoogleLogin();
       if (response.success) {
-        router.push("/");
+        router.push('/');
       } else {
-        setError("An unexpected error occurred.");
+        setError('An unexpected error occurred.');
         setIsLoading(false);
       }
-    } catch (error) {
-      console.log("handleGoogleSignIn: ", error);
-      setError("An unexpected error occurred.");
+    } catch (_error) {
+      setError('An unexpected error occurred.');
       setIsLoading(false);
     }
   };
@@ -89,7 +92,9 @@ export default function MainRegister() {
       {/* form */}
       <form
         className="mb-6 w-full lg:max-w-md mx-auto p-8 bg-gray-100 dark:bg-gray-800 shadow-xl rounded-xl transition-all duration-500 ease-in-out hover:transform hover:scale-105"
-        onSubmit={handleSubmit}
+        onSubmit={(e) => {
+          void handleSubmit(e);
+        }}
       >
         {/* Handle errors */}
         {error && (
@@ -182,7 +187,7 @@ export default function MainRegister() {
         </div>
         <div className="text-center">
           <p className="mb-4 text-gray-600 dark:text-gray-500">
-            Already have an account?{" "}
+            Already have an account?{' '}
             <Link
               href="/login"
               className="text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-100 underline"
@@ -201,7 +206,7 @@ export default function MainRegister() {
                 <LoadingAnimation size={16} />
               </div>
             ) : (
-              "Register"
+              'Register'
             )}
           </Button>
         </div>
@@ -212,7 +217,7 @@ export default function MainRegister() {
         <Button
           type="button"
           className="w-full rounded-full py-6"
-          onClick={handleGoogleSignIn}
+          onClick={() => void handleGoogleSignIn()}
         >
           <div className="flex items-center">
             Continue with Google

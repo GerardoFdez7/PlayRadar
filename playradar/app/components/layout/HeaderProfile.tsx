@@ -1,11 +1,11 @@
-import ModeToggle from "@/components/features/ThemeSelector";
-import { GoBack } from "../ui/GoBack";
+import ModeToggle from '@/components/features/ThemeSelector';
+import { GoBack } from '../ui/GoBack';
 
 interface HeaderProfileProps {
   className?: string;
 }
 
-const HeaderProfile: React.FC<HeaderProfileProps> = ({ className = "" }) => {
+const HeaderProfile: React.FC<HeaderProfileProps> = ({ className = '' }) => {
   return (
     <header
       className={`flex flex-row justify-between py-6 mb-4 sticky top-0 backdrop-blur z-50 ${className}`}

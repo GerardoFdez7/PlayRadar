@@ -1,11 +1,11 @@
-@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 .font-playRadar {
-  font-family: "Orbitron", sans-serif;
+  font-family: 'Orbitron', sans-serif;
 }
 
 @layer base {
@@ -39,8 +39,8 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
-    
-    --skeleton-base: #e5e7eb; 
+
+    --skeleton-base: #e5e7eb;
     --skeleton-highlight: #f3f4f6;
   }
 

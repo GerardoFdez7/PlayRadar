@@ -1,5 +1,5 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
-import { Card, CardContent } from "@/components/ui/Card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import { Card, CardContent } from '@/components/ui/Card';
 
 interface RequirementsProps {
   minRequirements: Array<{ key: string; value: string }>;
@@ -10,7 +10,6 @@ export function Requirements({
   minRequirements,
   recRequirements,
 }: RequirementsProps) {
-  
   if (minRequirements.length === 0 && recRequirements.length === 0) {
     return null;
   }
@@ -63,7 +62,9 @@ export function Requirements({
           <div>
             <Card>
               <CardContent className="pt-6">
-                <h3 className="text-lg font-semibold mb-2">Minimum Requirements</h3>
+                <h3 className="text-lg font-semibold mb-2">
+                  Minimum Requirements
+                </h3>
                 {minRequirements.length > 0 ? (
                   <dl className="grid grid-cols-1 gap-4">
                     {minRequirements.map((req, index) => (
@@ -85,7 +86,9 @@ export function Requirements({
           <div>
             <Card>
               <CardContent className="pt-6">
-                <h3 className="text-lg font-semibold mb-2">Recommended Requirements</h3>
+                <h3 className="text-lg font-semibold mb-2">
+                  Recommended Requirements
+                </h3>
                 {recRequirements.length > 0 ? (
                   <dl className="grid grid-cols-1 gap-4">
                     {recRequirements.map((req, index) => (

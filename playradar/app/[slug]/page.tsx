@@ -1,6 +1,6 @@
-import HeaderGame from "@/components/layout/HeaderGame";
-import MainGame from "@/components/layout/MainGame";
-import Footer from "@/components/layout/Footer";
+import HeaderGame from '@/components/layout/HeaderGame';
+import MainGame from '@/components/layout/MainGame';
+import Footer from '@/components/layout/Footer';
 
 export default function GameDetailsPage() {
   return (

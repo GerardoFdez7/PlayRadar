@@ -1,18 +1,19 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import HeaderHome from "@/components/layout/HeaderHome";
+import type { Meta, StoryObj } from '@storybook/react';
+import HeaderHome from '@/components/layout/HeaderHome';
 
 const meta = {
-  title: "Components/Layout/HeaderHome",
+  title: 'Components/Layout/HeaderHome',
   component: HeaderHome,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   argTypes: {
-    setSearchTerm: { action: "setSearchTerm" },
-    setIsMobileMenuOpen: { action: "setIsMobileMenuOpen" },
-    setSelectedGenreSlug: { action: "setSelectedGenreSlug" },
+    setSearchTerm: { action: 'setSearchTerm' },
+    setIsMobileMenuOpen: { action: 'setIsMobileMenuOpen' },
+    setSelectedGenreSlug: { action: 'setSelectedGenreSlug' },
   },
 } satisfies Meta<typeof HeaderHome>;
 
 export default meta;
+
 type Story = StoryObj<typeof meta>;
 
 export const Defaut: Story = {
@@ -20,7 +21,7 @@ export const Defaut: Story = {
     user: false,
     selectedGenreSlug: null,
     isMobileMenuOpen: false,
-    searchTerm: "",
+    searchTerm: '',
     setSearchTerm: () => {},
     setIsMobileMenuOpen: () => {},
     setSelectedGenreSlug: () => {},
@@ -32,7 +33,7 @@ export const SearchActive: Story = {
     user: false,
     selectedGenreSlug: null,
     isMobileMenuOpen: false,
-    searchTerm: "Rocket League",
+    searchTerm: 'Rocket League',
     setSearchTerm: () => {},
     setIsMobileMenuOpen: () => {},
     setSelectedGenreSlug: () => {},

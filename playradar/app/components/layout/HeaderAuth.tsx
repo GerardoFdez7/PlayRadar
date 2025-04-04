@@ -1,13 +1,13 @@
-import ModeToggle from "@/components/features/ThemeSelector";
-import logo from "@/assets/logo.png";
-import Image from "next/image";
-import { GoBack } from "@/app/components/ui/GoBack";
+import ModeToggle from '@/components/features/ThemeSelector';
+import logo from '@/assets/logo.png';
+import Image from 'next/image';
+import { GoBack } from '@/app/components/ui/GoBack';
 
 interface HeaderAuthProps {
   className?: string;
 }
 
-const HeaderAuth: React.FC<HeaderAuthProps> = ({ className = "" }) => {
+const HeaderAuth: React.FC<HeaderAuthProps> = ({ className = '' }) => {
   return (
     <header className={`${className}`}>
       {/* Title */}

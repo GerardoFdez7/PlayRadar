@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/lib/firebase";
-import useGames from "@/hooks/useGames";
-import useSentinel from "@/hooks/useSentinel";
-import useMultimedia from "@/hooks/useMultimedia";
-import useTooltip from "@/hooks/useTooltip";
-import HeaderHome from "@/components/layout/HeaderHome";
-import MainHome from "@/components/layout/MainHome";
+import React, { useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '@/app/lib/firebase';
+import useGames from '@/hooks/useGames';
+import useSentinel from '@/hooks/useSentinel';
+import useMultimedia from '@/hooks/useMultimedia';
+import useTooltip from '@/hooks/useTooltip';
+import HeaderHome from '@/components/layout/HeaderHome';
+import MainHome from '@/components/layout/MainHome';
 
 export default function HomePage({}) {
   const [user] = useAuthState(auth);
   // Mobile Menu State
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   // Tab state
-  const [selectedTab, setSelectedTab] = useState<"home" | "for-you">("home");
+  const [selectedTab, setSelectedTab] = useState<'home' | 'for-you'>('home');
   // API calls states
   const {
     filteredGames,
@@ -30,7 +30,7 @@ export default function HomePage({}) {
     setSortBy,
     loadMoreGames,
     loadMoreSearchResults,
-  } = useGames([], null, selectedTab === "for-you");
+  } = useGames([], null, selectedTab === 'for-you');
   // Card states
   const { activeTooltip, setActiveTooltip } = useTooltip();
   const {
@@ -44,9 +44,13 @@ export default function HomePage({}) {
   } = useMultimedia();
   // Detect end of the list
   const sentinelRef = useSentinel(
-    loadMoreGames,
-    loadMoreSearchResults,
-    searchTerm
+    () => {
+      void loadMoreGames();
+    },
+    () => {
+      void loadMoreSearchResults();
+    },
+    searchTerm,
   );
 
   return (
@@ -78,7 +82,7 @@ export default function HomePage({}) {
         setMuted={setMuted}
         handleScreenshotHover={handleScreenshotHover}
         currentScreenshotIndex={currentScreenshotIndex}
-        getTrailerOfHoveredGame={getTrailerOfHoveredGame}
+        getTrailerOfHoveredGame={(e) => void getTrailerOfHoveredGame(e)}
         user={!!user}
         onTabChange={setSelectedTab}
       />

@@ -1,10 +1,10 @@
-import Link from "next/link";
+import Link from 'next/link';
 
 interface FooterProps {
   className?: string;
 }
 
-const Footer: React.FC<FooterProps> = ({ className = "" }) => {
+const Footer: React.FC<FooterProps> = ({ className = '' }) => {
   return (
     <footer
       className={`px-4 pt-4 mt-auto text-center border-gray-400 dark:border-gray-500 ${className}`}

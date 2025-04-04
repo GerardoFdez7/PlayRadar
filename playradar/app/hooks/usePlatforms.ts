@@ -1,13 +1,7 @@
-import { useState, useEffect } from "react";
-import {
-  doc,
-  updateDoc,
-  arrayRemove,
-  arrayUnion,
-  getDoc,
-} from "firebase/firestore";
-import { db, auth } from "@/lib/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useState, useEffect } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '@/app/lib/firebase';
+import { addPlatform, getPlatform, delPlatform } from '@/services/requests';
 
 function usePlatforms() {
   const [userPlatforms, setUserPlatforms] = useState<string[]>([]);
@@ -15,46 +9,29 @@ function usePlatforms() {
 
   // Get user Platforms when page loads
   useEffect(() => {
-    const fetchUserGenre = async () => {
-      if (user) {
+    const fetchUserPlatform = async () => {
+      if (user?.uid) {
         try {
-          const userDoc = await getDoc(doc(db, "users", user.uid));
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
-            setUserPlatforms(userData.platforms || []);
-          }
-        } catch (error) {
-          console.error("Error fetching user Platforms:", error);
-        }
+          const userPlatformsRes = await getPlatform(user.uid);
+          setUserPlatforms(userPlatformsRes.platforms || []);
+        } catch (_error) {}
       }
     };
-
-    fetchUserGenre();
+    void fetchUserPlatform();
   }, [user]);
 
   // Function to handle the Platforms toggle
   const handlePlatformToggle = async (platformSlug: string) => {
-    if (!user) return;
-
+    if (!user?.uid) return;
     try {
-      const userRef = doc(db, "users", user.uid);
-
       if (userPlatforms.includes(platformSlug)) {
-        // If it's already in Platforms, remove it
-        await updateDoc(userRef, {
-          platforms: arrayRemove(platformSlug),
-        });
-        setUserPlatforms(userPlatforms.filter((slug) => slug !== platformSlug));
+        await delPlatform(user.uid, platformSlug);
+        setUserPlatforms(userPlatforms.filter((id) => id !== platformSlug));
       } else {
-        // Add if missing
-        await updateDoc(userRef, {
-          platforms: arrayUnion(platformSlug),
-        });
+        await addPlatform(user.uid, platformSlug);
         setUserPlatforms([...userPlatforms, platformSlug]);
       }
-    } catch (error) {
-      console.error("Error updating platforms:", error);
-    }
+    } catch (_error) {}
   };
 
   return { userPlatforms: userPlatforms, handlePlatformToggle };

@@ -1,16 +1,16 @@
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/lib/firebase";
-import { User } from "firebase/auth";
-import { useUsername } from "@/app/hooks/useUserProfile";
-import { Button } from "@/components/ui/Button";
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '@/app/lib/firebase';
+import { User } from 'firebase/auth';
+import { useUsername } from '@/app/hooks/useUserProfile';
+import { Button } from '@/components/ui/Button';
 
 const getInitials = (user: User | null) => {
-  if (!user) return "U";
+  if (!user) return 'U';
 
   // Get displayName from Firebase Auth
   if (user.displayName) {
-    const names = user.displayName.split(" ");
-    return `${names[0][0]}${names.length > 1 ? names[1][0] : ""}`.toUpperCase();
+    const names = user.displayName.split(' ');
+    return `${names[0][0]}${names.length > 1 ? names[1][0] : ''}`.toUpperCase();
   }
 
   // If there is no displayName, use email
@@ -18,7 +18,7 @@ const getInitials = (user: User | null) => {
     return user.email[0].toUpperCase();
   }
 
-  return "U";
+  return 'U';
 };
 
 export default function AvatarProfile() {
@@ -27,10 +27,8 @@ export default function AvatarProfile() {
 
   const getDisplayInitials = () => {
     if (username) {
-      const names = username.split(" ");
-      return `${names[0][0]}${
-        names.length > 1 ? names[1][0] : ""
-      }`.toUpperCase();
+      const names = username.split(' ');
+      return `${names[0][0]}${names.length > 1 ? names[1][0] : ''}`.toUpperCase();
     }
     return getInitials(user || null);
   };

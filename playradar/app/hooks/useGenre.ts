@@ -1,13 +1,7 @@
-import { useState, useEffect } from "react";
-import {
-  doc,
-  updateDoc,
-  arrayRemove,
-  arrayUnion,
-  getDoc,
-} from "firebase/firestore";
-import { db, auth } from "@/lib/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useState, useEffect } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '@/app/lib/firebase';
+import { addGenre, getGenre, delGenre } from '@/services/requests';
 
 function useGenre() {
   const [userGenres, setUserGenres] = useState<string[]>([]);
@@ -16,45 +10,28 @@ function useGenre() {
   // Get user Genres when page loads
   useEffect(() => {
     const fetchUserGenre = async () => {
-      if (user) {
+      if (user?.uid) {
         try {
-          const userDoc = await getDoc(doc(db, "users", user.uid));
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
-            setUserGenres(userData.genres || []);
-          }
-        } catch (error) {
-          console.error("Error fetching user genres:", error);
-        }
+          const userGenresRes = await getGenre(user.uid);
+          setUserGenres(userGenresRes.genres || []);
+        } catch (_error) {}
       }
     };
-
-    fetchUserGenre();
+    void fetchUserGenre();
   }, [user]);
 
   // Function to handle the Genres toggle
   const handleGenreToggle = async (genreSlug: string) => {
-    if (!user) return;
-
+    if (!user?.uid) return;
     try {
-      const userRef = doc(db, "users", user.uid);
-
       if (userGenres.includes(genreSlug)) {
-        // If it's already in genres, remove it
-        await updateDoc(userRef, {
-          genres: arrayRemove(genreSlug),
-        });
-        setUserGenres(userGenres.filter((slug) => slug !== genreSlug));
+        await delGenre(user.uid, genreSlug);
+        setUserGenres(userGenres.filter((id) => id !== genreSlug));
       } else {
-        // Add if missing
-        await updateDoc(userRef, {
-          genres: arrayUnion(genreSlug),
-        });
+        await addGenre(user.uid, genreSlug);
         setUserGenres([...userGenres, genreSlug]);
       }
-    } catch (error) {
-      console.error("Error updating genres:", error);
-    }
+    } catch (_error) {}
   };
 
   return { userGenres, handleGenreToggle };

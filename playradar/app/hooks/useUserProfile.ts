@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-import { User } from "firebase/auth";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { useEffect, useState } from 'react';
+import { User } from 'firebase/auth';
+import { getUsername, updateUsername } from '@/services/requests';
 
 export const useUsername = (user: User | null) => {
   const [username, setUsername] = useState<string | null>(null);
@@ -10,16 +9,16 @@ export const useUsername = (user: User | null) => {
   useEffect(() => {
     const fetchUsername = async () => {
       if (user) {
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-          setUsername(docSnap.data().username);
-        }
+        try {
+          const response = await getUsername(user.uid);
+          if (response.success) {
+            setUsername(response.username);
+          }
+        } catch (_error) {}
       }
     };
 
-    fetchUsername();
+    void fetchUsername();
   }, [user]);
 
   return username;
@@ -27,17 +26,21 @@ export const useUsername = (user: User | null) => {
 
 // Update username
 export const useUpdateUsername = (user: User | null) => {
-  const updateUsername = async (newUsername: string) => {
+  const updateUsernameFunc = async (newUsername: string) => {
     if (!user) {
-      alert("User not authenticated!");
+      alert('User not authenticated!');
       return;
     }
     try {
-      await updateDoc(doc(db, "users", user.uid), { username: newUsername });
-    } catch (err) {
-      console.error("Error updating username:", err);
+      const response = await updateUsername(user.uid, newUsername);
+      if (!response.success) {
+        throw new Error(response.error || 'Failed to update username');
+      }
+      return response;
+    } catch (_error) {
+      throw _error;
     }
   };
 
-  return { updateUsername };
+  return { updateUsernameFunc };
 };

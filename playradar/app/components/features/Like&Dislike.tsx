@@ -1,8 +1,8 @@
-import React from "react";
-import { Tooltip } from "@mui/material";
-import { ThumbsUp, ThumbsDown } from "lucide-react";
-import { Button } from "@/ui/Button";
-import { useGamePreferences } from "@/hooks/useGamePreferences";
+import React from 'react';
+import { Tooltip } from '@mui/material';
+import { ThumbsUp, ThumbsDown } from 'lucide-react';
+import { Button } from '@/ui/Button';
+import { useGamePreferences } from '@/hooks/useGamePreferences';
 
 interface LikeDislikeProps {
   user: boolean;
@@ -31,7 +31,7 @@ export const LikeDislikeButtons = ({
         placement="bottom"
         open={
           !user &&
-          activeTooltip?.type === "dislike" &&
+          activeTooltip?.type === 'dislike' &&
           activeTooltip?.gameId === gameId
         }
         onClose={() => setActiveTooltip(null)}
@@ -41,23 +41,23 @@ export const LikeDislikeButtons = ({
         slotProps={{
           tooltip: {
             className:
-              "bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-white px-3 py-2 rounded-lg text-sm",
+              'bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-white px-3 py-2 rounded-lg text-sm',
           },
         }}
       >
         <Button
           data-action="dislike"
           variant="ghost"
-          onClick={() => user && handleDislikeToggle(gameId.toString())}
+          onClick={() => void (user && handleDislikeToggle(gameId.toString()))}
           className={`p-0 m-1 hover:bg-transparent transition-all duration-300 transform ${
             userDislikes.includes(gameId.toString())
-              ? "text-primary scale-110"
-              : "hover:[&_svg]:fill-foreground/30"
+              ? 'text-primary scale-110'
+              : 'hover:[&_svg]:fill-foreground/30'
           }`}
         >
           <ThumbsDown
             className={`h-5 w-5 transition-transform duration-300 ${
-              userDislikes.includes(gameId.toString()) ? "fill-current" : ""
+              userDislikes.includes(gameId.toString()) ? 'fill-current' : ''
             }`}
           />
         </Button>
@@ -68,7 +68,7 @@ export const LikeDislikeButtons = ({
         placement="bottom"
         open={
           !user &&
-          activeTooltip?.type === "like" &&
+          activeTooltip?.type === 'like' &&
           activeTooltip?.gameId === gameId
         }
         onClose={() => setActiveTooltip(null)}
@@ -78,23 +78,23 @@ export const LikeDislikeButtons = ({
         componentsProps={{
           tooltip: {
             className:
-              "bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-white px-3 py-2 rounded-lg text-sm",
+              'bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-white px-3 py-2 rounded-lg text-sm',
           },
         }}
       >
         <Button
           data-action="like"
           variant="ghost"
-          onClick={() => user && handleLikeToggle(gameId.toString())}
+          onClick={() => void (user && handleLikeToggle(gameId.toString()))}
           className={`p-0 m-1 hover:bg-transparent transition-all duration-300 transform ${
             userLikes.includes(gameId.toString())
-              ? "text-primary scale-110"
-              : "hover:[&_svg]:fill-foreground/30"
+              ? 'text-primary scale-110'
+              : 'hover:[&_svg]:fill-foreground/30'
           }`}
         >
           <ThumbsUp
             className={`h-5 w-5 transition-transform duration-300 ${
-              userLikes.includes(gameId.toString()) ? "fill-current" : ""
+              userLikes.includes(gameId.toString()) ? 'fill-current' : ''
             }`}
           />
         </Button>

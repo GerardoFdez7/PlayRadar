@@ -1,24 +1,26 @@
-import { Button } from "@/components/ui/Button";
+import { Button } from '@/components/ui/Button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/ThemeDropdown";
-import { logout } from "@/services/authentication";
-import { useRouter } from "next/navigation";
-import { useUsername } from "@/app/hooks/useUserProfile";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/lib/firebase";
-import { User } from "firebase/auth";
+} from '@/components/ui/ThemeDropdown';
+import { logout } from '@/services/authentication';
+import { useRouter } from 'next/navigation';
+import { useUsername } from '@/app/hooks/useUserProfile';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '@/app/lib/firebase';
+import type { User } from 'firebase/auth';
 
 const getInitials = (user: User | null) => {
-  if (!user) return "U";
+  if (!user) {
+    return 'U';
+  }
 
   // Get displayName from Firebase Auth
   if (user.displayName) {
-    const names = user.displayName.split(" ");
-    return `${names[0][0]}${names.length > 1 ? names[1][0] : ""}`.toUpperCase();
+    const names = user.displayName.split(' ');
+    return `${names[0][0]}${names.length > 1 ? names[1][0] : ''}`.toUpperCase();
   }
 
   // If there is no displayName, use email
@@ -26,7 +28,7 @@ const getInitials = (user: User | null) => {
     return user.email[0].toUpperCase();
   }
 
-  return "U";
+  return 'U';
 };
 
 export default function Avatar() {
@@ -35,15 +37,13 @@ export default function Avatar() {
   const router = useRouter();
 
   const handleProfileClick = () => {
-    router.push("/profile");
+    router.push('/profile');
   };
 
   const getDisplayInitials = () => {
     if (username) {
-      const names = username.split(" ");
-      return `${names[0][0]}${
-        names.length > 1 ? names[1][0] : ""
-      }`.toUpperCase();
+      const names = username.split(' ');
+      return `${names[0][0]}${names.length > 1 ? names[1][0] : ''}`.toUpperCase();
     }
     return getInitials(user || null);
   };
@@ -54,8 +54,9 @@ export default function Avatar() {
     router.refresh();
   };
 
-  if (loading)
+  if (loading) {
     return <div className="w-10 h-10 bg-gray-300 rounded-full animate-pulse" />;
+  }
 
   return (
     <DropdownMenu>
@@ -80,11 +81,11 @@ export default function Avatar() {
             onClick={handleProfileClick}
             className="px-2 py-1.5 text-sm font-medium text-muted-foreground hover:bg-accent/50 hover:text-foreground cursor-pointer w-full text-left"
           >
-            {username || user?.email || "Anonymous User"}
+            {username || user?.email || 'Anonymous User'}
           </button>
         )}
         <DropdownMenuItem
-          onClick={handleLogout}
+          onClick={() => void handleLogout()}
           className="text-red-600 cursor-pointer hover:bg-accent/50"
         >
           Sign out

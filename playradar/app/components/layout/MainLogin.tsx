@@ -1,25 +1,24 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import {
   checkUser,
   handleGoogleLogin,
   handleForgotPassword,
-} from "@/services/authentication";
-import { Button } from "@/ui/Button";
-import GoogleLogo from "@/ui/GoogleLogo";
-import LoadingAnimation from "@/ui/Loader";
-
+} from '@/services/authentication';
+import { Button } from '@/ui/Button';
+import GoogleLogo from '@/ui/GoogleLogo';
+import LoadingAnimation from '@/ui/Loader';
 
 export default function MainLogin() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [newPassEmail, setNewPassEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [newPassEmail, setNewPassEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -42,14 +41,13 @@ export default function MainLogin() {
     try {
       const response = await checkUser(email, password);
       if (response.success) {
-        router.push("/");
+        router.push('/');
       } else {
-        setError("Invalid email or password.");
+        setError('Invalid email or password.');
         setIsLoading(false);
       }
-    } catch (error) {
-      console.log("handleSubmit: ", error);
-      setError("An unexpected error occurred.");
+    } catch (_error) {
+      setError('An unexpected error occurred.');
       setIsLoading(false);
     }
   };
@@ -60,14 +58,13 @@ export default function MainLogin() {
     try {
       const response = await handleGoogleLogin();
       if (response.success) {
-        router.push("/");
+        router.push('/');
       } else {
-        setError("An unexpected error occurred.");
+        setError('An unexpected error occurred.');
         setIsLoading(false);
       }
-    } catch (error) {
-      console.log("handleGoogleSignIn: ", error);
-      setError("An unexpected error occurred.");
+    } catch (_error) {
+      setError('An unexpected error occurred.');
       setIsLoading(false);
     }
   };
@@ -78,16 +75,15 @@ export default function MainLogin() {
     try {
       const response = await handleForgotPassword(newPassEmail);
       if (response.success) {
-        setMessage("Mail sent! Check your inbox to reset your password.");
+        setMessage('Mail sent! Check your inbox to reset your password.');
         setTimeout(() => setShowForgotPassword(false), 5000);
         setIsLoading(false);
       } else {
-        setError("An unexpected error occurred sending your recovery email.");
+        setError('An unexpected error occurred sending your recovery email.');
         setIsLoading(false);
       }
-    } catch (error) {
-      console.log("forgetPassword: ", error);
-      setError("An unexpected error occurred.");
+    } catch (_error) {
+      setError('An unexpected error occurred.');
       setIsLoading(false);
     }
   };
@@ -97,7 +93,9 @@ export default function MainLogin() {
       {/* form */}
       <form
         className="mb-6 w-full lg:max-w-md mx-auto p-8 bg-gray-100 dark:bg-gray-800 shadow-xl rounded-xl transition-all duration-500 ease-in-out hover:transform hover:scale-105"
-        onSubmit={handleSubmit}
+        onSubmit={(e) => {
+          void handleSubmit(e);
+        }}
       >
         {/* Handle errors */}
         {error && (
@@ -148,7 +146,7 @@ export default function MainLogin() {
             Password:
           </label>
           <input
-            type={showPassword ? "text" : "password"}
+            type={showPassword ? 'text' : 'password'}
             id="password"
             className="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
             value={password}
@@ -201,7 +199,7 @@ export default function MainLogin() {
         </div>
         <div className="text-center">
           <p className="mb-4 text-gray-600 dark:text-gray-500">
-            Don&apos;t have an account?{" "}
+            Don&apos;t have an account?{' '}
             <Link
               href="/register"
               className="text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-100 underline"
@@ -220,7 +218,7 @@ export default function MainLogin() {
                 <LoadingAnimation size={16} />
               </div>
             ) : (
-              "Login"
+              'Login'
             )}
           </Button>
         </div>
@@ -231,7 +229,7 @@ export default function MainLogin() {
         <Button
           type="button"
           className="w-full rounded-full py-6"
-          onClick={handleGoogleSignIn}
+          onClick={() => void handleGoogleSignIn()}
         >
           <div className="flex items-center">
             Continue with Google
@@ -257,7 +255,7 @@ export default function MainLogin() {
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-lg max-w-md w-full">
             <h2 className="text-xl font-bold mb-4">Reset Password</h2>
-            <form onSubmit={forgetPassword}>
+            <form onSubmit={void forgetPassword()}>
               <input
                 type="email"
                 value={newPassEmail}
@@ -283,7 +281,7 @@ export default function MainLogin() {
                   disabled={isLoading}
                   className="px-4 py-5 rounded-lg text-md"
                 >
-                  {isLoading ? "Sending..." : "Send Reset Email"}
+                  {isLoading ? 'Sending...' : 'Send Reset Email'}
                 </Button>
               </div>
             </form>

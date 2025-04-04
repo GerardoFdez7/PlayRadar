@@ -1,11 +1,11 @@
-import React from "react";
-import Drawer from "@mui/joy/Drawer";
-import { CssVarsProvider } from "@mui/joy/styles";
-import { useTheme } from "next-themes";
-import HamburguerIcon from "@/components/ui/HamburguerIcon";
-import Sidebar from "@/components/layout/Sidebar";
-import LogInButton from "@/components/ui/LogInButton";
-import ModeToggle from "@/components/features/ThemeSelector";
+import React from 'react';
+import Drawer from '@mui/joy/Drawer';
+import { CssVarsProvider } from '@mui/joy/styles';
+import { useTheme } from 'next-themes';
+import HamburguerIcon from '@/components/ui/HamburguerIcon';
+import Sidebar from '@/components/layout/Sidebar';
+import LogInButton from '@/components/ui/LogInButton';
+import ModeToggle from '@/components/features/ThemeSelector';
 
 interface MobileSidebarContentProps {
   selectedGenreSlug: string | null;
@@ -14,11 +14,11 @@ interface MobileSidebarContentProps {
 
 function MobileSidebarContent({
   selectedGenreSlug,
-  onGenreSelect
+  onGenreSelect,
 }: MobileSidebarContentProps) {
   const [open, setOpen] = React.useState(false);
   const { resolvedTheme } = useTheme();
-  
+
   return (
     <>
       <div onClick={() => setOpen(true)}>
@@ -30,12 +30,12 @@ function MobileSidebarContent({
         onClose={() => setOpen(false)}
         anchor="right"
         sx={{
-          "& .MuiDrawer-content": {
-            backgroundColor: resolvedTheme === "dark" ? "#1f2937" : "#d1d5db",
-            color: resolvedTheme === "dark" ? "#d1d5db" : "#1f2937",
+          '& .MuiDrawer-content': {
+            backgroundColor: resolvedTheme === 'dark' ? '#1f2937' : '#d1d5db',
+            color: resolvedTheme === 'dark' ? '#d1d5db' : '#1f2937',
           },
         }}
-        className={resolvedTheme === "dark" ? "dark" : "light"}
+        className={resolvedTheme === 'dark' ? 'dark' : 'light'}
       >
         <header className="flex flex-row gap-4 justify-between mx-3 mt-2">
           <div onClick={() => setOpen(false)} role="button">
@@ -60,11 +60,11 @@ function MobileSidebarContent({
 // Main component to pass props
 export default function MobileSidebar({
   selectedGenreSlug,
-  onGenreSelect
+  onGenreSelect,
 }: MobileSidebarContentProps) {
   return (
     <CssVarsProvider>
-      <MobileSidebarContent 
+      <MobileSidebarContent
         selectedGenreSlug={selectedGenreSlug}
         onGenreSelect={onGenreSelect}
       />

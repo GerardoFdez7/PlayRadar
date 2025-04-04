@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { auth } from "@/lib/firebase";
-import { User } from "firebase/auth";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { auth } from '@/app/lib/firebase';
+import { User } from 'firebase/auth';
 
 // Force the user to be authenticated before accessing the page
 export function useAuth() {
@@ -11,7 +11,7 @@ export function useAuth() {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
-        setUserAuthenticated(currentUser);
+      setUserAuthenticated(currentUser);
       setAuthChecked(true);
     });
     return () => unsubscribe();
@@ -19,7 +19,7 @@ export function useAuth() {
 
   useEffect(() => {
     if (authChecked && !userAuthenticated) {
-      router.push("/");
+      router.push('/');
     }
   }, [authChecked, userAuthenticated, router]);
 

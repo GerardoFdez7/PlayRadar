@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const PcIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" {...props}>

@@ -1,31 +1,31 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useAuth } from "@/hooks/useAuth";
-import { useProfile } from "@/hooks/useProfile";
-import { useGamePreferences } from "@/hooks/useGamePreferences";
-import { usePlayLater } from "@/hooks/usePlayLater";
-import useGenre from "@/hooks/useGenre";
-import usePlatforms from "@/hooks/usePlatforms";
-import { useUsername, useUpdateUsername } from "@/hooks/useUserProfile";
-import useMultimedia from "@/hooks/useMultimedia";
-import useTooltip from "@/hooks/useTooltip";
-import AvatarProfile from "@/components/features/AvatarProfile";
-import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
-import { Pencil, Check, X } from "lucide-react";
-import { genres, platforms } from "@/components/consts/games.consts";
-import Loader from "@/components/ui/Loader";
-import CardGame from "@/ui/CardGame";
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/hooks/useAuth';
+import { useProfile } from '@/hooks/useProfile';
+import { useGamePreferences } from '@/hooks/useGamePreferences';
+import { usePlayLater } from '@/hooks/usePlayLater';
+import useGenre from '@/hooks/useGenre';
+import usePlatforms from '@/hooks/usePlatforms';
+import { useUsername, useUpdateUsername } from '@/hooks/useUserProfile';
+import useMultimedia from '@/hooks/useMultimedia';
+import useTooltip from '@/hooks/useTooltip';
+import AvatarProfile from '@/components/features/AvatarProfile';
+import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import { Pencil, Check, X } from 'lucide-react';
+import { genres, platforms } from '@/components/consts/games.consts';
+import Loader from '@/components/ui/Loader';
+import CardGame from '@/ui/CardGame';
 
 export function MainProfile() {
   const { userAuthenticated } = useAuth();
   const [editingUsername, setEditingUsername] = useState(false);
-  const [tempUsername, setTempUsername] = useState("");
+  const [tempUsername, setTempUsername] = useState('');
   const username = useUsername(userAuthenticated);
-  const { updateUsername } = useUpdateUsername(userAuthenticated);
+  const { updateUsernameFunc } = useUpdateUsername(userAuthenticated);
   // Handle genre and platform toggles
   const { userGenres, handleGenreToggle } = useGenre();
   const { userPlatforms, handlePlatformToggle } = usePlatforms();
@@ -53,16 +53,16 @@ export function MainProfile() {
   } = useMultimedia();
 
   const cancelEditUsername = () => {
-    setTempUsername(username || "");
+    setTempUsername(username || '');
     setEditingUsername(false);
   };
 
   useEffect(() => {
-    setTempUsername(username || "");
+    setTempUsername(username || '');
   }, [username]);
 
   const saveUsername = async () => {
-    await updateUsername(tempUsername);
+    await updateUsernameFunc(tempUsername);
     window.location.reload();
     setEditingUsername(false);
   };
@@ -80,7 +80,11 @@ export function MainProfile() {
               className="max-w-xs"
               autoFocus
             />
-            <Button size="icon" variant="ghost" onClick={saveUsername}>
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() => void saveUsername()}
+            >
               <Check className="w-4 h-4" />
             </Button>
             <Button size="icon" variant="ghost" onClick={cancelEditUsername}>
@@ -116,10 +120,10 @@ export function MainProfile() {
               <Badge
                 key={genre.name}
                 variant={
-                  userGenres.includes(genre.slug) ? "default" : "outline"
+                  userGenres.includes(genre.slug) ? 'default' : 'outline'
                 }
                 className="m-1 text-sm cursor-pointer xl:text-base 2xl:text-lg"
-                onClick={() => handleGenreToggle(genre.slug)}
+                onClick={() => void handleGenreToggle(genre.slug)}
               >
                 <span className="mr-1">{genre.icon}</span>
                 {genre.name}
@@ -138,10 +142,10 @@ export function MainProfile() {
               <Badge
                 key={platform.id}
                 variant={
-                  userPlatforms.includes(platform.id) ? "default" : "outline"
+                  userPlatforms.includes(platform.id) ? 'default' : 'outline'
                 }
                 className="m-1 text-sm cursor-pointer xl:text-base 2xl:text-lg"
-                onClick={() => handlePlatformToggle(platform.id)}
+                onClick={() => void handlePlatformToggle(platform.id)}
               >
                 <span className="flex justify-center items-center mr-1">
                   {platform.icon}
@@ -192,14 +196,16 @@ export function MainProfile() {
                   <CardGame
                     key={games.id}
                     games={games}
-                    getTrailerOfHoveredGame={getTrailerOfHoveredGame}
+                    getTrailerOfHoveredGame={(e) =>
+                      void getTrailerOfHoveredGame(e)
+                    }
                     videoRefs={videoRefs}
                     trailers={trailers}
                     muted={muted}
                     setMuted={setMuted}
                     handleScreenshotHover={handleScreenshotHover}
                     currentScreenshotIndex={currentScreenshotIndex}
-                    user={!userAuthenticated}
+                    user={!!userAuthenticated}
                     activeTooltip={activeTooltip}
                     setActiveTooltip={setActiveTooltip}
                   />
@@ -221,14 +227,16 @@ export function MainProfile() {
                   <CardGame
                     key={games.id}
                     games={games}
-                    getTrailerOfHoveredGame={getTrailerOfHoveredGame}
+                    getTrailerOfHoveredGame={(e) =>
+                      void getTrailerOfHoveredGame(e)
+                    }
                     videoRefs={videoRefs}
                     trailers={trailers}
                     muted={muted}
                     setMuted={setMuted}
                     handleScreenshotHover={handleScreenshotHover}
                     currentScreenshotIndex={currentScreenshotIndex}
-                    user={!userAuthenticated}
+                    user={!!userAuthenticated}
                     activeTooltip={activeTooltip}
                     setActiveTooltip={setActiveTooltip}
                   />
@@ -250,14 +258,16 @@ export function MainProfile() {
                   <CardGame
                     key={games.id}
                     games={games}
-                    getTrailerOfHoveredGame={getTrailerOfHoveredGame}
+                    getTrailerOfHoveredGame={(e) =>
+                      void getTrailerOfHoveredGame(e)
+                    }
                     videoRefs={videoRefs}
                     trailers={trailers}
                     muted={muted}
                     setMuted={setMuted}
                     handleScreenshotHover={handleScreenshotHover}
                     currentScreenshotIndex={currentScreenshotIndex}
-                    user={!userAuthenticated}
+                    user={!!userAuthenticated}
                     activeTooltip={activeTooltip}
                     setActiveTooltip={setActiveTooltip}
                   />

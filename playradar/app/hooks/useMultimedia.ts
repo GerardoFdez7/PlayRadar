@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from "react";
-import { Game } from "@/types/games.types";
-import { getGameTrailer } from "@/services/api";
+import { useState, useRef, useEffect } from 'react';
+import { Game } from '@/types/games.types';
+import { getGameTrailer } from '@/app/services/rawg';
 
 export default function useMultimedia() {
   const videoRefs = useRef<{ [key: string]: HTMLVideoElement | null }>({});
@@ -10,13 +10,13 @@ export default function useMultimedia() {
     Record<number, number>
   >({});
   const [hoveredGameId, setHoveredGameId] = useState<string | number | null>(
-    null
+    null,
   );
 
   // Handle scrolling in screenshots
   const handleScreenshotHover = (
     e: React.MouseEvent<HTMLDivElement>,
-    game: Game
+    game: Game,
   ) => {
     const container = e.currentTarget.getBoundingClientRect();
     const mouseX = e.clientX - container.left;
@@ -26,7 +26,7 @@ export default function useMultimedia() {
     if (totalScreenshots > 0) {
       const newIndex = Math.min(
         Math.floor(percentage * totalScreenshots),
-        totalScreenshots - 1
+        totalScreenshots - 1,
       );
       setCurrentScreenshotIndex((prev) => ({ ...prev, [game.id]: newIndex }));
     }
@@ -47,7 +47,7 @@ export default function useMultimedia() {
   // Effect to handle playback logic
   useEffect(() => {
     if (hoveredGameId && videoRefs.current[hoveredGameId]) {
-      const video = videoRefs.current[hoveredGameId]!;
+      const video = videoRefs.current[hoveredGameId] as HTMLVideoElement;
       video.currentTime = 0;
       video.load();
       video.play().catch(() => {});

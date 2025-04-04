@@ -1,12 +1,12 @@
-import React from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { Search } from "lucide-react";
-import { Input } from "@/ui/Input";
-import Avatar from "@/features/Avatar";
-import MobileSidebar from "@/layout/MobileSidebar";
-import ModeToggle from "@/features/ThemeSelector";
-import logo from "@/assets/logo.png";
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { Search } from 'lucide-react';
+import { Input } from '@/ui/Input';
+import Avatar from '@/features/Avatar';
+import MobileSidebar from '@/layout/MobileSidebar';
+import ModeToggle from '@/features/ThemeSelector';
+import logo from '@/assets/logo.png';
 
 interface HeaderHomeProps {
   searchTerm: string;
@@ -64,7 +64,7 @@ export default function HeaderHome({
               <button
                 className="absolute right-7 font-semibold"
                 onClick={() => {
-                  setSearchTerm("");
+                  setSearchTerm('');
                 }}
               >
                 X
@@ -74,17 +74,18 @@ export default function HeaderHome({
         </div>
         {/* LOG IN button*/}
         <div className="items-center hidden gap-4 ml-4 min-[767px]:flex">
-          {hasMounted && (user ? (
-            <Avatar />
-          ) : (
-            <button
-              onClick={() => router.push("/login")}
-              className="font-bold bg-transparent text-lg relative after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-[-4px] after:h-[4px] 
+          {hasMounted &&
+            (user ? (
+              <Avatar />
+            ) : (
+              <button
+                onClick={() => router.push('/login')}
+                className="font-bold bg-transparent text-lg relative after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-[-4px] after:h-[4px] 
             after:bg-current after:transform after:origin-left after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100 after:rounded-full"
-            >
-              LOG IN
-            </button>
-          ))}
+              >
+                LOG IN
+              </button>
+            ))}
           <ModeToggle />
         </div>
 

@@ -1,6 +1,6 @@
-import React from "react";
-import { PlayLaterButton } from "@/components/features/PlayLater";
-import { LikeDislikeButtons } from "@/components/features/Like&Dislike";
+import React from 'react';
+import { PlayLaterButton } from '@/components/features/PlayLater';
+import { LikeDislikeButtons } from '@/components/features/Like&Dislike';
 
 interface GameActionsProps {
   gameId: number;
@@ -23,14 +23,14 @@ export const GameActions = ({
 }: GameActionsProps) => {
   const handleAction = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLElement;
-    const button = target.closest("[data-action]");
+    const button = target.closest('[data-action]');
     if (!button) return;
 
     // Event delegation to reduce the number of event listeners for the Tooltip
-    const action = button.getAttribute("data-action");
+    const action = button.getAttribute('data-action');
     if (!user) {
       setActiveTooltip({
-        type: action || "",
+        type: action || '',
         gameId: gameId,
       });
     }

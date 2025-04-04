@@ -1,15 +1,15 @@
-import * as React from "react";
-import type { Preview } from "@storybook/react";
-import { ThemeProvider } from "../app/components/features/ThemeProvider";
-import { CacheProvider } from "@emotion/react";
-import createEmotionCache from "@emotion/cache";
+import * as React from 'react';
+import type { Preview } from '@storybook/react';
+import { ThemeProvider } from '../app/components/features/ThemeProvider';
+import { CacheProvider } from '@emotion/react';
+import createEmotionCache from '@emotion/cache';
 import { AppRouterContext } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import "../app/globals.css";
+import '../app/globals.css';
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 const emotionCache = createEmotionCache({
-  key: "css",
-  prepend: true
+  key: 'css',
+  prepend: true,
 });
 
 const mockRouter: AppRouterInstance = {
@@ -27,7 +27,7 @@ const preview: Preview = {
       <AppRouterContext.Provider value={mockRouter as AppRouterInstance}>
         <CacheProvider value={emotionCache}>
           <ThemeProvider>
-              <Story />
+            <Story />
           </ThemeProvider>
         </CacheProvider>
       </AppRouterContext.Provider>
@@ -35,11 +35,11 @@ const preview: Preview = {
   ],
   parameters: {
     themes: {
-      default: "light",
+      default: 'light',
       list: [
-        { name: "light", class: "light", color: "#ffffff" },
-        { name: "dark", class: "dark", color: "#000000" },
-        { name: "system", class: "system" },
+        { name: 'light', class: 'light', color: '#ffffff' },
+        { name: 'dark', class: 'dark', color: '#000000' },
+        { name: 'system', class: 'system' },
       ],
     },
   },

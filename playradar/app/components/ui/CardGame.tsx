@@ -1,10 +1,10 @@
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { Game } from "@/types/games.types";
-import { MdVolumeOff, MdVolumeUp } from "react-icons/md";
-import { platforms } from "@/consts/games.consts";
-import { GameActions } from "@/features/GameActions";
-import videogameImage from "@/assets/placeholder.png";
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { Game } from '@/types/games.types';
+import { MdVolumeOff, MdVolumeUp } from 'react-icons/md';
+import { platforms } from '@/consts/games.consts';
+import { GameActions } from '@/features/GameActions';
+import videogameImage from '@/assets/placeholder.png';
 
 interface CardGameProps {
   user: boolean;
@@ -16,9 +16,9 @@ interface CardGameProps {
   setMuted: React.Dispatch<React.SetStateAction<boolean>>;
   handleScreenshotHover: (
     e: React.MouseEvent<HTMLDivElement>,
-    game: Game
+    game: Game,
   ) => void;
-  currentScreenshotIndex: Record<number, number>;  
+  currentScreenshotIndex: Record<number, number>;
   activeTooltip: { type: string; gameId: number } | null;
   setActiveTooltip: React.Dispatch<
     React.SetStateAction<{ type: string; gameId: number } | null>
@@ -67,11 +67,11 @@ export default function CardGame({
               muted={muted}
               loop
               className="object-cover absolute inset-0 z-10 w-full h-full opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-              style={{ pointerEvents: "none" }}
+              style={{ pointerEvents: 'none' }}
               onLoadedData={() => {
                 // Play video when ready
                 if (videoRefs.current[games.id]) {
-                  videoRefs.current[games.id]?.play();
+                  void videoRefs.current[games.id]?.play();
                 }
               }}
             />
@@ -120,8 +120,8 @@ export default function CardGame({
                         key={index}
                         className={`h-1 flex-1 rounded-full transition-all duration-300 ${
                           index === currentScreenshotIndex[games.id]
-                            ? "bg-white"
-                            : "bg-gray-500"
+                            ? 'bg-white'
+                            : 'bg-gray-500'
                         }`}
                       />
                     ))}
@@ -140,20 +140,19 @@ export default function CardGame({
           className={`object-cover w-full h-full transition-all duration-500 ${
             trailers[games.id.toString()] ||
             (games.short_screenshots?.length ?? 0) > 0
-              ? "group-hover:opacity-0"
-              : ""
+              ? 'group-hover:opacity-0'
+              : ''
           }`}
         />
       </div>
 
       {/* Card information */}
       <div className="mt-2">
-        
         {/* Platforms icons*/}
         <div className="flex absolute left-5 gap-1">
           {games.parent_platforms?.map((parent_platforms) => {
             const platform = platforms.find(
-              (p) => p.slug === parent_platforms.platform.slug
+              (p) => p.slug === parent_platforms.platform.slug,
             );
             return (
               <span
@@ -188,7 +187,7 @@ export default function CardGame({
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm">Genre</span>
                 <span className="text-sm text-right">
-                  {games.genres.map((genre) => genre.name).join(", ")}
+                  {games.genres.map((genre) => genre.name).join(', ')}
                 </span>
               </div>
 

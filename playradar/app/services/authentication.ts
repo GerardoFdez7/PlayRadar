@@ -1,47 +1,12 @@
-import { auth, db } from "../lib/firebase";
+import { auth } from '@/app/lib/firebase';
 import {
   GoogleAuthProvider,
   signInWithPopup,
   signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  User,
   signOut,
   sendPasswordResetEmail,
-} from "firebase/auth";
-import { doc, setDoc, getDoc } from "firebase/firestore";
-
-// Email & Password register
-export async function registerUser(
-  username: string,
-  email: string,
-  password: string
-) {
-  try {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    const user = userCredential.user;
-
-    await setDoc(doc(db, "users", user.uid), {
-      uid: user.uid,
-      username,
-      email,
-      createdAt: new Date(),
-      liked: [],
-      disliked: [],
-      play_later: [],
-      genres: [],
-      platforms: [],
-    });
-
-    return { success: true, user };
-  } catch (error: unknown) {
-    console.log("An error occurred while registering:", error);
-    return { success: false };
-  }
-}
+} from 'firebase/auth';
+import { createGoogleUser } from '@/services/requests';
 
 // Email & Password login
 export async function checkUser(email: string, password: string) {
@@ -49,36 +14,12 @@ export async function checkUser(email: string, password: string) {
     const userCredential = await signInWithEmailAndPassword(
       auth,
       email,
-      password
+      password,
     );
     // Returns the authenticated user
     return { success: true, user: userCredential.user };
-  } catch (error) {
-    console.log("checkUser: ", error);
+  } catch (_error) {
     return { success: false };
-  }
-}
-
-// Create user document in Firestore if it does not exist
-async function createUserRecordIfNotExists(
-  user: User,
-  usernameFallback: string
-): Promise<void> {
-  const userRef = doc(db, "users", user.uid);
-  const docSnap = await getDoc(userRef);
-
-  if (!docSnap.exists()) {
-    await setDoc(userRef, {
-      uid: user.uid,
-      username: user.displayName || usernameFallback,
-      email: user.email,
-      createdAt: new Date(),
-      liked: [],
-      disliked: [],
-      play_later: [],
-      genres: [],
-      platforms: [],
-    });
   }
 }
 
@@ -88,11 +29,13 @@ export async function handleGoogleLogin() {
     const provider = new GoogleAuthProvider();
     const userCredential = await signInWithPopup(auth, provider);
     const user = userCredential.user;
-    await createUserRecordIfNotExists(user, user.displayName ?? "");
-    return { success: true, user };
-  } catch (err) {
-    console.log("handleGoogleLogin: ", err);
-    return { success: false };
+    const data = await createGoogleUser(user, user.displayName ?? '');
+    return { success: data.success, user: data.user };
+  } catch (_error) {
+    return {
+      success: false,
+      error: _error instanceof Error ? _error.message : 'Unknown error',
+    };
   }
 }
 
@@ -100,9 +43,7 @@ export async function handleGoogleLogin() {
 export const logout = async () => {
   try {
     await signOut(auth);
-  } catch (error) {
-    console.error("Logout error:", error);
-  }
+  } catch (_error) {}
 };
 
 // Reset password
@@ -110,8 +51,7 @@ export const handleForgotPassword = async (email: string) => {
   try {
     await sendPasswordResetEmail(auth, email);
     return { success: true };
-  } catch (error) {
-    console.log("sendPasswordResetEmail error:", error);
+  } catch (_error) {
     return { success: false };
   }
 };

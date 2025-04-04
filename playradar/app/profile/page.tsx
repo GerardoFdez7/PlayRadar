@@ -1,5 +1,5 @@
-import HeaderProfile from "@/components/layout/HeaderProfile";
-import { MainProfile } from "@/components/layout/MainProfile";
+import HeaderProfile from '@/components/layout/HeaderProfile';
+import { MainProfile } from '@/components/layout/MainProfile';
 
 export default function ProfilePage() {
   return (

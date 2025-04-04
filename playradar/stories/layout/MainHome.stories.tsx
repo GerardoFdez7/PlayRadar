@@ -14,7 +14,7 @@ const mockGames: Game[] = [
     parent_platforms: [{ platform: { id: 1, name: 'PC', slug: 'pc' } }],
     short_screenshots: [],
     ratings_count: 100,
-    isAvailable: true
+    isAvailable: true,
   },
   {
     id: 2,
@@ -23,10 +23,12 @@ const mockGames: Game[] = [
     released: '2023-02-01',
     genres: [{ id: 2, name: 'Adventure', slug: 'adventure' }],
     background_image: '/sample-image2.jpg',
-    parent_platforms: [{ platform: { id: 2, name: 'PlayStation', slug: 'playstation' } }],
+    parent_platforms: [
+      { platform: { id: 2, name: 'PlayStation', slug: 'playstation' } },
+    ],
     short_screenshots: [],
     ratings_count: 200,
-    isAvailable: true
+    isAvailable: true,
   },
   {
     id: 3,
@@ -35,10 +37,12 @@ const mockGames: Game[] = [
     released: '2023-02-01',
     genres: [{ id: 2, name: 'Adventure', slug: 'adventure' }],
     background_image: '/sample-image2.jpg',
-    parent_platforms: [{ platform: { id: 3, name: 'PlayStation', slug: 'playstation' } }],
+    parent_platforms: [
+      { platform: { id: 3, name: 'PlayStation', slug: 'playstation' } },
+    ],
     short_screenshots: [],
     ratings_count: 400,
-    isAvailable: true
+    isAvailable: true,
   },
   {
     id: 4,
@@ -47,43 +51,46 @@ const mockGames: Game[] = [
     released: '2023-02-01',
     genres: [{ id: 4, name: 'Adventure', slug: 'adventure' }],
     background_image: '/sample-image2.jpg',
-    parent_platforms: [{ platform: { id: 4, name: 'PlayStation', slug: 'playstation' } }],
+    parent_platforms: [
+      { platform: { id: 4, name: 'PlayStation', slug: 'playstation' } },
+    ],
     short_screenshots: [],
     ratings_count: 5600,
-    isAvailable: true
-  }
+    isAvailable: true,
+  },
 ] as unknown as Game[];
 
 const meta: Meta<typeof MainHome> = {
   title: 'Components/Layout/MainHome',
   component: MainHome,
   parameters: {
-    layout: 'fullscreen'
+    layout: 'fullscreen',
   },
   argTypes: {
     isLoading: { control: 'boolean' },
     selectedPlatform: {
       control: 'select',
-      options: ['all', ...platforms.map(p => p.id)]
+      options: ['all', ...platforms.map((p) => p.id)],
     },
     setSortBy: { action: 'setSortBy' },
-    setSelectedPlatform: { action: 'setSelectedPlatform' }
-  }
+    setSelectedPlatform: { action: 'setSelectedPlatform' },
+  },
 };
 
 export default meta;
 
 const Template: StoryObj<typeof MainHome> = {
-  render: (args) => <MainHome {...args} />
+  render: (args) => <MainHome {...args} />,
 };
 
 export const Default: StoryObj<typeof MainHome> = {
-  ...Template
+  ...Template,
 };
+
 Default.args = {
   user: true,
   filteredGames: mockGames,
-  recommendedGames: mockGames,  
+  recommendedGames: mockGames,
   isLoading: false,
   selectedGenreSlug: null,
   selectedPlatform: 'all',

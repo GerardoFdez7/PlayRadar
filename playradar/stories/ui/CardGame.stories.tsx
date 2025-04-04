@@ -1,52 +1,58 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import CardGame from "@/components/ui/CardGame";
-import { Game } from "@/types/games.types";
-import { action } from "@storybook/addon-actions";
+import type { Meta, StoryObj } from '@storybook/react';
+import CardGame from '@/components/ui/CardGame';
+import { Game } from '@/types/games.types';
+import { action } from '@storybook/addon-actions';
 
 const meta: Meta<typeof CardGame> = {
-  title: "Components/UI/CardGame",
+  title: 'Components/UI/CardGame',
   component: CardGame,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 } satisfies Meta<typeof CardGame>;
 
 export default meta;
+
 type Story = StoryObj<typeof meta>;
 
 // Mock game data matching the Game type
 const mockGame: Game = {
   id: 123,
-  name: "Cyber Adventure 2077",
-  slug: "cyber-adventure-2077",
-  background_image: "https://play-lh.googleusercontent.com/mTPbxTTZ767n84VstMFdI4UEaaEvnAevaIfcLOjqlxzLupuGX5x0xE63LgyVrGjAHXc=w648-h364-rw",
+  name: 'Cyber Adventure 2077',
+  slug: 'cyber-adventure-2077',
+  background_image:
+    'https://play-lh.googleusercontent.com/mTPbxTTZ767n84VstMFdI4UEaaEvnAevaIfcLOjqlxzLupuGX5x0xE63LgyVrGjAHXc=w648-h364-rw',
   genres: [
-    { id: 1, name: "RPG", slug: "rpg" },
-    { id: 2, name: "Sci-Fi", slug: "sci-fi" },
+    { id: 1, name: 'RPG', slug: 'rpg' },
+    { id: 2, name: 'Sci-Fi', slug: 'sci-fi' },
   ],
-  released: "2023-10-01",
+  released: '2023-10-01',
   ratings_count: 1500,
   parent_platforms: [
-    { platform: { id: 1, slug: "pc", name: "Windows" } },
-    { platform: { id: 2, slug: "playstation", name: "PlayStation" } },
+    { platform: { id: 1, slug: 'pc', name: 'Windows' } },
+    { platform: { id: 2, slug: 'playstation', name: 'PlayStation' } },
   ],
   short_screenshots: [
-    { id: 1, image: "https://play-lh.googleusercontent.com/mTPbxTTZ767n84VstMFdI4UEaaEvnAevaIfcLOjqlxzLupuGX5x0xE63LgyVrGjAHXc=w648-h364-rw" },
-    { id: 2, image: "https://example.com/screenshot2.jpg" },
+    {
+      id: 1,
+      image:
+        'https://play-lh.googleusercontent.com/mTPbxTTZ767n84VstMFdI4UEaaEvnAevaIfcLOjqlxzLupuGX5x0xE63LgyVrGjAHXc=w648-h364-rw',
+    },
+    { id: 2, image: 'https://example.com/screenshot2.jpg' },
   ],
 };
 
 // Mock handlers and refs
 const videoRefs = { current: {} };
 const handlers = {
-  handleHoverGame: action("hover-game"),
-  handleScreenshotHover: action("screenshot-hover"),
-  setMuted: action("set-muted"),
-  setActiveTooltip: action("set-active-tooltip"),
+  handleHoverGame: action('hover-game'),
+  handleScreenshotHover: action('screenshot-hover'),
+  setMuted: action('set-muted'),
+  setActiveTooltip: action('set-active-tooltip'),
 };
 
 export const Default: Story = {
   args: {
     games: mockGame,
-    trailers: { "123": "https://example.com/trailer.mp4" },
+    trailers: { '123': 'https://example.com/trailer.mp4' },
     muted: true,
     currentScreenshotIndex: { 123: 0 },
     user: true,

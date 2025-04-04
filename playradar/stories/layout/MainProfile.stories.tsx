@@ -1,28 +1,29 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { MainProfile } from "@/components/layout/MainProfile";
-import { action } from "@storybook/addon-actions";
+import type { Meta, StoryObj } from '@storybook/react';
+import { MainProfile } from '@/components/layout/MainProfile';
+import { action } from '@storybook/addon-actions';
 
 const meta: Meta<typeof MainProfile> = {
-  title: "Components/Layout/MainProfile",
+  title: 'Components/Layout/MainProfile',
   component: MainProfile,
 };
 
 export default meta;
+
 type Story = StoryObj<typeof MainProfile>;
 
 export const Default: Story = {
   args: {
-    username: "TestUser",
+    username: 'TestUser',
     editingUsername: false,
-    setEditingUsername: action("setEditingUsername"),
-    tempUsername: "TestUser",
-    setTempUsername: action("setTempUsername"),
-    saveUsername: async () => action("saveUsername")(),
-    cancelEditUsername: action("cancelEditUsername"),
+    setEditingUsername: action('setEditingUsername'),
+    tempUsername: 'TestUser',
+    setTempUsername: action('setTempUsername'),
+    saveUsername: async () => action('saveUsername')(),
+    cancelEditUsername: action('cancelEditUsername'),
     userGenres: [],
-    handleGenreToggle: action("handleGenreToggle"),
+    handleGenreToggle: action('handleGenreToggle'),
     userPlatforms: [],
-    handlePlatformToggle: action("handlePlatformToggle"),
+    handlePlatformToggle: action('handlePlatformToggle'),
     likedGames: [],
     dislikedGames: [],
     playLaterGames: [],
@@ -33,16 +34,16 @@ export const Default: Story = {
     videoRefs: { current: {} },
     trailers: {},
     muted: false,
-    setMuted: action("setMuted"),
-    handleScreenshotHover: action("handleScreenshotHover"),
+    setMuted: action('setMuted'),
+    handleScreenshotHover: action('handleScreenshotHover'),
     currentScreenshotIndex: {},
-    getTrailerOfHoveredGame: action("getTrailerOfHoveredGame"),
+    getTrailerOfHoveredGame: action('getTrailerOfHoveredGame'),
     activeTooltip: null,
-    setActiveTooltip: action("setActiveTooltip"),
+    setActiveTooltip: action('setActiveTooltip'),
   },
   decorators: [
     (Story) => (
-      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <Story />
       </div>
     ),
@@ -54,6 +55,6 @@ export const EditingUsername: Story = {
   args: {
     ...Default.args,
     editingUsername: true,
-    tempUsername: "NewUsername",
+    tempUsername: 'NewUsername',
   },
 };

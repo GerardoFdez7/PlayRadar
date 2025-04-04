@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import type { GameDetails, GameMedia } from "@/types/games.types";
-import { getGameDetails, getGameMedia } from "@/services/api";
+import { useState, useEffect } from 'react';
+import type { GameDetails, GameMedia } from '@/types/games.types';
+import { getGameDetails, getGameMedia } from '@/app/services/rawg';
 
 export const useDetailGame = (slug: string) => {
   const [gameDetails, setGameDetails] = useState<GameDetails | null>(null);
@@ -27,15 +27,14 @@ export const useDetailGame = (slug: string) => {
         }
 
         if (!details) {
-          setError("Failed to load game data");
+          setError('Failed to load game data');
         }
-      } catch (err) {
-        setError("Error fetching game data");
-        console.error(err);
+      } catch (_error) {
+        setError('Error fetching game data');
       }
     };
 
-    fetchGameData();
+    void fetchGameData().catch((_error) => {});
   }, [slug]);
 
   return { gameDetails, gameMedia, error };

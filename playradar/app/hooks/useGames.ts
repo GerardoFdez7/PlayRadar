@@ -1,28 +1,32 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
-import { getSearchedGames, getGames, getRecomendations } from "@/services/api";
-import { Game } from "@/types/games.types";
-import { sortGames } from "@/consts/games.consts";
-import useGenre from "@/hooks/useGenre";
-import usePlatforms from "@/hooks/usePlatforms";
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import {
+  getSearchedGames,
+  getGames,
+  getRecomendations,
+} from '@/app/services/rawg';
+import { Game } from '@/types/games.types';
+import { sortGames } from '@/consts/games.consts';
+import useGenre from '@/hooks/useGenre';
+import usePlatforms from '@/hooks/usePlatforms';
 
 export default function useGames(
   initialGames: Game[],
   initialNextUrl: string | null,
-  isRecommendations: boolean = false
+  isRecommendations: boolean = false,
 ) {
   const [games, setGames] = useState<Game[]>(
-    Array.isArray(initialGames) ? initialGames : []
+    Array.isArray(initialGames) ? initialGames : [],
   );
   const [nextUrl, setNextUrl] = useState<string | null>(initialNextUrl);
   const [searchResults, setSearchResults] = useState<Game[]>([]);
   const [nextSearchUrl, setNextSearchUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [selectedGenreSlug, setSelectedGenreSlug] = useState<string | null>(
-    null
+    null,
   );
-  const [selectedPlatform, setSelectedPlatform] = useState("all");
-  const [sortBy, setSortBy] = useState("default");
+  const [selectedPlatform, setSelectedPlatform] = useState('all');
+  const [sortBy, setSortBy] = useState('default');
   const { userGenres } = useGenre();
   const { userPlatforms } = usePlatforms();
 
@@ -43,15 +47,15 @@ export default function useGames(
 
       const platformFilters = [
         ...userPlatforms,
-        ...(selectedPlatform !== "all" ? [selectedPlatform] : []),
+        ...(selectedPlatform !== 'all' ? [selectedPlatform] : []),
       ].filter(Boolean);
 
       setIsLoading(true);
       try {
         const data = await getRecomendations(
           undefined,
-          genreFilters.join(","),
-          platformFilters.join(",")
+          genreFilters.join(','),
+          platformFilters.join(','),
         );
         if (data) {
           setGames(data.results);
@@ -62,7 +66,7 @@ export default function useGames(
       }
     } else {
       const platformId =
-        selectedPlatform !== "all" ? selectedPlatform : undefined;
+        selectedPlatform !== 'all' ? selectedPlatform : undefined;
       const genreSlug = selectedGenreSlug ?? undefined;
 
       setIsLoading(true);
@@ -94,10 +98,10 @@ export default function useGames(
   const filteredGames = useMemo(() => {
     return sortedGames.filter(
       (game) =>
-        selectedPlatform === "all" ||
+        selectedPlatform === 'all' ||
         game.parent_platforms?.some(
-          (p) => p.platform.id.toString() === selectedPlatform
-        )
+          (p) => p.platform.id.toString() === selectedPlatform,
+        ),
     );
   }, [sortedGames, selectedPlatform]);
 
@@ -105,10 +109,10 @@ export default function useGames(
   const recommendedGames = useMemo(() => {
     return sortedGames.filter(
       (game) =>
-        selectedPlatform === "all" ||
+        selectedPlatform === 'all' ||
         game.parent_platforms?.some(
-          (p) => p.platform.id.toString() === selectedPlatform
-        )
+          (p) => p.platform.id.toString() === selectedPlatform,
+        ),
     );
   }, [sortedGames, selectedPlatform]);
 
@@ -130,7 +134,7 @@ export default function useGames(
       if (searchTerm.trim()) {
         setIsLoading(true);
         setSelectedGenreSlug(null);
-        setSelectedPlatform("all");
+        setSelectedPlatform('all');
 
         const data = await getSearchedGames(searchTerm);
         if (data?.results) {
@@ -144,7 +148,7 @@ export default function useGames(
       }
     };
 
-    const handler = setTimeout(fetchInitialSearch, 500);
+    const handler = setTimeout(() => void fetchInitialSearch(), 500);
     return () => clearTimeout(handler);
   }, [searchTerm]);
 
@@ -165,7 +169,7 @@ export default function useGames(
     let isActive = true;
     const debouncer = setTimeout(() => {
       if (!searchTerm.trim() && isActive) {
-        fetchFilteredGames();
+        void fetchFilteredGames().catch((_error) => {});
       }
     }, 100);
 

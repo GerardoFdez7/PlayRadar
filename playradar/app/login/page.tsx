@@ -1,6 +1,6 @@
-import MainLogin from "@/components/layout/MainLogin";
-import HeaderAuth from "@/layout/HeaderAuth";
-import Footer from "@/layout/Footer";
+import MainLogin from '@/components/layout/MainLogin';
+import HeaderAuth from '@/layout/HeaderAuth';
+import Footer from '@/layout/Footer';
 
 export default function Login() {
   return (

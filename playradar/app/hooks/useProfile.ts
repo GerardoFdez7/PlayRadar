@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
-import { getGamesByIds } from "@/services/api";
-import { Game } from "@/types/games.types";
+import { useState, useEffect } from 'react';
+import { getGamesByIds } from '@/app/services/rawg';
+import { Game } from '@/types/games.types';
 
 export function useProfile(
   userLikes: string[],
   userDislikes: string[],
-  userPlayLater: string[]
+  userPlayLater: string[],
 ) {
   const [isLoadingLiked, setIsLoadingLiked] = useState(true);
   const [isLoadingDisliked, setIsLoadingDisliked] = useState(true);
@@ -20,8 +20,7 @@ export function useProfile(
         if (ids.length === 0) return [];
         const games = await getGamesByIds(ids);
         return games.filter((game: Game | null): game is Game => game !== null);
-      } catch (error) {
-        console.error("Error fetching games:", error);
+      } catch (_error) {
         return [];
       } finally {
         if (ids === userLikes) setIsLoadingLiked(false);
@@ -36,25 +35,31 @@ export function useProfile(
       setIsLoadingPlayLater(true);
 
       if (userLikes.length > 0) {
-        fetchGames(userLikes).then(setLikedGames);
+        void fetchGames(userLikes)
+          .then(setLikedGames)
+          .catch((_error) => {});
       } else {
         setIsLoadingLiked(false);
       }
 
       if (userDislikes.length > 0) {
-        fetchGames(userDislikes).then(setDislikedGames);
+        void fetchGames(userDislikes)
+          .then(setDislikedGames)
+          .catch((_error) => {});
       } else {
         setIsLoadingDisliked(false);
       }
 
       if (userPlayLater.length > 0) {
-        fetchGames(userPlayLater).then(setPlayLaterGames);
+        void fetchGames(userPlayLater)
+          .then(setPlayLaterGames)
+          .catch((_error) => {});
       } else {
         setIsLoadingPlayLater(false);
       }
     };
 
-    loadGames();
+    void loadGames().catch((_error) => {});
   }, [userLikes, userDislikes, userPlayLater]);
 
   return {

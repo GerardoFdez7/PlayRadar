@@ -1,15 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '@/app/lib/firebase';
 import {
-  doc,
-  updateDoc,
-  arrayUnion,
-  arrayRemove,
-  getDoc,
-  UpdateData,
-  DocumentData,
-} from "firebase/firestore";
-import { db, auth } from "../lib/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
+  likeGame,
+  unlikeGame,
+  dislikeGame,
+  undislikeGame,
+  alldislikeGames,
+  alllikeGames,
+} from '@/services/requests';
 
 export function useGamePreferences() {
   const [userLikes, setUserLikes] = useState<string[]>([]);
@@ -19,87 +18,61 @@ export function useGamePreferences() {
   // Get user preferences when page loads
   useEffect(() => {
     const fetchUserPreferences = async () => {
-      if (user) {
+      if (user?.uid) {
         try {
-          const userDoc = await getDoc(doc(db, "users", user.uid));
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
-            setUserLikes(userData.liked || []);
-            setUserDislikes(userData.disliked || []);
-          }
-        } catch (error) {
-          console.error("Error fetching user preferences:", error);
-        }
+          const [likedRes, dislikedRes] = await Promise.all([
+            alllikeGames(user.uid),
+            alldislikeGames(user.uid),
+          ]);
+
+          setUserLikes(likedRes.liked || []);
+          setUserDislikes(dislikedRes.disliked || []);
+        } catch (_error) {}
       }
     };
-
-    fetchUserPreferences();
+    void fetchUserPreferences();
   }, [user]);
 
   // Function to handle the likes toggle
   const handleLikeToggle = async (gameId: string) => {
-    if (!user) return;
+    if (!user?.uid) return;
 
     try {
-      const userRef = doc(db, "users", user.uid);
-
       if (userLikes.includes(gameId)) {
-        // If it's already in likes, remove it
-        await updateDoc(userRef, {
-          liked: arrayRemove(gameId),
-        });
+        await unlikeGame(user.uid, gameId);
         setUserLikes(userLikes.filter((id) => id !== gameId));
       } else {
-        // If it is not in likes, add it and remove it from dislikes if it exists
-        const updates: UpdateData<DocumentData> = {
-          liked: arrayUnion(gameId),
-        };
+        await likeGame(user.uid, gameId);
+        setUserLikes([...userLikes, gameId]);
 
-        // If it's in dislikes, remove it from there
+        // Remove from dislikes if present
         if (userDislikes.includes(gameId)) {
-          updates.disliked = arrayRemove(gameId);
+          await undislikeGame(user.uid, gameId);
           setUserDislikes(userDislikes.filter((id) => id !== gameId));
         }
-
-        await updateDoc(userRef, updates);
-        setUserLikes([...userLikes, gameId]);
       }
-    } catch (error) {
-      console.error("Error updating likes:", error);
-    }
+    } catch (_error) {}
   };
 
   // Function to handle the dislikes toggle
   const handleDislikeToggle = async (gameId: string) => {
-    if (!user) return;
+    if (!user?.uid) return;
 
     try {
-      const userRef = doc(db, "users", user.uid);
-
       if (userDislikes.includes(gameId)) {
-        // If it's already in dislikes, remove it
-        await updateDoc(userRef, {
-          disliked: arrayRemove(gameId),
-        });
+        await undislikeGame(user.uid, gameId);
         setUserDislikes(userDislikes.filter((id) => id !== gameId));
       } else {
-        // If it is not in dislikes, add it and remove it from likes if it exists
-        const updates: UpdateData<DocumentData> = {
-          disliked: arrayUnion(gameId),
-        };
+        await dislikeGame(user.uid, gameId);
+        setUserDislikes([...userDislikes, gameId]);
 
-        // If it's in likes, remove it from there
+        // Remove from likes if present
         if (userLikes.includes(gameId)) {
-          updates.liked = arrayRemove(gameId);
+          await unlikeGame(user.uid, gameId);
           setUserLikes(userLikes.filter((id) => id !== gameId));
         }
-
-        await updateDoc(userRef, updates);
-        setUserDislikes([...userDislikes, gameId]);
       }
-    } catch (error) {
-      console.error("Error updating dislikes:", error);
-    }
+    } catch (_error) {}
   };
 
   return { userLikes, userDislikes, handleLikeToggle, handleDislikeToggle };

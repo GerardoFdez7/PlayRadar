@@ -1,34 +1,36 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import LoadingAnimation from "@/components/ui/Loader";
+import type { Meta, StoryObj } from '@storybook/react';
+import LoadingAnimation from '@/components/ui/Loader';
 
 const meta = {
-  title: "Components/ui/Loader",
+  title: 'Components/ui/Loader',
   component: LoadingAnimation,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
     docs: {
       description: {
-        component: "An animated loading indicator using Lottie animation. Displays a smooth animation while content is loading.",
+        component:
+          'An animated loading indicator using Lottie animation. Displays a smooth animation while content is loading.',
       },
     },
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   argTypes: {
     className: {
-      control: "text",
-      description: "Additional CSS classes for container",
+      control: 'text',
+      description: 'Additional CSS classes for container',
       table: {
         defaultValue: { summary: "''" },
       },
     },
     size: {
-      control: { type: "number", min: 20, max: 200 },
-      description: "Size of the loader in pixels",      
+      control: { type: 'number', min: 20, max: 200 },
+      description: 'Size of the loader in pixels',
     },
   },
 } satisfies Meta<typeof LoadingAnimation>;
 
 export default meta;
+
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {

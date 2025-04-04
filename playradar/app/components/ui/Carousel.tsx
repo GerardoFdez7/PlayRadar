@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useCallback } from "react";
-import useEmblaCarousel from "embla-carousel-react";
-import type { EmblaOptionsType } from "embla-carousel";
-import placeholder from "@/assets/placeholder.png";
-import Image from "next/image";
-import Thumb from "@/components/ui/Thumb";
+import React, { useState, useEffect, useCallback } from 'react';
+import useEmblaCarousel from 'embla-carousel-react';
+import type { EmblaOptionsType } from 'embla-carousel';
+import placeholder from '@/assets/placeholder.png';
+import Image from 'next/image';
+import Thumb from '@/components/ui/Thumb';
 
 interface CarouselProps {
   items: Array<{
     id: string;
-    type: "image" | "video";
+    type: 'image' | 'video';
     src: string;
     alt: string;
     preview?: string;
@@ -20,14 +20,14 @@ interface CarouselProps {
 const Carousel = (props: CarouselProps) => {
   const { items, options } = props;
   const orderedItems = [...items].sort((a, b) => {
-    if (a.type === "video" && b.type !== "video") return -1;
-    if (b.type === "video" && a.type !== "video") return 1;
+    if (a.type === 'video' && b.type !== 'video') return -1;
+    if (b.type === 'video' && a.type !== 'video') return 1;
     return 0;
   });
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [emblaMainRef, emblaMainApi] = useEmblaCarousel(options);
   const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel({
-    containScroll: "keepSnaps",
+    containScroll: 'keepSnaps',
     dragFree: true,
   });
 
@@ -36,7 +36,7 @@ const Carousel = (props: CarouselProps) => {
       if (!emblaMainApi || !emblaThumbsApi) return;
       emblaMainApi.scrollTo(index);
     },
-    [emblaMainApi, emblaThumbsApi]
+    [emblaMainApi, emblaThumbsApi],
   );
 
   const onSelect = useCallback(() => {
@@ -49,7 +49,7 @@ const Carousel = (props: CarouselProps) => {
     if (!emblaMainApi) return;
     onSelect();
 
-    emblaMainApi.on("select", onSelect).on("reInit", onSelect);
+    emblaMainApi.on('select', onSelect).on('reInit', onSelect);
   }, [emblaMainApi, onSelect]);
 
   return (
@@ -59,7 +59,7 @@ const Carousel = (props: CarouselProps) => {
           {orderedItems.map((item) => (
             <div className="flex-[0_0_100%] min-w-0" key={item.id}>
               <div className="relative mb-6 w-full aspect-video">
-                {item.type === "image" ? (
+                {item.type === 'image' ? (
                   <Image
                     src={item.src || placeholder}
                     alt={item.alt}

@@ -13,6 +13,7 @@ const meta: Meta<typeof Tabs> = {
 };
 
 export default meta;
+
 type Story = StoryObj<typeof Tabs>;
 
 export const Basic: Story = {
@@ -23,7 +24,7 @@ export const Basic: Story = {
         <TabsTrigger value="settings">Settings</TabsTrigger>
         <TabsTrigger value="billing">Billing</TabsTrigger>
       </TabsList>
-      
+
       <TabsContent value="account">
         <p className="pt-4">Make changes to your account here.</p>
       </TabsContent>

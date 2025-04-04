@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from '@storybook/react';
 import {
   PcIcon,
   XboxIcon,
@@ -15,22 +15,23 @@ import {
   LinuxIcon,
   IosIcon,
   AndroidIcon,
-} from "@/components/ui/Platforms";
+} from '@/components/ui/Platforms';
 
 const meta = {
-  title: "Components/UI/Platforms",
+  title: 'Components/UI/Platforms',
   parameters: {
-    layout: "centered",
+    layout: 'centered',
     docs: {
       description: {
-        component: "Individual platform icons with hover effects",
+        component: 'Individual platform icons with hover effects',
       },
     },
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 } satisfies Meta;
 
 export default meta;
+
 type Story = StoryObj<typeof meta>;
 
 // PC Icon Story

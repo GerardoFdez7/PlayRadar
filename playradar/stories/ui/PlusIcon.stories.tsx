@@ -1,22 +1,23 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import PlusIcon from "@/components/ui/PlusIcon";
+import type { Meta, StoryObj } from '@storybook/react';
+import PlusIcon from '@/components/ui/PlusIcon';
 
 const meta = {
-  title: "Components/UI/PlusIcon",
+  title: 'Components/UI/PlusIcon',
   component: PlusIcon,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
     docs: {
       description: {
-        component: "A plus icon with rotation animation capabilities through CSS classes.",
+        component:
+          'A plus icon with rotation animation capabilities through CSS classes.',
       },
     },
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   argTypes: {
     className: {
-      control: "text",
-      description: "Additional CSS classes for custom styling and animations",
+      control: 'text',
+      description: 'Additional CSS classes for custom styling and animations',
       table: {
         defaultValue: { summary: "''" },
       },
@@ -25,16 +26,17 @@ const meta = {
 } satisfies Meta<typeof PlusIcon>;
 
 export default meta;
+
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    className: "",
+    className: '',
   },
 };
 
 export const CustomClass: Story = {
   args: {
-    className: "text-blue-500 scale-150",
+    className: 'text-blue-500 scale-150',
   },
 };

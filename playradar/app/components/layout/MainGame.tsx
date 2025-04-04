@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useParams } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
-import { useDetailGame } from "@/hooks/useDetailGame";
-import useTooltip from "@/hooks/useTooltip";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
-import { Badge } from "@/components/ui/Badge";
-import { GameActions } from "@/components/features/GameActions";
-import { Requirements } from "@/components/ui/Requirements";
-import Carousel from "@/components/ui/Carousel";
-import { ExternalLink } from "lucide-react";
+import { useParams } from 'next/navigation';
+import { useAuth } from '@/hooks/useAuth';
+import { useDetailGame } from '@/hooks/useDetailGame';
+import useTooltip from '@/hooks/useTooltip';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import { Badge } from '@/components/ui/Badge';
+import { GameActions } from '@/components/features/GameActions';
+import { Requirements } from '@/components/ui/Requirements';
+import Carousel from '@/components/ui/Carousel';
+import { ExternalLink } from 'lucide-react';
 
 export function MainGame() {
   const { slug } = useParams();
@@ -54,14 +54,14 @@ export function MainGame() {
   const carouselItems = [
     ...(gameMedia?.short_screenshots || []).map((screenshot) => ({
       id: `screenshot-${screenshot.id}`,
-      type: "image" as const,
+      type: 'image' as const,
       src: screenshot.image,
       alt: `${gameDetails.name} screenshot ${screenshot.id}`,
     })),
     ...(gameMedia?.movies || []).map((trailer) => ({
       id: `trailer-${trailer.id}`,
-      type: "video" as const,
-      src: trailer.data.max || "",
+      type: 'video' as const,
+      src: trailer.data.max || '',
       preview: trailer.preview,
       alt: `${gameDetails.name} trailer ${trailer.id}`,
     })),
@@ -70,19 +70,19 @@ export function MainGame() {
   // Format requirements for display
   const formatRequirements = (reqString?: string) => {
     if (!reqString) return [];
-    return reqString.split("\n").map((line) => {
-      const cleanedLine = line.replace(/^(Recommended|Minimum):\s*/i, "");
-      const [key, value] = cleanedLine.split(": ");
+    return reqString.split('\n').map((line) => {
+      const cleanedLine = line.replace(/^(Recommended|Minimum):\s*/i, '');
+      const [key, value] = cleanedLine.split(': ');
       return { key, value };
     });
   };
 
   const pcPlatform = gameDetails.platforms?.find(
-    (p) => p.platform.slug === "pc"
+    (p) => p.platform.slug === 'pc',
   );
   const minRequirements = formatRequirements(pcPlatform?.requirements?.minimum);
   const recRequirements = formatRequirements(
-    pcPlatform?.requirements?.recommended
+    pcPlatform?.requirements?.recommended,
   );
 
   return (
@@ -141,10 +141,10 @@ export function MainGame() {
             <div className="mt-4">
               <h3 className="mb-2 text-lg font-medium">Developer</h3>
               <p>
-                {gameDetails.developers?.map((d) => d.name).join(", ") || (
+                {gameDetails.developers?.map((d) => d.name).join(', ') || (
                   <span className="text-gray-500">
-                    {" "}
-                    Developer information not available{" "}
+                    {' '}
+                    Developer information not available{' '}
                   </span>
                 )}
               </p>
@@ -189,7 +189,7 @@ export function MainGame() {
                 {gameDetails.publishers?.length ? (
                   gameDetails.publishers.map((p, index) => (
                     <span key={p.id}>
-                      {index > 0 && ", "}
+                      {index > 0 && ', '}
                       {gameDetails.website ? (
                         <a
                           href={`${gameDetails.website}`}
@@ -270,10 +270,10 @@ export function MainGame() {
               <div
                 className={`flex items-center justify-center w-16 h-16 rounded-full border-4 ${
                   gameDetails.metacritic >= 75
-                    ? "border-green-500 text-green-500"
+                    ? 'border-green-500 text-green-500'
                     : gameDetails.metacritic >= 50
-                    ? "border-yellow-500 text-yellow-500"
-                    : "border-red-500 text-red-500"
+                      ? 'border-yellow-500 text-yellow-500'
+                      : 'border-red-500 text-red-500'
                 }`}
               >
                 <span className="text-xl font-bold">

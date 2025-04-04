@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import React from "react";
-import { useRouter } from "next/navigation";
-import { auth } from "@/lib/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
-import Avatar from "@/components/features/Avatar";
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import { auth } from '@/app/lib/firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import Avatar from '@/components/features/Avatar';
 
 interface LogInButtonProps {
   className?: string;
 }
 
-const LogInButton: React.FC<LogInButtonProps> = ({ className = "" }) => {
+const LogInButton: React.FC<LogInButtonProps> = ({ className = '' }) => {
   const router = useRouter();
   const [user] = useAuthState(auth);
 
@@ -20,7 +20,7 @@ const LogInButton: React.FC<LogInButtonProps> = ({ className = "" }) => {
         <Avatar />
       ) : (
         <button
-          onClick={() => router.push("/login")}
+          onClick={() => router.push('/login')}
           className="font-bold bg-transparent text-lg relative after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-[-4px] after:h-[4px] 
             after:bg-current after:transform after:origin-left after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100 after:rounded-full"
         >

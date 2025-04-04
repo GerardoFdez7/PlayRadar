@@ -1,12 +1,12 @@
-import ModeToggle from "@/components/features/ThemeSelector";
-import LogInButton from "@/components/ui/LogInButton";
-import { GoBack } from "../ui/GoBack";
+import ModeToggle from '@/components/features/ThemeSelector';
+import LogInButton from '@/components/ui/LogInButton';
+import { GoBack } from '../ui/GoBack';
 
 interface HeaderGameProps {
   className?: string;
 }
 
-const HeaderGame: React.FC<HeaderGameProps> = ({ className = "" }) => {
+const HeaderGame: React.FC<HeaderGameProps> = ({ className = '' }) => {
   return (
     <header
       className={`flex flex-row gap-4 justify-between mx-6 py-6 ${className}`}

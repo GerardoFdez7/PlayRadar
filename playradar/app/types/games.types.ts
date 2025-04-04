@@ -8,7 +8,7 @@ import {
   Publisher,
   ESRBRating,
   Tag,
-} from "./lists.types";
+} from './lists.types';
 
 export type Game = {
   id: number;

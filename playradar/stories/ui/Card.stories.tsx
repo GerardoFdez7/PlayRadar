@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from '@storybook/react';
 import {
   Card,
   CardHeader,
@@ -6,18 +6,19 @@ import {
   CardDescription,
   CardContent,
   CardFooter,
-} from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
-import radarImage from "@/assets/placeholder.png";
-import Image from "next/image";
+} from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import radarImage from '@/assets/placeholder.png';
+import Image from 'next/image';
 
 const meta: Meta<typeof Card> = {
-  title: "Components/UI/Card",
+  title: 'Components/UI/Card',
   component: Card,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;
+
 type Story = StoryObj<typeof Card>;
 
 export const Basic: Story = {
