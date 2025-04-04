@@ -2,7 +2,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Game } from '@/types/games.types';
 import { MdVolumeOff, MdVolumeUp } from 'react-icons/md';
-import { platforms } from '@/consts/games.consts';
+import { platforms } from '@/app/lib/consts/games.consts';
 import { GameActions } from '@/features/GameActions';
 import videogameImage from '@/assets/placeholder.png';
 

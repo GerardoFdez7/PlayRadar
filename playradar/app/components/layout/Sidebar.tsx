@@ -1,4 +1,4 @@
-import { genres } from '@/components/consts/games.consts';
+import { genres } from '@/app/lib/consts/games.consts';
 import Footer from '@/components/layout/Footer';
 
 interface SidebarProps {

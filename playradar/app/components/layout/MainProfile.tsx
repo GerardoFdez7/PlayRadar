@@ -16,7 +16,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { Pencil, Check, X } from 'lucide-react';
-import { genres, platforms } from '@/components/consts/games.consts';
+import { genres, platforms } from '@/app/lib/consts/games.consts';
 import Loader from '@/components/ui/Loader';
 import CardGame from '@/ui/CardGame';
 

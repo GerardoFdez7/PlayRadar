@@ -7,7 +7,7 @@
       "@/features/*": ["./app/components/features/*"],
       "@/layout/*": ["./app/components/layout/*"],
       "@/ui/*": ["./app/components/ui/*"],
-      "@/consts/*": ["./app/components/consts/*"],
+      "@/consts/*": ["app/lib/consts/*"],
       "@/hooks/*": ["app/hooks/*"],
       "@/types/*": ["app/types/*"],
       "@/services/*": ["app/services/*"],

@@ -12,7 +12,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { Smile, Gamepad } from 'lucide-react';
 import Sidebar from '@/layout/Sidebar';
-import { platforms } from '@/consts/games.consts';
+import { platforms } from '@/app/lib/consts/games.consts';
 
 interface MainHomeProps {
   user: boolean;

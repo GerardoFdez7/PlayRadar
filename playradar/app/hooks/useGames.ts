@@ -5,7 +5,7 @@ import {
   getRecomendations,
 } from '@/app/services/rawg';
 import { Game } from '@/types/games.types';
-import { sortGames } from '@/consts/games.consts';
+import { sortGames } from '@/app/lib/consts/games.consts';
 import useGenre from '@/hooks/useGenre';
 import usePlatforms from '@/hooks/usePlatforms';
 

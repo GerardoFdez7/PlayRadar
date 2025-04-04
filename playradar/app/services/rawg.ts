@@ -1,4 +1,4 @@
-const apiKey = '6037cc7b2ce54502b9cfcd7ddc582d9c';
+const apiKey = process.env.NEXT_PUBLIC_RAWG_API_KEY;
 
 if (!apiKey) {
   throw new Error('Missing NEXT_PUBLIC_RAWG_apiKey environment variable');

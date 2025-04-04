@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import MainHome from '@/components/layout/MainHome';
 import { Game } from '@/types/games.types';
-import { platforms } from '@/consts/games.consts';
+import { platforms } from '@/app/lib/consts/games.consts';
 
 const mockGames: Game[] = [
   {
