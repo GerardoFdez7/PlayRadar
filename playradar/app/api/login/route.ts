@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
+import prisma from '@/lib/connections/prisma';
 
 // Create user if it doesn't exist when sign in with Google
 export async function POST(req: NextRequest) {
@@ -24,6 +24,7 @@ export async function POST(req: NextRequest) {
           id: user.uid,
           username: user.displayName || usernameFallback,
           email: user.email,
+          image: null,
           createdAt: new Date(),
           liked: [],
           disliked: [],

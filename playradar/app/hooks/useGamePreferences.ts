@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '@/app/lib/firebase';
+import { auth } from '@/lib/connections/firebase';
 import {
   likeGame,
   unlikeGame,

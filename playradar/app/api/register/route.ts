@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/firebase';
+import { auth } from '@/lib/connections/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import prisma from '@/lib/prisma';
+import prisma from '@/lib/connections/prisma';
 
 // Register user with email and password
 export async function POST(req: NextRequest) {
@@ -21,6 +21,7 @@ export async function POST(req: NextRequest) {
         id: user.uid,
         username,
         email,
+        image: null,
         createdAt: new Date(),
         liked: [],
         disliked: [],

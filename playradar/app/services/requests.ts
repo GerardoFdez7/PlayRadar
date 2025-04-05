@@ -242,3 +242,41 @@ export const updateUsername = async (id: string, username: string) => {
   }
   return response.json();
 };
+
+export const delUser = async (id: string) => {
+  const response = await fetch('/api/profile', {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id }),
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || 'Failed to update username');
+  }
+  return response.json();
+};
+
+export const getImage = async (id: string) => {
+  const response = await fetch(`/api/profile/image?id=${id}`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || 'Failed to fetch username');
+  }
+  return response.json();
+};
+
+export const updateImage = async (id: string, image: string) => {
+  const response = await fetch('/api/profile/image', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id, image }),
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || 'Failed to update image');
+  }
+  return response.json();
+};

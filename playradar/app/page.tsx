@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '@/app/lib/firebase';
+import { auth } from '@/app/lib/connections/firebase';
 import useGames from '@/hooks/useGames';
 import useSentinel from '@/hooks/useSentinel';
 import useMultimedia from '@/hooks/useMultimedia';

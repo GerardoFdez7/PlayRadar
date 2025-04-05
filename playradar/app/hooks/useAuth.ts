@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { auth } from '@/app/lib/firebase';
+import { auth } from '@/lib/connections/firebase';
 import { User } from 'firebase/auth';
 
 // Force the user to be authenticated before accessing the page

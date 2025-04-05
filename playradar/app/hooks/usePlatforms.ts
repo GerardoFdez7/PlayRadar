@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '@/app/lib/firebase';
+import { auth } from '@/app/lib/connections/firebase';
 import { addPlatform, getPlatform, delPlatform } from '@/services/requests';
 
 function usePlatforms() {

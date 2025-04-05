@@ -2,7 +2,7 @@
 
 import { useParams } from 'next/navigation';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '@/app/lib/firebase';
+import { auth } from '@/lib/connections/firebase';
 import { useDetailGame } from '@/hooks/useDetailGame';
 import useTooltip from '@/hooks/useTooltip';
 import Skeleton from 'react-loading-skeleton';

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { auth } from '@/app/lib/firebase';
+import { auth } from '@/lib/connections/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import Avatar from '@/components/features/Avatar';
 

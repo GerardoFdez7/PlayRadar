@@ -1,3 +1,5 @@
+import Image from 'next/image';
+import { useImage } from '@/hooks/useImage';
 import { Button } from '@/components/ui/Button';
 import {
   DropdownMenu,
@@ -7,9 +9,9 @@ import {
 } from '@/components/ui/ThemeDropdown';
 import { logout } from '@/services/authentication';
 import { useRouter } from 'next/navigation';
-import { useUsername } from '@/app/hooks/useUserProfile';
+import { useUsername } from '@/hooks/useUserProfile';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '@/app/lib/firebase';
+import { auth } from '@/lib/connections/firebase';
 import type { User } from 'firebase/auth';
 
 const getInitials = (user: User | null) => {
@@ -35,6 +37,9 @@ export default function Avatar() {
   const [user, loading] = useAuthState(auth);
   const username = useUsername(user || null);
   const router = useRouter();
+  const { image, isLoading: imageLoading } = useImage({
+    user: user?.uid || '',
+  });
 
   const handleProfileClick = () => {
     router.push('/profile');
@@ -54,7 +59,7 @@ export default function Avatar() {
     router.refresh();
   };
 
-  if (loading) {
+  if (loading || imageLoading) {
     return <div className="w-10 h-10 bg-gray-300 rounded-full animate-pulse" />;
   }
 
@@ -63,15 +68,26 @@ export default function Avatar() {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="rounded-full h-10 w-10 p-0 font-bold text-lg 
-          bg-gradient-to-br from-blue-500 to-purple-600 
-          hover:from-blue-600 hover:to-purple-700 
+          className={`rounded-full h-10 w-10 p-0 font-bold text-lg 
+          ${!image ? 'bg-gradient-to-br from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700' : ''}
           transition-all duration-300 shadow-lg hover:shadow-xl
           relative after:content-[''] after:absolute after:inset-0 
           after:rounded-full after:border-2 after:border-white/20 
-          after:hover:border-white/30"
+          after:hover:border-white/30`}
         >
-          {getDisplayInitials()}
+          {image ? (
+            <div className="absolute inset-0 w-full h-full">
+              <Image
+                src={image}
+                alt="Profile picture"
+                width={40}
+                height={40}
+                className="w-full h-full object-cover rounded-full"
+              />
+            </div>
+          ) : (
+            getDisplayInitials()
+          )}
         </Button>
       </DropdownMenuTrigger>
 

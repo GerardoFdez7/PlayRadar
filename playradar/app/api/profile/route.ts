@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
+import prisma from '@/lib/connections/prisma';
 
 export async function GET(req: NextRequest) {
   try {
@@ -75,6 +75,46 @@ export async function PUT(req: NextRequest) {
   } catch (_error) {
     return NextResponse.json(
       { success: false, error: 'Error updating profile' },
+      { status: 500 },
+    );
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const { id } = await req.json();
+
+    if (!id) {
+      return NextResponse.json(
+        { success: false, error: 'User ID required' },
+        { status: 400 },
+      );
+    }
+
+    // Check if user exists
+    const userExists = await prisma.user.findUnique({
+      where: { id: id },
+    });
+
+    if (!userExists) {
+      return NextResponse.json(
+        { success: false, error: 'User not found' },
+        { status: 404 },
+      );
+    }
+
+    // Delete the user account
+    await prisma.user.delete({
+      where: { id: id },
+    });
+
+    return NextResponse.json({
+      success: true,
+      message: 'Account successfully deleted',
+    });
+  } catch (_error) {
+    return NextResponse.json(
+      { success: false, error: 'Error deleting account' },
       { status: 500 },
     );
   }

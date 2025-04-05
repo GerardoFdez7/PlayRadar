@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
 import { useGamePreferences } from '@/hooks/useGamePreferences';
 import { usePlayLater } from '@/hooks/usePlayLater';
+import { useImage } from '@/hooks/useImage';
 import useGenre from '@/hooks/useGenre';
 import usePlatforms from '@/hooks/usePlatforms';
 import { useUsername, useUpdateUsername } from '@/hooks/useUserProfile';
@@ -15,17 +16,26 @@ import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
-import { Pencil, Check, X } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 import { genres, platforms } from '@/app/lib/consts/games.consts';
 import Loader from '@/components/ui/Loader';
 import CardGame from '@/ui/CardGame';
+import ProfileOptions from '@/components/features/ProfileOptions';
 
 export function MainProfile() {
   const { userAuthenticated } = useAuth();
-  const [editingUsername, setEditingUsername] = useState(false);
-  const [tempUsername, setTempUsername] = useState('');
   const username = useUsername(userAuthenticated);
   const { updateUsernameFunc } = useUpdateUsername(userAuthenticated);
+  // Edit states
+  const [editingUsername, setEditingUsername] = useState(false);
+  const [editingProfile, setEditingProfile] = useState(false);
+  const [tempUsername, setTempUsername] = useState('');
+  const [localUsername, setLocalUsername] = useState<string | null>(null);
+  const [tempImageFile, setTempImageFile] = useState<File | null>(null);
+  const [tempImagePreview, setTempImagePreview] = useState<string | null>(null);
+  const { image, uploadImage } = useImage({
+    user: userAuthenticated?.uid || '',
+  });
   // Handle genre and platform toggles
   const { userGenres, handleGenreToggle } = useGenre();
   const { userPlatforms, handlePlatformToggle } = usePlatforms();
@@ -55,55 +65,141 @@ export function MainProfile() {
   const cancelEditUsername = () => {
     setTempUsername(username || '');
     setEditingUsername(false);
+    setEditingProfile(false);
+    setTempImageFile(null);
+    setTempImagePreview(null);
+    const fileInput = document.querySelector(
+      'input[type="file"]',
+    ) as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
   };
 
   useEffect(() => {
     setTempUsername(username || '');
+    setLocalUsername(username);
   }, [username]);
 
+  const handleImageSelected = (file: File) => {
+    setTempImageFile(file);
+    const previewUrl = URL.createObjectURL(file);
+    setTempImagePreview(previewUrl);
+  };
+
+  const handleEditProfile = () => {
+    setEditingUsername(true);
+    setEditingProfile(true);
+  };
+
   const saveUsername = async () => {
-    await updateUsernameFunc(tempUsername);
-    window.location.reload();
-    setEditingUsername(false);
+    try {
+      // First handle username update
+      const response = await updateUsernameFunc(tempUsername);
+
+      // Then handle image upload if there's a new image
+      if (tempImageFile) {
+        const formData = new FormData();
+        formData.append('file', tempImageFile);
+        formData.append('upload_preset', 'profile_image');
+
+        // Upload to Cloudinary via fetch
+        const uploadResponse = await fetch(
+          `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+          {
+            method: 'POST',
+            body: formData,
+          },
+        );
+        if (!uploadResponse.ok) {
+          throw new Error('Failed to upload image to Cloudinary');
+        }
+
+        // Upload my Database via fetch
+        const uploadData = await uploadResponse.json();
+        if (uploadData.secure_url) {
+          await uploadImage(uploadData.secure_url);
+        } else {
+        }
+      }
+
+      if (response && response.success) {
+        setLocalUsername(tempUsername);
+        setEditingUsername(false);
+        setEditingProfile(false);
+        setTempImageFile(null);
+      }
+    } catch (_error) {}
+  };
+
+  const handleImageDeleted = async () => {
+    // Show confirmation dialog
+    const isConfirmed = window.confirm(
+      'Are you sure you want to delete your profile picture?',
+    );
+
+    if (!isConfirmed) return;
+
+    try {
+      // Clear the temporary image state
+      setTempImageFile(null);
+      setTempImagePreview(null);
+
+      // Upload empty string to clear the image in the database
+      await uploadImage('');
+      window.location.reload();
+
+      // Reset file input if it exists
+      const fileInput = document.querySelector(
+        'input[type="file"]',
+      ) as HTMLInputElement;
+      if (fileInput) fileInput.value = '';
+    } catch (_error) {}
   };
 
   return (
     <main className="mx-10">
       {/* Username Section */}
-      <div className="flex gap-4 items-end mb-10">
-        <AvatarProfile />
-        {editingUsername ? (
-          <div className="flex gap-2 items-center">
-            <Input
-              value={tempUsername}
-              onChange={(e) => setTempUsername(e.target.value)}
-              className="max-w-xs"
-              autoFocus
-            />
-            <Button
-              size="icon"
-              variant="ghost"
-              onClick={() => void saveUsername()}
-            >
-              <Check className="w-4 h-4" />
-            </Button>
-            <Button size="icon" variant="ghost" onClick={cancelEditUsername}>
-              <X className="w-4 h-4" />
-            </Button>
-          </div>
-        ) : (
-          <div className="flex justify-between items-start h-full">
-            <h2 className="sm:text-5xl text-[7vw] font-bold">{username}</h2>
-            <Button
-              size="icon"
-              variant="ghost"
-              onClick={() => setEditingUsername(true)}
-            >
-              <Pencil className="w-4 h-4" />
-              <span className="sr-only">Edit username</span>
-            </Button>
-          </div>
-        )}
+      <div className="flex flex-col w-full mb-10">
+        <div className="flex justify-end w-full">
+          <ProfileOptions onEditProfile={handleEditProfile} />
+        </div>
+
+        <div className="flex items-baseline gap-6">
+          <AvatarProfile
+            key={editingUsername ? 'editing' : 'not-editing'}
+            isEditing={editingUsername || editingProfile}
+            onImageSelected={handleImageSelected}
+            onImageDeleted={() => void handleImageDeleted()}
+            previewImage={tempImagePreview}
+            currentImage={image}
+          />
+
+          {editingUsername ? (
+            <div className="flex gap-2 items-center">
+              <Input
+                value={tempUsername}
+                onChange={(e) => setTempUsername(e.target.value)}
+                className="max-w-xs text-md"
+                autoFocus
+              />
+              <Button
+                size="icon"
+                variant="ghost"
+                onClick={() => void saveUsername()}
+              >
+                <Check className="w-6 h-6" />
+              </Button>
+              <Button size="icon" variant="ghost" onClick={cancelEditUsername}>
+                <X className="w-6 h-6" />
+              </Button>
+            </div>
+          ) : (
+            <div className="flex-1">
+              <h2 className="sm:text-5xl text-[7vw] font-bold">
+                {localUsername || username}
+              </h2>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="grid relative grid-cols-1 gap-6 mx-auto mb-8 md:grid-cols-2">

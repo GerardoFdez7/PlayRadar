@@ -1,6 +1,6 @@
 import React from 'react';
 import * as SelectPrimitive from '@radix-ui/react-select';
-import { cn } from '@/app/lib/utils';
+import { cn } from '@/lib/utils';
 
 const Select = SelectPrimitive.Root;
 const SelectTrigger = React.forwardRef<
