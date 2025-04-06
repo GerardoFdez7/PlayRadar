@@ -7,6 +7,11 @@ const nextConfig = {
         hostname: 'media.rawg.io',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        pathname: '/**',
+      },
     ],
     unoptimized: process.env.NODE_ENV === 'production' ? false : true,
   },
