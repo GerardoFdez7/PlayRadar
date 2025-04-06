@@ -1,4 +1,4 @@
-const apiKey = 'cda0b9d604254b5580f38097126b6f63';
+const apiKey = process.env.NEXT_PUBLIC_RAWG_API_KEY;
 
 if (!apiKey) {
   throw new Error('Missing NEXT_PUBLIC_RAWG_apiKey environment variable');
@@ -36,6 +36,7 @@ export const getGames = async (
     const data = await res.json();
     return data;
   } catch (_error) {
+    console.error('Error fetching games:', _error);
     return null;
   }
 };
@@ -75,6 +76,7 @@ export const getRecomendations = async (
     const data = await res.json();
     return data;
   } catch (_error) {
+    console.error('Error fetching games:', _error);
     return null;
   }
 };
@@ -90,6 +92,7 @@ export const getSearchedGames = async (query: string, url?: string) => {
     const data = await res.json();
     return data; // { count, next, previous, results }
   } catch (_error) {
+    console.error('Error fetching games:', _error);
     return null;
   }
 };
@@ -118,6 +121,7 @@ export const getGameDetails = async (slug: string) => {
     const data = await res.json();
     return data;
   } catch (_error) {
+    console.error('Error fetching game details:', _error);
     return null;
   }
 };
@@ -133,6 +137,7 @@ export const getGameTrailer = async (gameId: string) => {
     const data = await res.json();
     return data.results[0]?.data?.max || null;
   } catch (_error) {
+    console.error('Error fetching game trailer:', _error);
     return null;
   }
 };
@@ -146,6 +151,7 @@ export const getGameScreenshots = async (slug: string) => {
     const data = await res.json();
     return data.results;
   } catch (_error) {
+    console.error('Error fetching game screenshots:', _error);
     return null;
   }
 };
@@ -177,6 +183,7 @@ export const getGameMedia = async (slug: string) => {
       trailers: trailers || [],
     };
   } catch (_error) {
+    console.error('Error fetching game media:', _error);
     return { screenshots: [], trailers: [] };
   }
 };

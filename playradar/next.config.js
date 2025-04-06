@@ -7,12 +7,19 @@ const nextConfig = {
         hostname: 'media.rawg.io',
         pathname: '/**',
       },
-      {
-        protocol: 'https',
-        hostname: 'playradar-a90bf.firebasestorage.app',
-      },
     ],
     unoptimized: process.env.NODE_ENV === 'production' ? false : true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  compiler: {
+    removeConsole:
+      process.env.NODE_ENV === 'production'
+        ? {
+            exclude: ['error', 'warn'],
+          }
+        : false,
   },
   experimental: {
     reactCompiler: true,
