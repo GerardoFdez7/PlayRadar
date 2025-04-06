@@ -138,10 +138,13 @@ docker-compose.override.yml
 # Storybook
 *storybook.log
 
-# Ignore changes to .husky files but keep the directory
+# Ignore changes to config files but keep them in the repo
 .husky/*
 !.husky/_/*
 !.husky/_/husky.sh
 !.husky/.commit-msg
 !.husky/pre-commit
 !.husky/commit-msg
+lint-staged.config.js
+eslint.config.mjs
+.prettierrc
