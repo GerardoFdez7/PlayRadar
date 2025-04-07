@@ -59,7 +59,7 @@ export default function MainRegister() {
           password,
         });
         if (registrationResult.success) {
-          router.push('/');
+          router.push('/login');
         } else {
           setError('Error during register, try again later.');
           setIsLoading(false);
