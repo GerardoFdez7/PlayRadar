@@ -22,7 +22,7 @@ const Footer: React.FC<FooterProps> = ({ className = '' }) => {
       </p>
 
       <Link
-        href="https://gerardofdez7.github.io/Portfolio/"
+        href="https://gerardofdez7.github.io/data_analyst/"
         target="_blank"
         rel="noopener noreferrer"
         className="text-sm text-gray-700 transition-colors dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300"
